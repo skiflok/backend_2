@@ -1,6 +1,6 @@
 spring:
   application:
-    name: backend_2
+    name: backend
 
   datasource:
     url: jdbc:postgresql://localhost:5432/backend2
