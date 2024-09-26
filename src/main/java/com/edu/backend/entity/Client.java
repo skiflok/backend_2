@@ -18,10 +18,10 @@ public class Client {
     private Long id;
 
     @Column(name = "client_name")
-    private String clientName;
+    private String name;
 
     @Column(name = "client_surname")
-    private String clientSurname;
+    private String surname;
 
     @Column(name = "birthday")
     private LocalDate birthday;
@@ -33,8 +33,8 @@ public class Client {
     @Column(name = "registration_date")
     private LocalDate registrationDate;
 
-    // todo foreign key
-    @Column(name = "address_id")
-    private Long addressId;
+    @ManyToOne
+    @JoinColumn(name = "address_id")
+    private Address address;
 
 }
