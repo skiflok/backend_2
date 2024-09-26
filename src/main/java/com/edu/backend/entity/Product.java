@@ -6,7 +6,6 @@ import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Getter
 @Entity
@@ -35,10 +34,11 @@ public class Product {
     @Column(name = "last_update_date ")
     private LocalDate lastUpdateDate;
 
-    // todo FKey
-    @Column(name = "supplier_id ")
-    private Long supplierId;
+    @ManyToOne
+    @JoinColumn(name = "supplier_id ")
+    private Supplier supplier;
 
-    @Column(name = "image_id ")
-    private UUID imageId;
+    @ManyToOne
+    @JoinColumn(name = "image_id ")
+    private Image image;
 }
