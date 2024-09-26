@@ -1,0 +1,7 @@
+databaseChangeLog:
+    - changeSet:
+        id: 1
+        author: skiflok
+        changes:
+            - sqlFile:
+                path: db/changelog/scripts/create_tables.sql

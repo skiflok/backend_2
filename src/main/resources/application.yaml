@@ -16,6 +16,8 @@ spring:
         format_sql: true
         use_sql_comments: true
 
+  liquibase:
+    enabled: false
 
 
 server:
