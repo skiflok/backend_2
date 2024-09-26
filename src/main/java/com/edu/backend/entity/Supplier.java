@@ -17,9 +17,9 @@ public class Supplier {
     @Column(name = "name")
     private String name;
 
-    // todo FKey
-    @Column(name = "address_id ")
-    private Long address_id;
+    @ManyToOne
+    @JoinColumn(name = "address_id ")
+    private Address address;
 
     @Column(name = "phone_number ")
     private String phoneNumber;
