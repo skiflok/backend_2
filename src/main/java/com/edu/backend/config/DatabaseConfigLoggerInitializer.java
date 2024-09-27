@@ -1,11 +1,11 @@
-package com.edu.backend;
+package com.edu.backend.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 
 @Slf4j
-public class DatabaseConnectionLogger implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+public class DatabaseConfigLoggerInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
