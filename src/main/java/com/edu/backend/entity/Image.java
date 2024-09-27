@@ -17,6 +17,5 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "imageIdSeq")
     private UUID id;
 
-    @Lob
     private byte[] image;
 }

@@ -18,7 +18,7 @@ CREATE TABLE s21.address
 CREATE TABLE s21.image
 (
     id    UUID NOT NULL,
-    image OID,
+    image bytea,
     PRIMARY KEY (id)
 );
 

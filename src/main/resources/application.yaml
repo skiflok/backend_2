@@ -18,7 +18,12 @@ spring:
 
   liquibase:
     enabled: true
+    show-summary-output: console
 
 
 server:
   port: 9999
+
+logging:
+  level:
+    liquibase: info
