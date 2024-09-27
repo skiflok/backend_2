@@ -110,3 +110,99 @@ END $;
 - Если вы используете другие базы данных, возможно, вам нужно будет адаптировать код под их синтаксис.
 
 Этот подход обеспечит консистентность между изображением и продуктом, связывая их через идентификатор изображения.
+
+Ошибка, которую вы видите, связана с неправильным синтаксисом SQL в вашем скрипте миграции Liquibase. Конкретно, проблема возникает из-за того, что Liquibase не может корректно интерпретировать блок PL/pgSQL, который вы используете в своем SQL-запросе.
+
+### Проблема
+Сообщение об ошибке указывает на то, что вы используете "неоконченный долларовый кавычка", что означает, что Liquibase не может найти соответствующий закрывающий  `$`  для открывающего  `$` . Это может происходить по нескольким причинам:
+
+1. **Неправильное использование блоков PL/pgSQL**: Liquibase не всегда корректно обрабатывает PL/pgSQL. В некоторых случаях лучше использовать  `sql`  с обычными SQL-запросами.
+2. **Неправильный синтаксис в самом SQL**.
+
+### Решение
+Попробуйте переписать ваш SQL-код, чтобы избежать использования PL/pgSQL, или убедитесь, что ваш блок PL/pgSQL правильно оформлен. Вот пример, как можно переписать ваш код, чтобы избежать использования PL/pgSQL:
+
+#### Вариант 1: Использование нескольких отдельных запросов
+
+Если вы можете обойтись без переменных, просто выполните вставку изображений и продуктов в два отдельных запроса:
+- changeSet:
+  id: 2
+  author: skiflok
+  changes:
+  - sql:
+  sql: |
+  INSERT INTO s21.address (city, country, street)
+  VALUES ('Moscow', 'RUSSIA', 'qwerty'),
+  ('Kazan', 'RUSSIA', 'asdfgh');
+
+      - sql:
+          sql: |
+            INSERT INTO s21.image (id, image)
+            VALUES (gen_random_uuid(), pg_read_binary_file('/psql_map_folder/product_images/duck.PNG'));
+
+      - sql:
+          sql: |
+            INSERT INTO s21.client (client_name,
+                                     client_surname,
+                                     birthday,
+                                     gender,
+                                     registration_date,
+                                     address_id)
+            VALUES ('client 1', 'client_surname 1', '2000-10-11', 'MALE', '2022-09-05', 1),
+                   ('client 2', 'client_surname 2', '2001-12-15', 'FEMALE', '2022-09-06', 2);
+
+      - sql:
+          sql: |
+            INSERT INTO s21.supplier ("name", address_id, phone_number)
+            VALUES ('pppppp', 1, '8987654321');
+
+      - sql:
+          sql: |
+            INSERT INTO s21.product ("name", "category", price, available_stock, last_update_date, supplier_id, image_id)
+            VALUES ('duck', 'HOME_AND_GARDEN', 15, 5, '2024-10-15', 1, (SELECT id FROM s21.image LIMIT 1));
+В этом варианте вы используете подзапрос  `(SELECT id FROM s21.image LIMIT 1)`  для получения идентификатора изображения. Это предполагает, что вы хотите взять только что вставленное изображение. Однако это может быть не самым надежным подходом, если у вас есть другие записи в таблице  `image` .
+
+#### Вариант 2: Использование PL/pgSQL
+
+Если вы все же хотите использовать PL/pgSQL, убедитесь, что ваш код корректен:
+- changeSet:
+  id: 2
+  author: skiflok
+  changes:
+  - sql:
+  sql: |
+  DO $$
+  DECLARE
+  new_image_id UUID;
+  BEGIN
+  -- Вставка адресов
+  INSERT INTO s21.address (city, country, street)
+  VALUES ('Moscow', 'RUSSIA', 'qwerty'),
+  ('Kazan', 'RUSSIA', 'asdfgh');
+
+                -- Генерация нового UUID и вставка изображения
+                new_image_id := gen_random_uuid();
+                INSERT INTO s21.image (id, image)
+                VALUES (new_image_id, pg_read_binary_file('/psql_map_folder/product_images/duck.PNG'));
+
+                -- Вставка клиентов
+                INSERT INTO s21.client (client_name,
+                                         client_surname,
+                                         birthday,
+                                         gender,
+                                         registration_date,
+                                         address_id)
+                VALUES ('client 1', 'client_surname 1', '2000-10-11', 'MALE', '2022-09-05', 1),
+                       ('client 2', 'client_surname 2', '2001-12-15', 'FEMALE', '2022-09-06', 2);
+
+                -- Вставка поставщика
+                INSERT INTO s21.supplier ("name", address_id, phone_number)
+                VALUES ('pppppp', 1, '8987654321');
+
+                -- Вставка продукта с использованием сгенерированного image_id
+                INSERT INTO s21.product ("name", "category", price, available_stock, last_update_date, supplier_id, image_id)
+                VALUES ('duck', 'HOME_AND_GARDEN', 15, 5, '2024-10-15', 1, new_image_id);
+            END $;
+### Заключение
+Попробуйте один из предложенных вариантов, и это должно помочь вам избежать ошибки, связанной с "неоконченной долларовой кавычкой". Если проблема сохранится, проверьте синтаксис и убедитесь, что все используемые вами таблицы и поля существуют.
+

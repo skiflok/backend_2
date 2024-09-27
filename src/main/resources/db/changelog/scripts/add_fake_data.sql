@@ -18,4 +18,4 @@ INSERT INTO s21.supplier ("name", address_id, phone_number)
 VALUES ('pppppp', 1, '8987654321');
 
 INSERT INTO s21.product ("name", "category", price, available_stock, last_update_date, supplier_id, image_id)
-VALUES ('duck', 'HOME_AND_GARDEN', 15, 5, '2024-10-15', 1, ?);
+VALUES ('duck', 'HOME_AND_GARDEN', 15, 5, '2024-10-15', 1, (SELECT id FROM s21.image LIMIT 1));
