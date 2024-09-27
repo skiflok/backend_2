@@ -57,3 +57,56 @@ VALUES (gen_random_uuid(), pg_read_binary_file('/path/in/container/file'));
 
 
 
+#### анонимные процедуры
+
+Чтобы связать изображение и продукт в вашем SQL-запросе, вам нужно использовать идентификатор изображения ( `image_id` ), который был сгенерирован при вставке в таблицу  `s21.image` . Поскольку вы используете  `gen_random_uuid()`  для генерации UUID, вы можете сохранить этот UUID в переменной и использовать его в дальнейшем запросе.
+
+Вот как это можно сделать с помощью PL/pgSQL, чтобы сохранить UUID изображения и использовать его при вставке продукта:
+
+### Пример с использованием PL/pgSQL
+DO $$
+DECLARE
+new_image_id UUID;
+BEGIN
+-- Вставка адресов
+INSERT INTO s21.address (city, country, street)
+VALUES ('Moscow', 'RUSSIA', 'qwerty'),
+('Kazan', 'RUSSIA', 'asdfgh');
+
+    -- Генерация нового UUID и вставка изображения
+    new_image_id := gen_random_uuid();
+    INSERT INTO s21.image (id, image)
+    VALUES (new_image_id, pg_read_binary_file('/psql_map_folder/product_images/duck.PNG'));
+
+    -- Вставка клиентов
+    INSERT INTO s21.client (client_name,
+                             client_surname,
+                             birthday,
+                             gender,
+                             registration_date,
+                             address_id)
+    VALUES ('client 1', 'client_surname 1', '2000-10-11', 'MALE', '2022-09-05', 1),
+           ('client 2', 'client_surname 2', '2001-12-15', 'FEMALE', '2022-09-06', 2);
+
+    -- Вставка поставщика
+    INSERT INTO s21.supplier ("name", address_id, phone_number)
+    VALUES ('pppppp', 1, '8987654321');
+
+    -- Вставка продукта с использованием сгенерированного image_id
+    INSERT INTO s21.product ("name", "category", price, available_stock, last_update_date, supplier_id, image_id)
+    VALUES ('duck', 'HOME_AND_GARDEN', 15, 5, '2024-10-15', 1, new_image_id);
+END $;
+### Объяснение:
+1. **DO $ ... $**: Это блок PL/pgSQL, который позволяет выполнять анонимные процедуры.
+2. **DECLARE**: Здесь вы объявляете переменную  `new_image_id`  типа UUID для хранения идентификатора изображения.
+3. **BEGIN**: Начало блока выполнения.
+4. **new_image_id := gen_random_uuid();**: Генерация нового UUID и сохранение его в переменной  `new_image_id` .
+5. **INSERT INTO s21.image**: Вставка изображения с использованием сгенерированного UUID.
+6. **INSERT INTO s21.product**: Вставка продукта с использованием сохраненного  `new_image_id` , что связывает продукт с изображением.
+
+### Примечания:
+- Убедитесь, что путь к файлу в  `pg_read_binary_file`  корректен и доступен в контексте выполнения SQL-запроса.
+- Проверьте, что все таблицы и их поля существуют и имеют правильные типы данных.
+- Если вы используете другие базы данных, возможно, вам нужно будет адаптировать код под их синтаксис.
+
+Этот подход обеспечит консистентность между изображением и продуктом, связывая их через идентификатор изображения.

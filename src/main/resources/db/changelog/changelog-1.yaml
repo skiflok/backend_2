@@ -1,13 +1,13 @@
 databaseChangeLog:
-    - changeSet:
-        id: 1
-        author: skiflok
-        changes:
-            - sqlFile:
-                path: db/changelog/scripts/create_tables.sql
-    - changeSet:
-          id: 2
-          author: skiflok
-          changes:
-              - sqlFile:
-                    path: db/changelog/scripts/add_fake_data.sql
+  - changeSet:
+      id: 1
+      author: skiflok
+      changes:
+        - sqlFile:
+            path: db/changelog/scripts/create_tables.sql
+  - changeSet:
+      id: 2
+      author: skiflok
+      changes:
+        - sqlFile:
+            path: db/changelog/scripts/add_fake_data.sql
