@@ -7,7 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Backend2Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(Backend2Application.class, args);
+        SpringApplication application = new SpringApplication(Backend2Application.class);
+        application.addInitializers(new DatabaseConnectionLogger());
+        application.run(args);
     }
 
 }
