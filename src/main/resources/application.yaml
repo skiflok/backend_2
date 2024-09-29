@@ -20,6 +20,10 @@ spring:
     enabled: true
     show-summary-output: console
 
+  output:
+    ansi:
+      enabled: always
+
 
 server:
   port: 9999

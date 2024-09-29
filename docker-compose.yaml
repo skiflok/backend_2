@@ -11,5 +11,6 @@ services:
     ports:
       - "5432:5432"  # Проброс порта
     volumes:
-      - C:\Users\anisimovav3\workDir\projects\s21\backend\backend_2\src\main\resources\psql_map_folder:/psql_map_folder  # Укажите путь к вашей локальной папке
-    restart: no  # Опционально: перезапускать контейнер при сбоях
+#      - C:\Users\anisimovav3\workDir\projects\s21\backend\backend_2\src\main\resources\psql_map_folder:/psql_map_folder
+      - G:\workdir\21-school\backend\backend_2\backend_2\src\main\resources\psql_map_folder:/psql_map_folder
+#    restart: no  # Опционально: перезапускать контейнер при сбоях
