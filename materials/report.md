@@ -13,3 +13,5 @@
 ## REST API
 
 [Аннотированные контроллеры](https://javarush.com/quests/lectures/questspring.level05.lecture02)
+
+[Building a RESTful Web Service](https://github.com/spring-guides/gs-rest-service)
