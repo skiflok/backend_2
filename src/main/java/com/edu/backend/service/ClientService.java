@@ -32,7 +32,7 @@ public class ClientService {
         return repository.findClientsByNameAndSurname(name, surname);
     }
 
-    public List<Client> getAllClients(Integer limit, Integer offset) {
+    public List<Client> getAllClientsPageable(Integer limit, Integer offset) {
         Pageable pageable = null;
 
         if (limit != null && offset != null) {

@@ -44,11 +44,11 @@ public class ClientController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Client> getAllClients(
+    public List<Client> getAllClientsPageable(
             @RequestParam(required = false) Integer limit,
             @RequestParam(required = false) Integer offset) {
 
-        return service.getAllClients(limit, offset);
+        return service.getAllClientsPageable(limit, offset);
     }
 
 
