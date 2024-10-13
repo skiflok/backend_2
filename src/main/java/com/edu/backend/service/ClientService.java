@@ -43,11 +43,7 @@ public class ClientService {
                                 addressDto.getCity(),
                                 addressDto.getStreet()
                         )
-                .orElseGet(() -> {
-                    Address temp = modelMapper.map(addressDto, Address.class);
-                    temp = addressRepository.save(temp);
-                    return temp;
-                });
+                .orElseGet(() -> addressRepository.save(modelMapper.map(addressDto, Address.class)));
 
         log.info("address = {}", address);
         client.setRegistrationDate(LocalDate.now());
