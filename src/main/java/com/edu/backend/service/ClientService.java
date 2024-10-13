@@ -6,6 +6,7 @@ import com.edu.backend.entity.Address;
 import com.edu.backend.entity.Client;
 import com.edu.backend.repository.AddressRepository;
 import com.edu.backend.repository.ClientRepository;
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +33,7 @@ public class ClientService {
 
         clientRepository.findClientsByNameAndSurname(client.getName(), client.getSurname())
                 .ifPresent(find -> {
-                    throw new EntityNotFoundException("Клиент уже существует");
+                    throw new EntityExistsException("Клиент уже существует");
                 });
 
         AddressDto addressDto = clientDto.getAddress();
