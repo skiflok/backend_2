@@ -17,10 +17,10 @@ public class AddressController {
 
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
-    public List<Address> findByCountryAndCityAndStreet(
+    public Address findByCountryAndCityAndStreet(
             @RequestParam String country,
             @RequestParam String city,
             @RequestParam String street) {
-        return repository.findByCountryAndCityAndStreet(country, city, street);
+        return repository.findByCountryAndCityAndStreet(country, city, street).orElseThrow();
     }
 }

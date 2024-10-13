@@ -2,9 +2,9 @@ package com.edu.backend.entity;
 
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 @Entity
 @Table(name = "address", schema = "s21")
 public class Address {
