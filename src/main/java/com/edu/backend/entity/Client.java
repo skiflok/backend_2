@@ -2,18 +2,18 @@ package com.edu.backend.entity;
 
 import com.edu.backend.enums.Gender;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.Data;
 
 import java.time.LocalDate;
 
-@Getter
+@Data
 @Entity
 @Table(name = "client", schema = "s21")
 public class Client {
 
     @Id
     @Column(name = "id")
-    @SequenceGenerator(name = "clientsIdSeq", sequenceName = "clients_id_seq", allocationSize = 1)
+    @SequenceGenerator(name = "clientsIdSeq", sequenceName = "s21.client_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "clientsIdSeq")
     private Long id;
 

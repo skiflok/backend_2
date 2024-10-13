@@ -1,14 +1,14 @@
 CREATE SCHEMA IF NOT EXISTS s21;
 
 CREATE SEQUENCE IF NOT EXISTS s21.address_id_seq START WITH 1 INCREMENT BY 1;
-CREATE SEQUENCE IF NOT EXISTS s21.clients_id_seq START WITH 1 INCREMENT BY 1;
-CREATE SEQUENCE IF NOT EXISTS s21.image_id_seq START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE IF NOT EXISTS s21.client_id_seq START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE IF NOT EXISTS s21.product_id_seq START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE IF NOT EXISTS s21.supplier_id_seq START WITH 1 INCREMENT BY 1;
 
 CREATE TABLE s21.address
 (
     id      BIGINT NOT NULL default nextval('s21.address_id_seq'),
+--     id      BIGSERIAL NOT NULL,
     country VARCHAR(255),
     city    VARCHAR(255),
     street  VARCHAR(255),
@@ -24,7 +24,8 @@ CREATE TABLE s21.image
 
 CREATE TABLE s21.client
 (
-    id                BIGINT NOT NULL default nextval('s21.clients_id_seq'),
+    id                BIGINT NOT NULL default nextval('s21.client_id_seq'),
+--     id                BIGSERIAL NOT NULL,
     client_name       VARCHAR(255),
     client_surname    VARCHAR(255),
     birthday          DATE,
@@ -38,6 +39,7 @@ CREATE TABLE s21.client
 CREATE TABLE s21.supplier
 (
     id           BIGINT NOT NULL default nextval('s21.supplier_id_seq'),
+--     id           BIGSERIAL NOT NULL,
     name         VARCHAR(255),
     address_id   BIGINT,
     phone_number VARCHAR(255),
@@ -50,6 +52,7 @@ create type s21.category as enum ('ELECTRONICS', 'CLOTHING', 'COSMETICS', 'HOME_
 CREATE TABLE s21.product
 (
     id               BIGINT NOT NULL default nextval('s21.product_id_seq'),
+--     id               BIGSERIAL NOT NULL,
     name             VARCHAR(255),
     category         s21.category,
     price            NUMERIC(38, 2),

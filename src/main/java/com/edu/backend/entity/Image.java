@@ -13,8 +13,6 @@ public class Image {
 
     @Id
     @Column(name = "id")
-    @SequenceGenerator(name = "imageIdSeq", sequenceName = "image_id_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "imageIdSeq")
     private UUID id;
 
     private byte[] image;
