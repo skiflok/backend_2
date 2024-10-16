@@ -1,7 +1,6 @@
 package com.edu.backend.entity;
 
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +11,6 @@ import java.util.Objects;
 @Setter
 @Entity
 @Table(name = "address", schema = "s21")
-@Schema(description = "Адрес")
 public class Address {
 
     @Id

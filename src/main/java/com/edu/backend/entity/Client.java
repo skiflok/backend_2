@@ -1,7 +1,6 @@
 package com.edu.backend.entity;
 
 import com.edu.backend.enums.Gender;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -10,7 +9,7 @@ import java.time.LocalDate;
 @Data
 @Entity
 @Table(name = "client", schema = "s21")
-@Schema(description = "Пользователь")
+
 public class Client {
 
     @Id

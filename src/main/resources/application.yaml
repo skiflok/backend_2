@@ -39,3 +39,4 @@ springdoc:
 #    path:
   swagger-ui:
     path: /swagger/index.html
+    show-common-extensions: true
