@@ -2,7 +2,6 @@ package com.edu.backend.controller;
 
 import com.edu.backend.dto.AddressDto;
 import com.edu.backend.dto.ClientDto;
-import com.edu.backend.entity.Client;
 import com.edu.backend.service.ClientService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
