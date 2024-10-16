@@ -1,4 +1,4 @@
-package com.edu.backend.controller;
+package com.edu.backend.controller.advice;
 
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
