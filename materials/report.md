@@ -23,3 +23,7 @@
 [Пагинация и сортировка с использованием Spring Data JPA](https://www.baeldung.com/spring-data-jpa-pagination-sorting)
 
 [Spring – Log Incoming Requests](https://www.baeldung.com/spring-http-logging)
+
+### Swagger UI
+
+[Генерация OpenAPI из Spring Boot MVC](https://habr.com/ru/articles/814061/)

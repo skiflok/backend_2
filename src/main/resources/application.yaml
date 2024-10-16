@@ -33,3 +33,9 @@ logging:
     liquibase: info
     com.edu.backend: debug
     org.springframework.web.filter.CommonsRequestLoggingFilter: debug
+
+springdoc:
+#  api-docs:
+#    path:
+  swagger-ui:
+    path: /swagger/index.html
