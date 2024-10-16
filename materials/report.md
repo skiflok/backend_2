@@ -19,3 +19,7 @@
 [Error Handling for REST with Spring](https://www.baeldung.com/exception-handling-for-rest-with-spring)
 
 [Problem Details Specification [RFC 7807]](https://howtodoinjava.com/spring-mvc/spring-problemdetail-errorresponse/)
+
+[Пагинация и сортировка с использованием Spring Data JPA](https://www.baeldung.com/spring-data-jpa-pagination-sorting)
+
+[Spring – Log Incoming Requests](https://www.baeldung.com/spring-http-logging)
