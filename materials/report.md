@@ -27,3 +27,7 @@
 ### Swagger UI
 
 [Генерация OpenAPI из Spring Boot MVC](https://habr.com/ru/articles/814061/)
+
+### favicon
+
+[favicon](https://www.favicon.cc/)
