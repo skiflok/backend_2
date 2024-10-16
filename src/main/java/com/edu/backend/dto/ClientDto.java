@@ -12,6 +12,7 @@ import java.time.LocalDate;
 public class ClientDto {
 
     private Long id;
+
     @NotNull
     @Size(min = 1, max = 100)
     private String name;

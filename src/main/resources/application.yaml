@@ -8,7 +8,7 @@ spring:
     password: pass
 
   jpa:
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: validate
     properties:
@@ -31,3 +31,4 @@ server:
 logging:
   level:
     liquibase: info
+    com.edu.backend: debug
