@@ -32,3 +32,4 @@ logging:
   level:
     liquibase: info
     com.edu.backend: debug
+    org.springframework.web.filter.CommonsRequestLoggingFilter: debug
