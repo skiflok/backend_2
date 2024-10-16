@@ -51,8 +51,11 @@ public class ClientService {
         log.info("save client id = {}", client.getId());
     }
 
-    public Client getClient(long id) {
-        return clientRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    public ClientDto getClient(long id) {
+        return modelMapper.map(
+                clientRepository.findById(id).orElseThrow(EntityNotFoundException::new),
+                ClientDto.class
+        );
     }
 
     public void deleteClient(Long id) {

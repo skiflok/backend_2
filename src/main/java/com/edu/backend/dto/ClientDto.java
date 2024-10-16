@@ -19,6 +19,7 @@ public class ClientDto {
     @Size(min = 1, max = 100)
     private String name;
 
+    @Schema(description = "Имя. Размер от 1 до 100 символов")
     @NotNull
     @Size(min = 1, max = 100)
     private String surname;

@@ -24,7 +24,7 @@ public class ClientController {
             produces = "application/json"
     )
     @ResponseStatus(HttpStatus.OK)
-    public Client getClient(@PathVariable Long id) {
+    public ClientDto getClient(@PathVariable Long id) {
         return service.getClient(id);
     }
 
