@@ -24,6 +24,10 @@ spring:
     ansi:
       enabled: always
 
+  servlet:
+    multipart:
+      max-file-size: 2MB
+
 
 server:
   port: 9999
