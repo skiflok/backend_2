@@ -63,7 +63,7 @@ public class ClientController {
             produces = "application/json"
     )
     @ResponseStatus(HttpStatus.OK)
-    public Page<Client> getAllClientsPageable(
+    public Page<ClientDto> getAllClientsPageable(
             @RequestParam(required = false) Integer limit,
             @RequestParam(required = false) Integer offset) {
         return service.getAllClientsPageable(limit, offset);

@@ -10,6 +10,7 @@ import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.mapping.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -75,12 +77,15 @@ public class ClientService {
                 );
     }
 
-    public Page<Client> getAllClientsPageable(Integer limit, Integer offset) {
+    public Page<ClientDto> getAllClientsPageable(Integer limit, Integer offset) {
         return Stream.of(limit, offset)
                 .filter(Objects::nonNull)
                 .count() == 2
                 ? clientRepository.findAll(PageRequest.of(offset, limit))
-                : new PageImpl<>(clientRepository.findAll());
+                .map(client -> modelMapper.map(client, ClientDto.class))
+                : new PageImpl<>(clientRepository.findAll().stream()
+                .map(client -> modelMapper.map(client, ClientDto.class))
+                .toList());
     }
 
     public void changeAddress(Long id, AddressDto addressDto) {
