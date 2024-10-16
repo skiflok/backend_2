@@ -9,7 +9,6 @@ import java.time.LocalDate;
 @Data
 @Entity
 @Table(name = "client", schema = "s21")
-
 public class Client {
 
     @Id
