@@ -66,14 +66,13 @@ public class ClientService {
                         });
     }
 
-    public Client findClientsByNameAndSurname(String name, String surname) {
-        return clientRepository.findClientsByNameAndSurname(name, surname).orElseThrow(() ->
-                new EntityNotFoundException(
-                        String.format("Клиент [name=%s] [surname=%s] не найден",
-                                name,
-                                surname)
-                )
-        );
+    public ClientDto findClientsByNameAndSurname(String name, String surname) {
+        return clientRepository.findClientsByNameAndSurname(name, surname)
+                .map(client -> modelMapper.map(client, ClientDto.class))
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Клиент [name=%s] [surname=%s] не найден",
+                        name,
+                        surname))
+                );
     }
 
     public Page<Client> getAllClientsPageable(Integer limit, Integer offset) {

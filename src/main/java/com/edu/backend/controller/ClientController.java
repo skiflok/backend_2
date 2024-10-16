@@ -52,7 +52,7 @@ public class ClientController {
             produces = "application/json"
     )
     @ResponseStatus(HttpStatus.OK)
-    public Client getClientsByNameAndSurname(
+    public ClientDto getClientsByNameAndSurname(
             @RequestParam String name,
             @RequestParam String surname) {
         return service.findClientsByNameAndSurname(name, surname);
