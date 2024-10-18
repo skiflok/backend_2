@@ -1,6 +1,7 @@
 package com.edu.backend.controller;
 
 import com.edu.backend.dto.ImageDto;
+import com.edu.backend.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
