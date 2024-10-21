@@ -16,23 +16,31 @@ public class ImageController {
     private final ImageService service;
 
 
-//    добавление изображения (на вход подается byte array изображения и id товара).
+    //    добавление изображения (на вход подается byte array изображения и id товара).
     public void addImage() {
 
     }
-//    Изменение изображения (на вход подается id изображения и новая строка для замены)
+
+    //    Изменение изображения (на вход подается id изображения и новая строка для замены)
     public void changeImage() {
 
     }
-//    Удаление изображения по id изображения
+
+    //    Удаление изображения по id изображения
     public void deleteImage() {
 
     }
-//    Получение изображения конкретного товара (по id товара)
-    public ImageDto getImageByProductId() {
-        return null;
+
+    //    Получение изображения конкретного товара (по id товара)
+    @GetMapping(
+            value = "/by-prodyct-id/{id}",
+            produces = "application/octet-stream"
+    )
+    public byte[] getImageByProductId(@PathVariable Long id) {
+        return service.getImageByProductId(id);
     }
-//    Получение изображения по id изображения
+
+    //    Получение изображения по id изображения
     @GetMapping(
             value = "/{id}",
             produces = "application/octet-stream"
@@ -41,7 +49,4 @@ public class ImageController {
     public byte[] getImageById(@PathVariable UUID id) {
         return service.getImageById(id);
     }
-
-
-
 }
