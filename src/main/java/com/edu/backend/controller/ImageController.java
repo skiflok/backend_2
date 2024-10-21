@@ -27,8 +27,10 @@ public class ImageController {
     }
 
     //    Удаление изображения по id изображения
-    public void deleteImage() {
-
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteImage(@PathVariable UUID id) {
+        service.deleteById(id);
     }
 
     //    Получение изображения конкретного товара (по id товара)
@@ -36,6 +38,7 @@ public class ImageController {
             value = "/by-prodyct-id/{id}",
             produces = "application/octet-stream"
     )
+    @ResponseStatus(HttpStatus.OK)
     public byte[] getImageByProductId(@PathVariable Long id) {
         return service.getImageByProductId(id);
     }
