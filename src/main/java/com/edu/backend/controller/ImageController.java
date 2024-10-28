@@ -5,7 +5,9 @@ import com.edu.backend.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.UUID;
 
 @RestController()
@@ -22,18 +24,22 @@ public class ImageController {
     }
 
     //    Изменение изображения (на вход подается id изображения и новая строка для замены)
-    public void changeImage() {
-
+    @PatchMapping(
+            value = "/change",
+            consumes = "multipart/form-data"
+    )
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void changeImage(@RequestPart UUID id,
+                            @RequestPart MultipartFile image) throws IOException {
+        service.changeImage(id, image);
     }
 
-    //    Удаление изображения по id изображения
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteImage(@PathVariable UUID id) {
         service.deleteById(id);
     }
 
-    //    Получение изображения конкретного товара (по id товара)
     @GetMapping(
             value = "/by-prodyct-id/{id}",
             produces = "application/octet-stream"
@@ -43,7 +49,6 @@ public class ImageController {
         return service.getImageByProductId(id);
     }
 
-    //    Получение изображения по id изображения
     @GetMapping(
             value = "/{id}",
             produces = "application/octet-stream"
