@@ -1,4 +1,4 @@
-package com.edu.backend.controller.advice;
+package com.edu.backend.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -51,4 +51,8 @@ public class ImageService {
                     .image(image.getBytes())
                     .build());
     }
+
+    //todo
+    public void addImageByProductId(Long productId, MultipartFile image) {
+    }
 }
