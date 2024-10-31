@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,7 +26,7 @@ public class ImageController {
     )
     @PostMapping(
             value = "/add",
-            consumes = "multipart/form-data"
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
     )
     @ResponseStatus(HttpStatus.CREATED)
     public void addImage(@RequestPart Long productId,
@@ -39,7 +40,7 @@ public class ImageController {
     )
     @PatchMapping(
             value = "/change",
-            consumes = "multipart/form-data"
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
     )
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void changeImage(@RequestPart UUID id,
@@ -60,7 +61,7 @@ public class ImageController {
 
     @GetMapping(
             value = "/by-product-id/{id}",
-            produces = "application/octet-stream"
+            produces = MediaType.APPLICATION_OCTET_STREAM_VALUE
     )
     @Operation(
             summary = "Получение изображения",
@@ -73,7 +74,7 @@ public class ImageController {
 
     @GetMapping(
             value = "/{id}",
-            produces = "application/octet-stream"
+            produces = MediaType.APPLICATION_OCTET_STREAM_VALUE
     )
     @Operation(
             summary = "Получение изображения",
