@@ -1,4 +1,4 @@
-package com.edu.backend.controller.temp;
+package com.edu.backend.controller;
 
 import com.edu.backend.entity.Address;
 import com.edu.backend.repository.AddressRepository;
