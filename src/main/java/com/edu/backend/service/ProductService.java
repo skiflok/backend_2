@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @Service
@@ -17,7 +16,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ModelMapper modelMapper;
 
-    public void addProduct(ProductDto productDto, MultipartFile imageFile) {
+    public void addProduct(ProductDto productDto) {
         log.info("addProduct");
     }
 
@@ -27,5 +26,14 @@ public class ProductService {
                 .orElseThrow(() ->
                         new EntityNotFoundException(String.format("Продукт с [id=%d] не найден", id))
                 );
+    }
+
+    public void decreaseProduct(Long productId, Integer decreaseStockValue) {
+    }
+
+    public void getAllProduct() {
+    }
+
+    public void deleteById(Long id) {
     }
 }

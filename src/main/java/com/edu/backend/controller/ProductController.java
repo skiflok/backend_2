@@ -7,20 +7,23 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "ProductController", description = "Контроллер для работы с товарами")
 @RestController()
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/product")
+@RequestMapping(
+        value = "/api/v1/product",
+        produces = MediaType.APPLICATION_JSON_VALUE
+)
 public class ProductController {
 
     private final ProductService service;
 
     @PostMapping(
             value = "/add",
-            consumes = "multipart/form-data"
+            consumes = MediaType.APPLICATION_JSON_VALUE
     )
     @Operation(
             summary = "Добавление товара",
@@ -28,42 +31,49 @@ public class ProductController {
     )
     @ResponseStatus(HttpStatus.CREATED)
     public void addProduct(
-            @RequestBody @Valid ProductDto productDto,
-            @RequestPart MultipartFile imageFile) {
-        service.addProduct(productDto, imageFile);
+            @RequestBody @Valid ProductDto productDto) {
+        service.addProduct(productDto);
     }
 
-//    @PostMapping(
-//            value = "/add",
-//            consumes = "multipart/form-data",
-//            produces = "application/json"
-//    )
-    public void decreaseProduct() {}
-
-    @GetMapping(
-            value = "/{id}",
-            produces = "application/json"
+    @PatchMapping(value = "/decrease-product")
+    @Operation(
+            summary = "Уменьшение количества товара",
+            description = "Уменьшение количества товара (на вход запросу подается id товара и на сколько уменьшить)"
     )
-    @ResponseStatus(HttpStatus.CREATED)
+    public void decreaseProduct(
+            @RequestParam Long productId,
+            @RequestParam Integer decreaseStockValue) {
+        service.decreaseProduct(productId, decreaseStockValue);
+    }
+
+    @GetMapping(value = "/{id}")
+    @Operation(
+            summary = "Получение товара по id",
+            description = "Получение товара по id"
+    )
+    @ResponseStatus(HttpStatus.OK)
     public ProductDto getProductById(@PathVariable Long id) {
         return service.getProductById(id);
     }
 
-    public void getAllProduct() {}
+    @GetMapping(value = "/all")
+    @Operation(
+            summary = "Получение всех доступных товаров",
+            description = "Получение всех доступных товаров"
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public void getAllProduct() {
+        service.getAllProduct();
+    }
 
-    public void deleteProduct() {}
+    @DeleteMapping(value = "/{id}")
+    @Operation(
+            summary = "Удаление товара по id",
+            description = "Удаление товара по id"
+    )
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteProduct(@PathVariable Long id) {
+        service.deleteById(id);
+    }
 
 }
-
-/*
-*
-Добавление товара (на вход подается json, соответствующей структуре, описанной сверху).
-
-Уменьшение количества товара (на вход запросу подается id товара и на сколько уменьшить)
-
-Получение товара по id
-
-Получение всех доступных товаров
-
-Удаление товара по id
-* */
