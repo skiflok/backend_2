@@ -10,6 +10,10 @@
 [Liquibase vs Flyway](https://www.baeldung.com/liquibase-vs-flyway)
 [Using Liquibase with Spring Boot Tutorial](https://medium.com/@cat.edelveis/using-liquibase-with-spring-boot-tutorial-79245a0b79a6)
 
+### H2
+
+[Spring Boot With H2 Database]{https://www.baeldung.com/spring-boot-h2-database}
+
 ## REST API
 
 [Аннотированные контроллеры](https://javarush.com/quests/lectures/questspring.level05.lecture02)
@@ -23,6 +27,8 @@
 [Пагинация и сортировка с использованием Spring Data JPA](https://www.baeldung.com/spring-data-jpa-pagination-sorting)
 
 [Spring – Log Incoming Requests](https://www.baeldung.com/spring-http-logging)
+
+## Swagger
 
 ### Swagger UI
 
