@@ -103,6 +103,12 @@ public class ClientController {
             value = "/{id}/change-address",
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
+    @Operation(
+            summary = "Получение клиентов по имени и фамилии",
+            description = """
+                    Изменение адреса клиента
+                    параметры: Id и новый адрес в виде json"""
+    )
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void changeAddress(
             @PathVariable Long id,
@@ -111,3 +117,4 @@ public class ClientController {
         service.changeAddress(id, addressDto);
     }
 }
+
