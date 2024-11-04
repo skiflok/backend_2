@@ -52,7 +52,7 @@ public class SupplierController {
             description = "Удаление поставщика по id"
     )
     @DeleteMapping(
-            value = "/{id}}"
+            value = "/{id}"
     )
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable Long supplierId) {
@@ -77,7 +77,7 @@ public class SupplierController {
             description = "Получение поставщика по id"
     )
     @GetMapping(
-            value = "/{id}}",
+            value = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @ResponseStatus(HttpStatus.OK)

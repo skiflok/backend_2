@@ -1,6 +1,7 @@
 package com.edu.backend.dto;
 
 import com.edu.backend.enums.Category;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -17,6 +18,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
+@Schema(description = "Товар")
 public class ProductDto {
 
     private Long id;

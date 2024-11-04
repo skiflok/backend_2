@@ -34,5 +34,6 @@ public class ClientDto {
     private LocalDate registrationDate;
 
     @NotNull
-    private AddressDto address;
+    @JsonProperty("address_id")
+    private Long addressId;
 }

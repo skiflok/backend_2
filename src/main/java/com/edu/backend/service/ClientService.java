@@ -40,17 +40,19 @@ public class ClientService {
                     throw new EntityExistsException("Клиент уже существует");
                 });
 
-        AddressDto addressDto = clientDto.getAddress();
 
-        Address address = findAddressOrSaveAndReturnIfNotExists(addressDto);
+        //todo
+//        AddressDto addressDto = clientDto.getAddress();
 
-        log.info("address = {}", address);
-        client.setRegistrationDate(LocalDate.now());
-        client.setAddress(address);
-
-        log.info("client {}", client);
-        client = clientRepository.save(client);
-        log.info("save client id = {}", client.getId());
+//        Address address = findAddressOrSaveAndReturnIfNotExists(addressDto);
+//
+//        log.info("address = {}", address);
+//        client.setRegistrationDate(LocalDate.now());
+//        client.setAddress(address);
+//
+//        log.info("client {}", client);
+//        client = clientRepository.save(client);
+//        log.info("save client id = {}", client.getId());
     }
 
     public ClientDto getClient(long id) {
