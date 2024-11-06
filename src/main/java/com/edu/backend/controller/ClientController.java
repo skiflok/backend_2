@@ -44,9 +44,7 @@ public class ClientController {
             description = "Добавление клиента (на вход подается json, соответствующей структуре, описанной сверху)."
     )
     @ResponseStatus(HttpStatus.CREATED)
-    public void saveClient(
-            @Valid @RequestBody ClientDto clientDto
-    ) {
+    public void addClient(@Valid @RequestBody ClientDto clientDto) {
         service.saveClient(clientDto);
     }
 

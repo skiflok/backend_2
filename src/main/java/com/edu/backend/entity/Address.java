@@ -4,12 +4,14 @@ package com.edu.backend.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Objects;
 
 @Getter
 @Setter
 @Entity
+@ToString
 @Table(name = "address", schema = "s21")
 public class Address {
 
@@ -38,7 +40,9 @@ public class Address {
             return false;
         }
         Address address = (Address) o;
-        return Objects.equals(country, address.country) && Objects.equals(city, address.city) && Objects.equals(street, address.street);
+        return Objects.equals(country, address.country) &&
+                Objects.equals(city, address.city) &&
+                Objects.equals(street, address.street);
     }
 
     @Override

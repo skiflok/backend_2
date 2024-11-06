@@ -2,16 +2,16 @@ spring:
   application:
     name: backend
 
-#  datasource:
-#    url: jdbc:postgresql://localhost:5432/backend2
-#    username: admin
-#    password: pass
-
   datasource:
-    url: jdbc:h2:mem:backend2
-    username: sa
-    password: password
-    driverClassName: org.h2.Driver
+    url: jdbc:postgresql://localhost:5432/backend2
+    username: admin
+    password: pass
+
+#  datasource:
+#    url: jdbc:h2:mem:backend2
+#    username: sa
+#    password: password
+#    driverClassName: org.h2.Driver
 
   jpa:
     show-sql: false
@@ -23,7 +23,7 @@ spring:
         use_sql_comments: true
 
     #    for H2
-    database-platform: org.hibernate.dialect.H2Dialect
+#    database-platform: org.hibernate.dialect.H2Dialect
 #    defer-datasource-initialization: true
 
   h2:

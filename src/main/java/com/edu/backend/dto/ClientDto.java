@@ -36,10 +36,10 @@ public class ClientDto {
     @NotNull
     private Gender gender;
 
-    @JsonProperty("registration_date")
+//    @JsonProperty("registration_date")
     private LocalDate registrationDate;
 
     @NotNull
-    @JsonProperty("address_id")
+//    @JsonProperty("address_id")
     private Long addressId;
 }

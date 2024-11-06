@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -37,19 +38,17 @@ public class ClientService {
                     throw new EntityExistsException("Клиент уже существует");
                 });
 
+        Address address = addressRepository.findById(clientDto.getAddressId()).orElseThrow(
+                () -> new EntityNotFoundException(String.format("Адрес с [id=%d] не найден", clientDto.getAddressId()))
+        );
 
-        //todo
-//        AddressDto addressDto = clientDto.getAddress();
+        log.info("address = {}", address.toString());
+        client.setRegistrationDate(LocalDate.now());
+        client.setAddress(address);
 
-//        Address address = findAddressOrSaveAndReturnIfNotExists(addressDto);
-//
-//        log.info("address = {}", address);
-//        client.setRegistrationDate(LocalDate.now());
-//        client.setAddress(address);
-//
-//        log.info("client {}", client);
-//        client = clientRepository.save(client);
-//        log.info("save client id = {}", client.getId());
+        log.info("client {}", client.toString());
+        client = clientRepository.save(client);
+        log.info("save client id = {}", client.getId());
     }
 
     public ClientDto getClient(long id) {
