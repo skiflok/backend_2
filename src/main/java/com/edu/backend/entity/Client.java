@@ -2,10 +2,7 @@ package com.edu.backend.entity;
 
 import com.edu.backend.enums.Gender;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -13,6 +10,9 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "client", schema = "s21")
 public class Client {
@@ -39,6 +39,10 @@ public class Client {
     @Column(name = "registration_date")
     private LocalDate registrationDate;
 
+    @ManyToOne
+    @JoinColumn(name = "address_id")
+    private Address address;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -56,9 +60,4 @@ public class Client {
     public int hashCode() {
         return Objects.hash(name, surname, birthday, gender, registrationDate, address);
     }
-
-    @ManyToOne
-    @JoinColumn(name = "address_id")
-    private Address address;
-
 }

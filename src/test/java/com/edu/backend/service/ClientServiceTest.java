@@ -2,12 +2,13 @@ package com.edu.backend.service;
 
 import com.edu.backend.dto.AddressDto;
 import com.edu.backend.dto.ClientDto;
+import com.edu.backend.entity.Address;
 import com.edu.backend.entity.Client;
 import com.edu.backend.enums.Gender;
 import com.edu.backend.repository.AddressRepository;
 import com.edu.backend.repository.ClientRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,10 +21,11 @@ import org.modelmapper.ModelMapper;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 
-@Disabled
+
+@Slf4j
 @ExtendWith(MockitoExtension.class)
 class ClientServiceTest {
 
@@ -38,6 +40,7 @@ class ClientServiceTest {
 
     private ClientDto clientDto;
     private AddressDto addressDto;
+    private Client client;
 
     @BeforeEach
     public void init() {
@@ -58,14 +61,28 @@ class ClientServiceTest {
                 .street("street")
                 .build();
 
+        client = Client.builder()
+                .id(1L)
+                .name("Name")
+                .surname("Surname")
+                .birthday(LocalDate.now())
+                .gender(Gender.MALE)
+                .registrationDate(LocalDate.now())
+                .address(modelMapper.map(addressDto, Address.class))
+                .build();
+
     }
 
     @Test
     public void getClientShouldOk() {
-        Mockito.when(clientRepository.findById(any())).thenReturn(Optional.of(new Client()));
+        Mockito.when(clientRepository.findById(any())).thenReturn(Optional.of(client));
 
-        clientService.getClient(1L);
-        System.out.println(clientDto.toString());
+        ClientDto clientDtoTest = clientService.getClient(1L);
+
+        log.info("clientDto = [{}]", clientDto);
+        log.info("clientDtoTest = [{}]", clientDtoTest);
+
+        assertEquals(clientDtoTest, clientDto);
     }
 
 }
