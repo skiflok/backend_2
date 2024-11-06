@@ -53,7 +53,10 @@ public class ClientService {
 
     public ClientDto getClient(long id) {
         return modelMapper.map(
-                clientRepository.findById(id).orElseThrow(EntityNotFoundException::new),
+                clientRepository.findById(id)
+                        .orElseThrow(() ->
+                                new EntityNotFoundException(String.format("Клиент с [id=%d] не найден", id))
+                        ),
                 ClientDto.class
         );
     }

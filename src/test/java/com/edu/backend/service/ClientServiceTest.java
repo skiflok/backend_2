@@ -7,6 +7,7 @@ import com.edu.backend.entity.Client;
 import com.edu.backend.enums.Gender;
 import com.edu.backend.repository.AddressRepository;
 import com.edu.backend.repository.ClientRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 
 
@@ -70,7 +72,6 @@ class ClientServiceTest {
                 .registrationDate(LocalDate.now())
                 .address(modelMapper.map(addressDto, Address.class))
                 .build();
-
     }
 
     @Test
@@ -83,6 +84,17 @@ class ClientServiceTest {
         log.info("clientDtoTest = [{}]", clientDtoTest);
 
         assertEquals(clientDtoTest, clientDto);
+    }
+
+    @Test
+    public void getClientShouldThrowEntityNotFoundExceptionWhenIdNotExist() {
+        Mockito.when(clientRepository.findById(1L)).thenReturn(Optional.empty());
+
+        EntityNotFoundException exception = assertThrows(
+                EntityNotFoundException.class,
+                () -> clientService.getClient(1L));
+
+        assertEquals(exception.getMessage(), "Клиент с [id=1] не найден");
     }
 
 }
