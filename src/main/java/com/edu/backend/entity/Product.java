@@ -3,12 +3,17 @@ package com.edu.backend.entity;
 import com.edu.backend.enums.Category;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Getter
+@Setter
 @Entity
+@ToString
 @Table(name = "product", schema = "s21")
 public class Product {
 
@@ -41,4 +46,23 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "image_id ")
     private Image image;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Objects.equals(name, product.name) &&
+                category == product.category &&
+                Objects.equals(price, product.price) &&
+                Objects.equals(availableStock, product.availableStock) &&
+                Objects.equals(lastUpdateDate, product.lastUpdateDate) &&
+                Objects.equals(supplier, product.supplier) &&
+                Objects.equals(image, product.image);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, category, price, availableStock, lastUpdateDate, supplier, image);
+    }
 }

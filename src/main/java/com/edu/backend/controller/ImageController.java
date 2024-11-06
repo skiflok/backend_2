@@ -30,7 +30,7 @@ public class ImageController {
     )
     @ResponseStatus(HttpStatus.CREATED)
     public void addImage(@RequestPart Long productId,
-                         @RequestPart MultipartFile image) {
+                         @RequestPart MultipartFile image) throws IOException {
         service.addImageByProductId(productId, image);
     }
 

@@ -27,7 +27,7 @@ public class ImageService {
         return imageRepository.findById(uuid)
                 .map(Image::getImage)
                 .orElseThrow(() ->
-                        new EntityNotFoundException(String.format("Клиент с [id=%s] не найден", uuid))
+                        new EntityNotFoundException(String.format("Изображение с [id=%s] не найден", uuid))
                 );
     }
 
@@ -46,13 +46,25 @@ public class ImageService {
     }
 
     public void changeImage(UUID id, MultipartFile image) throws IOException {
-            imageRepository.save(Image.builder()
-                    .id(id)
-                    .image(image.getBytes())
-                    .build());
+        imageRepository.save(Image.builder()
+                .id(id)
+                .image(image.getBytes())
+                .build());
     }
 
-    //todo
-    public void addImageByProductId(Long productId, MultipartFile image) {
+    public void addImageByProductId(Long productId, MultipartFile inputImage) throws IOException {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() ->
+                        new EntityNotFoundException(String.format("Продукт с [id=%s] не найден", productId))
+                );
+        UUID imageUuid = UUID.randomUUID();
+        Image image = Image.builder()
+                .id(imageUuid)
+                .image(inputImage.getBytes())
+                .build();
+        imageRepository.save(image);
+        product.setImage(image);
+        productRepository.save(product);
+        log.info("Image update success");
     }
 }
