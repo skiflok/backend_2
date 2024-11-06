@@ -42,13 +42,13 @@ public class ClientService {
                 () -> new EntityNotFoundException(String.format("Адрес с [id=%d] не найден", clientDto.getAddressId()))
         );
 
-        log.info("address = {}", address.toString());
+        log.info("address = [{}]", address);
         client.setRegistrationDate(LocalDate.now());
         client.setAddress(address);
 
-        log.info("client {}", client.toString());
+        log.info("client = [{}]", client);
         client = clientRepository.save(client);
-        log.info("save client id = {}", client.getId());
+        log.info("save client id = [{}]", client.getId());
     }
 
     public ClientDto getClient(long id) {
