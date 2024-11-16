@@ -37,3 +37,9 @@
 ### favicon
 
 [favicon](https://www.favicon.cc/)
+
+### проблема с маппингом енама в кастомный тип в постгрес
+
+[Java Enums, JPA and PostgreSQL Enums](https://www.baeldung.com/java-enums-jpa-postgresql)
+[Ошибка создания bean-компонента с именем «entityManagerFactory»: org/hibernate/dialect/PostgreSQL82Dialect](https://stackoverflow.com/questions/76493173/error-creating-bean-with-name-entitymanagerfactory-org-hibernate-dialect-pos)
+[hypersistence-utils](https://github.com/vladmihalcea/hypersistence-utils)

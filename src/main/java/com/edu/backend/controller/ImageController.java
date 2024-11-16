@@ -29,7 +29,7 @@ public class ImageController {
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE
     )
     @ResponseStatus(HttpStatus.CREATED)
-    public void addImage(@RequestPart Long productId,
+    public void addImage(@RequestParam Long productId,
                          @RequestPart MultipartFile image) throws IOException {
         service.addImageByProductId(productId, image);
     }
