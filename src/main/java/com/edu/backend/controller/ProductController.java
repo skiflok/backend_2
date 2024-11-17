@@ -5,6 +5,7 @@ import com.edu.backend.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -42,9 +43,10 @@ public class ProductController {
             summary = "Уменьшение количества товара",
             description = "Уменьшение количества товара (на вход запросу подается id товара и на сколько уменьшить)"
     )
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public void decreaseProduct(
             @RequestParam Long productId,
-            @RequestParam Integer decreaseStockValue) {
+            @RequestParam @Min(1) Integer decreaseStockValue) {
         service.decreaseProduct(productId, decreaseStockValue);
     }
 

@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Getter
 @Entity
-@ToString
+@ToString(exclude = {"image"})
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

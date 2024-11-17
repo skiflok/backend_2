@@ -52,6 +52,15 @@ public class ProductService {
     }
 
     public void decreaseProduct(Long productId, Integer decreaseStockValue) {
+        Product product = productRepository.findById(productId).orElseThrow(
+                () -> new EntityNotFoundException(String.format("Продукт с [id=%d] не найден", productId))
+        );
+        if (decreaseStockValue > product.getAvailableStock()) {
+            throw new IllegalArgumentException("Количество товара меньше чем decreaseStockValue");
+        }
+        product.setAvailableStock(product.getAvailableStock() - decreaseStockValue);
+        productRepository.save(product);
+        log.info("product update [{}]", product);
     }
 
     public List<ProductDto> getAllProduct() {

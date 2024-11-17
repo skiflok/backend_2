@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
 @Slf4j
 @ControllerAdvice
@@ -23,7 +24,11 @@ public class RestResponseEntityExceptionHandler {
     }
 
 
-    @ExceptionHandler(value = {MethodArgumentNotValidException.class})
+    @ExceptionHandler(value = {
+            MethodArgumentNotValidException.class,
+            IllegalArgumentException.class
+//            HandlerMethodValidationException.class
+    })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ProblemDetail validationException(MethodArgumentNotValidException ex, WebRequest request) {
         log.error("Error: ", ex);
