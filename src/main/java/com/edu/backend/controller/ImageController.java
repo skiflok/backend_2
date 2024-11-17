@@ -43,7 +43,7 @@ public class ImageController {
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE
     )
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void changeImage(@RequestPart UUID id,
+    public void changeImage(@RequestParam UUID id,
                             @RequestPart MultipartFile image) throws IOException {
         service.changeImage(id, image);
     }
@@ -57,7 +57,6 @@ public class ImageController {
     public void deleteImage(@PathVariable UUID id) {
         service.deleteById(id);
     }
-
 
     @GetMapping(
             value = "/by-product-id/{id}",

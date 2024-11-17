@@ -42,7 +42,9 @@ public class ImageService {
     }
 
     public void deleteById(UUID id) {
-        //todo нужна обработка
+        if (!imageRepository.existsById(id)) {
+            throw new EntityNotFoundException(String.format("Изображение с [id=%s] товара не найдено", id));
+        }
         imageRepository.deleteById(id);
     }
 
