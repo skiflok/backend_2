@@ -69,5 +69,9 @@ public class ProductService {
     }
 
     public void deleteById(Long id) {
+        if (!productRepository.existsById(id)) {
+            throw new EntityNotFoundException(String.format("Продукт с [id=%s] не найден", id));
+        }
+        productRepository.deleteById(id);
     }
 }

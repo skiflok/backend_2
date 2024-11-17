@@ -46,7 +46,7 @@ public class Product {
     @JoinColumn(name = "supplier_id ")
     private Supplier supplier;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "image_id ")
     private Image image;
 
