@@ -2,13 +2,19 @@ package com.edu.backend.service;
 
 import com.edu.backend.dto.ProductDto;
 import com.edu.backend.dto.SupplierDto;
+import com.edu.backend.entity.Image;
+import com.edu.backend.entity.Product;
+import com.edu.backend.entity.Supplier;
+import com.edu.backend.repository.ImageRepository;
 import com.edu.backend.repository.ProductRepository;
+import com.edu.backend.repository.SupplierRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,10 +24,23 @@ import java.util.stream.Collectors;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final SupplierRepository supplierRepository;
+    private final ImageRepository imageRepository;
     private final ModelMapper defaultModelMapper;
 
     public void addProduct(ProductDto productDto) {
-        log.info("addProduct");
+        Supplier supplier = supplierRepository.findById(productDto.getSupplierId()).orElseThrow(() ->
+                new EntityNotFoundException(String.format("Поставщик с [id=%d] не найден", productDto.getSupplierId()))
+        );
+        Image image = imageRepository.findById(productDto.getImageUuid()).orElseThrow(() ->
+                new EntityNotFoundException(String.format("изображение с [id=%s] не найдено", productDto.getImageUuid()))
+        );
+        Product product = defaultModelMapper.map(productDto, Product.class);
+        product.setImage(image);
+        product.setSupplier(supplier);
+        product.setLastUpdateDate(LocalDate.now());
+        productRepository.save(product);
+        log.info("addProduct [{}]", product);
     }
 
     public ProductDto getProductById(Long id) {

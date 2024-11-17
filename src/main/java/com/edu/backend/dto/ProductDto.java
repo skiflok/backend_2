@@ -28,7 +28,7 @@ public class ProductDto {
     private String name;
 
     @NotNull
-    @Size(min = 1, max = 100)
+//    @Size(min = 1, max = 100)
     private Category category;
 
     @NotNull

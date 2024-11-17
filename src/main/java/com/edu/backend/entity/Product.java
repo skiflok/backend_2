@@ -21,7 +21,7 @@ public class Product {
 
     @Id
     @Column(name = "id")
-    @SequenceGenerator(name = "productIdSeq", sequenceName = "product_id_seq", allocationSize = 1)
+    @SequenceGenerator(name = "productIdSeq", sequenceName = "s21.product_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "productIdSeq")
     private Long id;
 
