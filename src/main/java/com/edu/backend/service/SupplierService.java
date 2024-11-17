@@ -40,9 +40,28 @@ public class SupplierService {
     }
 
     public void changeAddress(Long supplierId, AddressDto addressDto) {
+        Supplier supplier = supplierRepository.findById(supplierId).orElseThrow(() ->
+                new EntityNotFoundException(String.format("Поставщик с [id=%d] не существует", supplierId))
+        );
+        addressRepository.findByCountryAndCityAndStreet(
+                        addressDto.getCountry(),
+                        addressDto.getCity(),
+                        addressDto.getStreet())
+                .ifPresent(address -> {
+                    throw new EntityExistsException("Адрес с данными параметнами уже существует");
+                });
+        addressDto.setId(null);
+        Address address = addressRepository.save(defaultModelMapper.map(addressDto, Address.class));
+        supplier.setAddress(address);
+        supplier = supplierRepository.save(supplier);
+        log.info("Supplier update [{}]", supplier);
     }
 
-    public void deleteById(Long supplierId) {
+    public void deleteById(Long id) {
+        if (!supplierRepository.existsById(id)) {
+            throw new EntityNotFoundException(String.format("Поставщик с [id=%s] не найден", id));
+        }
+        supplierRepository.deleteById(id);
     }
 
     public List<SupplierDto> getAll() {

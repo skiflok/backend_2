@@ -56,8 +56,8 @@ public class SupplierController {
             value = "/{id}"
     )
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteById(@PathVariable Long supplierId) {
-        service.deleteById(supplierId);
+    public void deleteById(@PathVariable Long id) {
+        service.deleteById(id);
     }
 
     @Operation(
