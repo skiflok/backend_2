@@ -2,17 +2,18 @@ package com.edu.backend.entity;
 
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.Objects;
 
 @Getter
 @Setter
+@Builder
 @Entity
 @ToString
 @Table(name = "address", schema = "s21")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Address {
 
     @Id

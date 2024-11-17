@@ -5,6 +5,7 @@ import com.edu.backend.dto.SupplierDto;
 import com.edu.backend.service.SupplierService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -29,7 +30,7 @@ public class SupplierController {
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
     @ResponseStatus(HttpStatus.CREATED)
-    public void addSupplier(@RequestBody SupplierDto supplierDto) {
+    public void addSupplier(@Valid @RequestBody SupplierDto supplierDto) {
         service.add(supplierDto);
     }
 
@@ -42,8 +43,8 @@ public class SupplierController {
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void addSupplier(@RequestParam Long supplierId,
-                            @RequestBody AddressDto addressDto) {
+    public void changeSupplierAddress(@RequestParam Long supplierId,
+                                      @Valid @RequestBody AddressDto addressDto) {
         service.changeAddress(supplierId, addressDto);
     }
 
