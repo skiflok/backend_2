@@ -44,7 +44,7 @@ public class ProductDto {
     private Long supplierId;
 
     @NotNull
-    private UUID imageUuid;
+    private UUID imageId;
 
     @Override
     public boolean equals(Object o) {
@@ -57,11 +57,11 @@ public class ProductDto {
                 Objects.equals(availableStock, that.availableStock) &&
                 Objects.equals(lastUpdateDate, that.lastUpdateDate) &&
                 Objects.equals(supplierId, that.supplierId) &&
-                Objects.equals(imageUuid, that.imageUuid);
+                Objects.equals(imageId, that.imageId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, category, price, availableStock, lastUpdateDate, supplierId, imageUuid);
+        return Objects.hash(name, category, price, availableStock, lastUpdateDate, supplierId, imageId);
     }
 }

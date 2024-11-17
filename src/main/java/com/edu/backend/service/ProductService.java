@@ -1,7 +1,6 @@
 package com.edu.backend.service;
 
 import com.edu.backend.dto.ProductDto;
-import com.edu.backend.dto.SupplierDto;
 import com.edu.backend.entity.Image;
 import com.edu.backend.entity.Product;
 import com.edu.backend.entity.Supplier;
@@ -32,8 +31,8 @@ public class ProductService {
         Supplier supplier = supplierRepository.findById(productDto.getSupplierId()).orElseThrow(() ->
                 new EntityNotFoundException(String.format("Поставщик с [id=%d] не найден", productDto.getSupplierId()))
         );
-        Image image = imageRepository.findById(productDto.getImageUuid()).orElseThrow(() ->
-                new EntityNotFoundException(String.format("изображение с [id=%s] не найдено", productDto.getImageUuid()))
+        Image image = imageRepository.findById(productDto.getImageId()).orElseThrow(() ->
+                new EntityNotFoundException(String.format("изображение с [id=%s] не найдено", productDto.getImageId()))
         );
         Product product = defaultModelMapper.map(productDto, Product.class);
         product.setImage(image);
