@@ -1,0 +1,1225 @@
+{
+	"info": {
+		"_postman_id": "c7e2361c-3261-477e-a90a-6a6571501d2c",
+		"name": "s21_backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29840342"
+	},
+	"item": [
+		{
+			"name": "p1_postman",
+			"item": [
+				{
+					"name": "part_1",
+					"item": [
+						{
+							"name": "1-linux",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{everything}}?q=linux",
+									"host": [
+										"{{everything}}"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "linux"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3-linux",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{everything}}?q=linux&searchIn=title&&language=ru",
+									"host": [
+										"{{everything}}"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "linux"
+										},
+										{
+											"key": "searchIn",
+											"value": "title"
+										},
+										{
+											"key": null,
+											"value": null
+										},
+										{
+											"key": "language",
+											"value": "ru"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "2-develop",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{everything}}?q=linux&searchIn=title&from=2024-09-7&to=2024-09-22&language=ru&pageSize=10&page=3",
+									"host": [
+										"{{everything}}"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "linux"
+										},
+										{
+											"key": "searchIn",
+											"value": "title"
+										},
+										{
+											"key": "from",
+											"value": "2024-09-7"
+										},
+										{
+											"key": "to",
+											"value": "2024-09-22"
+										},
+										{
+											"key": "language",
+											"value": "ru"
+										},
+										{
+											"key": "pageSize",
+											"value": "10"
+										},
+										{
+											"key": "page",
+											"value": "3"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "4-science",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{top-headlines}}?country=ru&q=наука",
+									"host": [
+										"{{top-headlines}}"
+									],
+									"query": [
+										{
+											"key": "country",
+											"value": "ru"
+										},
+										{
+											"key": "q",
+											"value": "наука"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "part_2",
+					"item": [
+						{
+							"name": "https://kazan.hh.ru/vacancy/106732794/contacts?employerId=867461",
+							"protocolProfileBehavior": {
+								"followAuthorizationHeader": false,
+								"disableUrlEncoding": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Cookie",
+										"value":"",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7",
+										"type": "text"
+									},
+									{
+										"key": "X-Gib-Fgsscgib-W-Hh",
+										"value": "6dfV734fe9afaab23d1f768502be2886ff1f999c",
+										"type": "text"
+									},
+									{
+										"key": "X-Gib-Gsscgib-W-Hh",
+										"value": "MOKvQOtWSZkApqVzbm4JiDSfe+mHRPCLvSA9ApTdxGWKujauCo7J+cvcHG5nJRSldSZ2+lW5/hrJOZ1Q2V+qP26eApEY/1wQrnNncJmJaa/5OaI3xs4oNo1wN5kG61ptvMHJMsrEpoX5X5ad3f73V8e0IlK7/BfRQmgew1Ggm0xJTP8s1iR6ZKunf4TaxKg4hzDRRGJ8EG79tkr4AGfx6r0ZS57t7cPs1dKED4M6L/tnpHG/037bLrcS7LnJLo5p4g==",
+										"type": "text"
+									},
+									{
+										"key": "X-Hhtmfrom",
+										"value": "main",
+										"type": "text"
+									},
+									{
+										"key": "X-Hhtmsource",
+										"value": "vacancy_search_list",
+										"type": "text"
+									},
+									{
+										"key": "X-Xsrftoken",
+										"value": "fc7601e4e200d883cb1a8f0b361e837c",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://kazan.hh.ru/vacancy/106732794/contacts?employerId=867461",
+									"protocol": "https",
+									"host": [
+										"kazan",
+										"hh",
+										"ru"
+									],
+									"path": [
+										"vacancy",
+										"106732794",
+										"contacts"
+									],
+									"query": [
+										{
+											"key": "employerId",
+											"value": "867461"
+										}
+									]
+								},
+								"description": "cookie interseptor"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "part_3",
+					"item": [
+						{
+							"name": "https://api.telegram.org/{{bot_token}}/getMe",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.telegram.org/bot{{bot_token}}/getMe",
+									"protocol": "https",
+									"host": [
+										"api",
+										"telegram",
+										"org"
+									],
+									"path": [
+										"bot{{bot_token}}",
+										"getMe"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "https://api.telegram.org/{{bot_token}}/getUpdates",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.telegram.org/bot{{bot_token}}/getUpdates",
+									"protocol": "https",
+									"host": [
+										"api",
+										"telegram",
+										"org"
+									],
+									"path": [
+										"bot{{bot_token}}",
+										"getUpdates"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "https://api.telegram.org/bot{{bot_token}}/sendMessage?chat_id=579950685",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "https://api.telegram.org/bot{{bot_token}}/sendMessage?chat_id=579950685&text=hello",
+									"protocol": "https",
+									"host": [
+										"api",
+										"telegram",
+										"org"
+									],
+									"path": [
+										"bot{{bot_token}}",
+										"sendMessage"
+									],
+									"query": [
+										{
+											"key": "chat_id",
+											"value": "579950685"
+										},
+										{
+											"key": "text",
+											"value": "hello"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "https://api.telegram.org/bot{{bot_token}}/sendMessage?chat_id=579950685",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "",
+										"value": "",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "photo",
+											"type": "file",
+											"src": "/C:/Users/Lok/Desktop/MLP.jpg"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://api.telegram.org/bot{{bot_token}}/sendPhoto?chat_id=579950685",
+									"protocol": "https",
+									"host": [
+										"api",
+										"telegram",
+										"org"
+									],
+									"path": [
+										"bot{{bot_token}}",
+										"sendPhoto"
+									],
+									"query": [
+										{
+											"key": "chat_id",
+											"value": "579950685"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "https://api.telegram.org/bot{{bot_token}}/sendMessage?chat_id=579950685",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "",
+										"value": "",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "photo",
+											"type": "file",
+											"src": "/C:/Users/Lok/Desktop/Сортировка и поиск.pdf"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://api.telegram.org/bot{{bot_token}}/sendPhoto?chat_id=579950685",
+									"protocol": "https",
+									"host": [
+										"api",
+										"telegram",
+										"org"
+									],
+									"path": [
+										"bot{{bot_token}}",
+										"sendPhoto"
+									],
+									"query": [
+										{
+											"key": "chat_id",
+											"value": "579950685"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "https://api.telegram.org/bot{{bot_token}}/sendMessage?chat_id=579950685",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "",
+										"value": "",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "photo",
+											"type": "file",
+											"src": "/C:/Users/Lok/Desktop/Анисимов_Александр_Вячеславович_тестовое_задание.docx"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://api.telegram.org/bot{{bot_token}}/sendPhoto?chat_id=579950685",
+									"protocol": "https",
+									"host": [
+										"api",
+										"telegram",
+										"org"
+									],
+									"path": [
+										"bot{{bot_token}}",
+										"sendPhoto"
+									],
+									"query": [
+										{
+											"key": "chat_id",
+											"value": "579950685"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "https://api.telegram.org/bot{{bot_token}}/getUserProfilePhotos?user_id=579950685",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.telegram.org/bot{{bot_token}}/getUserProfilePhotos?user_id=579950685",
+									"protocol": "https",
+									"host": [
+										"api",
+										"telegram",
+										"org"
+									],
+									"path": [
+										"bot{{bot_token}}",
+										"getUserProfilePhotos"
+									],
+									"query": [
+										{
+											"key": "user_id",
+											"value": "579950685"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "https://api.telegram.org/bot{{bot_token}}/getUserProfilePhotos?user_id=579950685",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.telegram.org/bot{{bot_token}}/getFile?file_id=AgACAgIAAxUAAWb1m63Cic_DOu4mD14KmvH7zRvuAAKppzEbXViRIpuU_utMfOz-AQADAgADYwADNgQ",
+									"protocol": "https",
+									"host": [
+										"api",
+										"telegram",
+										"org"
+									],
+									"path": [
+										"bot{{bot_token}}",
+										"getFile"
+									],
+									"query": [
+										{
+											"key": "user_id",
+											"value": "579950685",
+											"disabled": true
+										},
+										{
+											"key": "file_id",
+											"value": "AgACAgIAAxUAAWb1m63Cic_DOu4mD14KmvH7zRvuAAKppzEbXViRIpuU_utMfOz-AQADAgADYwADNgQ"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "https://api.telegram.org/file/bot{{bot_token}}/photos/file_0.jpg",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.telegram.org/file/bot{{bot_token}}/photos/file_0.jpg",
+									"protocol": "https",
+									"host": [
+										"api",
+										"telegram",
+										"org"
+									],
+									"path": [
+										"file",
+										"bot{{bot_token}}",
+										"photos",
+										"file_0.jpg"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "backend",
+			"item": [
+				{
+					"name": "clients",
+					"item": [
+						{
+							"name": "client by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:9999/api/v1/client/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"api",
+										"v1",
+										"client",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "add",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\":\"null\",\r\n    \"name\": \"Иван\",\r\n    \"surname\": \"Иванов 3\",\r\n    \"birthday\": \"1990-01-01\",\r\n    \"gender\": \"MALE\",\r\n    \"registration_date\":\"\",\r\n    \"addressId\": 2\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:9999/api/v1/client/add",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"api",
+										"v1",
+										"client",
+										"add"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "all",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:9999/api/v1/client/all/pageable",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"api",
+										"v1",
+										"client",
+										"all",
+										"pageable"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "by name surname",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:9999/api/v1/client/12",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"api",
+										"v1",
+										"client",
+										"12"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "by name surname",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:9999/api/v1/client/search?name=Иван&surname=Иванов",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"api",
+										"v1",
+										"client",
+										"search"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "Иван"
+										},
+										{
+											"key": "surname",
+											"value": "Иванов"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "by id and new address",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 1,\r\n    \"country\": \"RUSSIA\",\r\n    \"city\": \"Moscow\",\r\n    \"street\": \"qwerty\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:9999/api/v1/client/13/change-address",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"api",
+										"v1",
+										"client",
+										"13",
+										"change-address"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "address",
+					"item": [
+						{
+							"name": "search?country city street",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:9999/api/v1/address/search?country=RUSSIA&city=Moscow&street=qwerty",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"api",
+										"v1",
+										"address",
+										"search"
+									],
+									"query": [
+										{
+											"key": "country",
+											"value": "RUSSIA"
+										},
+										{
+											"key": "city",
+											"value": "Moscow"
+										},
+										{
+											"key": "street",
+											"value": "qwerty"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "image",
+					"item": [
+						{
+							"name": "add image from product",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/G:/workdir/21-school/backend/backend_2/src/main/resources/psql_map_folder/product_images/fire.PNG"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:9999/api/v1/image/add?productId=1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"api",
+										"v1",
+										"image",
+										"add"
+									],
+									"query": [
+										{
+											"key": "productId",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "change image",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/G:/workdir/21-school/backend/backend_2/src/main/resources/psql_map_folder/product_images/postman.JPG"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:9999/api/v1/image/change?id=ee4b20d9-beb5-48a8-9bde-1eb2ba301b10",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"api",
+										"v1",
+										"image",
+										"change"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "ee4b20d9-beb5-48a8-9bde-1eb2ba301b10"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:9999/api/v1/image/a0d11677-23f5-492c-aed5-7d5925744e36",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"api",
+										"v1",
+										"image",
+										"a0d11677-23f5-492c-aed5-7d5925744e36"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get by product id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:9999/api/v1/image/by-product-id/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"api",
+										"v1",
+										"image",
+										"by-product-id",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:9999/api/v1/image/ee4b20d9-beb5-48a8-9bde-1eb2ba301b10",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"api",
+										"v1",
+										"image",
+										"ee4b20d9-beb5-48a8-9bde-1eb2ba301b10"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "supplier",
+					"item": [
+						{
+							"name": "supplier add",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 8,\r\n    \"name\": \"rrrrrr\",\r\n    \"address\": 2,\r\n    \"phoneNumber\": \"177234\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:9999/api/v1/supplier/add",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"api",
+										"v1",
+										"supplier",
+										"add"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "change address",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 1,\r\n    \"country\": \"123456\",\r\n    \"city\": \"456\",\r\n    \"street\": \"789\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:9999/api/v1/supplier/change-address?supplierId=2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"api",
+										"v1",
+										"supplier",
+										"change-address"
+									],
+									"query": [
+										{
+											"key": "supplierId",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "supplier delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:9999/api/v1/supplier/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"api",
+										"v1",
+										"supplier",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "sup by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:9999/api/v1/supplier/5",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"api",
+										"v1",
+										"supplier",
+										"5"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "all sup",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:9999/api/v1/supplier/all",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"api",
+										"v1",
+										"supplier",
+										"all"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "product",
+					"item": [
+						{
+							"name": "all product",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:9999/api/v1/product/all",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"api",
+										"v1",
+										"product",
+										"all"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "add product",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": \"null\",\r\n    \"name\": \"fire\",\r\n    \"category\": \"ELECTRONICS\",\r\n    \"price\": \"123.21\",\r\n    \"availableStock\": 50,\r\n    \"lastUpdateDate\": \"\",\r\n    \"supplierId\": 1,\r\n    \"imageId\": \"ee4b20d9-beb5-48a8-9bde-1eb2ba301b10\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:9999/api/v1/product/add",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"api",
+										"v1",
+										"product",
+										"add"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "decreaseStockValue",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:9999/api/v1/product/decrease-product?productId=2&decreaseStockValue=1000",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"api",
+										"v1",
+										"product",
+										"decrease-product"
+									],
+									"query": [
+										{
+											"key": "productId",
+											"value": "2"
+										},
+										{
+											"key": "decreaseStockValue",
+											"value": "1000"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "product by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:9999/api/v1/product/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"api",
+										"v1",
+										"product",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "product by id",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:9999/api/v1/product/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"api",
+										"v1",
+										"product",
+										"2"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "everything",
+			"value": "https://newsapi.org/v2/everything",
+			"type": "string"
+		},
+		{
+			"key": "top-headlines",
+			"value": "https://newsapi.org/v2/top-headlines",
+			"type": "string"
+		},
+		{
+			"key": "sources",
+			"value": "https://newsapi.org/v2/top-headlines/sources",
+			"type": "string"
+		},
+		{
+			"key": "bot_token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

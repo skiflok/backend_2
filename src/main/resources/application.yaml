@@ -1,0 +1,62 @@
+spring:
+  application:
+    name: backend
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/backend2
+    username: admin
+    password: pass
+
+#  datasource:
+#    url: jdbc:h2:mem:backend2
+#    username: sa
+#    password: password
+#    driverClassName: org.h2.Driver
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+    #    for H2
+#    database-platform: org.hibernate.dialect.H2Dialect
+#    defer-datasource-initialization: true
+
+#  h2:
+#    console:
+#      enabled: true
+
+
+  liquibase:
+    enabled: true
+    show-summary-output: console
+
+  output:
+    ansi:
+      enabled: always
+
+  servlet:
+    multipart:
+      max-file-size: 2MB
+
+
+server:
+  port: 9999
+
+logging:
+  level:
+    liquibase: info
+    com.edu.backend: debug
+    org.springframework.web.filter.CommonsRequestLoggingFilter: debug
+
+springdoc:
+#  api-docs:
+#    path:
+  swagger-ui:
+    path: /swagger/index.html
+    show-common-extensions: true
