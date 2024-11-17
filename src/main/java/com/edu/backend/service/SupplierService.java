@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -62,11 +63,13 @@ public class SupplierService {
             throw new EntityNotFoundException(String.format("Поставщик с [id=%s] не найден", id));
         }
         supplierRepository.deleteById(id);
+        log.info("Supplier [id = {}] delete", id);
     }
 
     public List<SupplierDto> getAll() {
-        //todo
-        return Collections.emptyList();
+        return supplierRepository.findAll().stream()
+                .map((element) -> defaultModelMapper.map(element, SupplierDto.class))
+                .collect(Collectors.toList());
     }
 
     public SupplierDto getById(Long id) {
