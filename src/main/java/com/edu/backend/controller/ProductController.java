@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Tag(name = "ProductController", description = "Контроллер для работы с товарами")
 @RestController()
 @RequiredArgsConstructor
@@ -62,8 +64,8 @@ public class ProductController {
             description = "Получение всех доступных товаров"
     )
     @ResponseStatus(HttpStatus.OK)
-    public void getAllProduct() {
-        service.getAllProduct();
+    public List<ProductDto> getAllProduct() {
+        return service.getAllProduct();
     }
 
     @DeleteMapping(value = "/{id}")
