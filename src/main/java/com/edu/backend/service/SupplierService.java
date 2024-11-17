@@ -29,9 +29,9 @@ public class SupplierService {
         supplierRepository.findById(supplierDto.getId()).ifPresent(s -> {
             throw new EntityExistsException(String.format("Поставщик с [id=%d] уже существует", supplierDto.getId()));
         });
-        Address address = addressRepository.findById(supplierDto.getAddress())
+        Address address = addressRepository.findById(supplierDto.getAddressId())
                 .orElseThrow(() -> new EntityNotFoundException(
-                        String.format("Адресс с [id=%d] не найден", supplierDto.getAddress())));
+                        String.format("Адресс с [id=%d] не найден", supplierDto.getAddressId())));
         Supplier supplier = defaultModelMapper.map(supplierDto, Supplier.class);
         supplier.setAddress(address);
         supplier = supplierRepository.save(supplier);
@@ -70,6 +70,12 @@ public class SupplierService {
     }
 
     public SupplierDto getById(Long id) {
-        return null;
+        return defaultModelMapper.map(
+                supplierRepository.findById(id)
+                        .orElseThrow(() ->
+                                new EntityNotFoundException(String.format("Поставщик с [id=%d] не найден", id))
+                        ),
+                SupplierDto.class
+        );
     }
 }

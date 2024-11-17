@@ -13,7 +13,7 @@ public class SupplierDto {
 
     private String name;
 
-    private Long address;
+    private Long addressId;
 
     private String phoneNumber;
 }
