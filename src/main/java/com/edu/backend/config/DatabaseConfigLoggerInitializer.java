@@ -11,12 +11,11 @@ public class DatabaseConfigLoggerInitializer implements ApplicationContextInitia
     public void initialize(ConfigurableApplicationContext applicationContext) {
         String databaseUrl = applicationContext.getEnvironment().getProperty("spring.datasource.url");
         String databaseUsername = applicationContext.getEnvironment().getProperty("spring.datasource.username");
-        String databasePassword = applicationContext.getEnvironment().getProperty("spring.datasource.password");
+//        String databasePassword = applicationContext.getEnvironment().getProperty("spring.datasource.password");
 
         // Логируем параметры подключения
         log.info("Подключение к базе данных:");
         log.info("URL: {}", databaseUrl);
         log.info("Пользователь: {}", databaseUsername);
-        log.info("Пароль: {}", "*****"); // Не показывайте пароль
     }
 }
