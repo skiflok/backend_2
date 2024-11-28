@@ -1,16 +1,14 @@
-version: '3.8'  # Укажите версию Docker Compose
+version: '3.8'
 
 services:
   postgres:
-    image: postgres:latest  # Используйте последнюю версию образа PostgreSQL
+    image: postgres:latest
     container_name: pg_backend_2
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: backend2
     ports:
-      - "5432:5432"  # Проброс порта
+      - "5432:5432"
     volumes:
-#      - G:\workdir\21-school\backend_2\src\main\resources\psql_map_folder:/psql_map_folder
-      - C:\Users\anisimovav3\workDir\projects\s21\backend_2\src\main\resources\psql_map_folder:/psql_map_folder
-#    restart: no  # Опционально: перезапускать контейнер при сбоях
+      - src/main/resources/psql_map_folder/product_images:/psql_map_folder
