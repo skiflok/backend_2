@@ -1,4 +1,4 @@
-version: '3.8'
+#version: '3.8'
 
 services:
   postgres:
@@ -11,4 +11,18 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - src/main/resources/psql_map_folder/product_images:/psql_map_folder
+      - ./src/main/resources/psql_map_folder/product_images:/psql_map_folder
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U admin -d backend2" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    image: backend:latest
+    container_name: backend
+    ports:
+      - "9999:9999"
+    depends_on:
+      postgres:
+        condition: service_healthy

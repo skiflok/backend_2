@@ -2,6 +2,13 @@
 
 * Тематика магазина: магазин бытовой техники.
 
+## Запуск
+
+* `mvn clean install -DskipTests -X` установка в локальный репозиторий
+* `mvn jib:dockerBuild` создание образа докер с помощью jib
+* `docker compose up`
+* `docker compose dowm`
+
 ## Сущности
 
 ```
