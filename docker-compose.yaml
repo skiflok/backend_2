@@ -14,9 +14,18 @@ services:
       - ./src/main/resources/psql_map_folder:/psql_map_folder
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U admin -d backend2" ]
-      interval: 10s
+      interval: 5s
       timeout: 5s
       retries: 5
+
+  adminer:
+    image: dpage/pgadmin4
+    container_name: pg_admin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user@domain.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "80:80"
 
   backend:
     image: backend:latest
