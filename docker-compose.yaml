@@ -11,7 +11,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./src/main/resources/psql_map_folder/product_images:/psql_map_folder
+      - ./src/main/resources/psql_map_folder:/psql_map_folder
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U admin -d backend2" ]
       interval: 10s
