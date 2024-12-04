@@ -47,3 +47,7 @@
 ### JIB GOOGLE
 
 [Jib - Containerize your Maven project]{https://github.com/GoogleContainerTools/jib/blob/master/jib-maven-plugin/README.md}
+
+### NGINX
+
+[Алфавитный указатель переменных](http://nginx.org/ru/docs/varindex.html)
