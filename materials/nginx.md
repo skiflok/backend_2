@@ -4,6 +4,11 @@
 
 ## config
 
+[Обратный прокси-сервер NGINX](https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/)
+
+<details>
+<summary>revers proxy conf</summary>
+
 ```
 events {}
 
@@ -108,6 +113,8 @@ http {
 - Убедитесь, что сервисы `backend` и `nginx` находятся в одной сети.
 - Имена контейнеров (`backend`) должны совпадать. Если это не так, используйте IP-адрес или измените
   `docker-compose.yml`, чтобы указать правильное имя хоста.
+
+</details>
 
 ### Logs
 
