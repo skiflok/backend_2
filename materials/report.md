@@ -43,3 +43,11 @@
 [Java Enums, JPA and PostgreSQL Enums](https://www.baeldung.com/java-enums-jpa-postgresql)
 [Ошибка создания bean-компонента с именем «entityManagerFactory»: org/hibernate/dialect/PostgreSQL82Dialect](https://stackoverflow.com/questions/76493173/error-creating-bean-with-name-entitymanagerfactory-org-hibernate-dialect-pos)
 [hypersistence-utils](https://github.com/vladmihalcea/hypersistence-utils)
+
+### JIB GOOGLE
+
+[Jib - Containerize your Maven project]{https://github.com/GoogleContainerTools/jib/blob/master/jib-maven-plugin/README.md}
+
+### NGINX
+
+[Алфавитный указатель переменных](http://nginx.org/ru/docs/varindex.html)
