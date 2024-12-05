@@ -4,7 +4,8 @@
 
 ### add tag
 
-git tag -a v1.0.0 -m "1.0.0"
+* `git tag -a v1.0.0 -m "1.0.0"`
+* `git push --follow-tags`
 
 [2.6 Основы Git - Работа с тегами](https://git-scm.com/book/ru/v2/%D0%9E%D1%81%D0%BD%D0%BE%D0%B2%D1%8B-Git-%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D1%82%D0%B5%D0%B3%D0%B0%D0%BC%D0%B8)
 
