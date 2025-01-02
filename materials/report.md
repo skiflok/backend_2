@@ -51,3 +51,7 @@
 ### NGINX
 
 [Алфавитный указатель переменных](http://nginx.org/ru/docs/varindex.html)
+
+## Docker
+
+[How to del docker image](https://stackoverflow.com/questions/65895928/how-to-delete-a-docker-image)

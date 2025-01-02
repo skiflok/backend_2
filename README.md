@@ -14,6 +14,18 @@
 
 </details>
 
+### пересборка имейджа
+
+<details>
+  <summary>rebuild</summary>
+
+> `docker compose down`
+> `mvn clean install`
+> `docker rmi backend`
+> `mvn jib:dockerBuild`
+
+</details>
+
 ## versions history
 
 <details>
