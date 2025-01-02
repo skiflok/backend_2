@@ -9,8 +9,8 @@
 
 * `mvn clean install -DskipTests -X` установка в локальный репозиторий
 * `mvn jib:dockerBuild` создание образа докер с помощью jib
-* `docker compose up`
-* `docker compose dowm`
+* `docker compose up` запуск контейнеров
+* `docker compose dowm` остановка контейнеров
 
 </details>
 
@@ -20,7 +20,7 @@
   <summary>rebuild</summary>
 
 * `docker compose down`
-*`mvn clean install`
+* `mvn clean install`
 * `docker rmi backend`
 * `mvn jib:dockerBuild`
 
