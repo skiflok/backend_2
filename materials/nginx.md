@@ -119,3 +119,55 @@ http {
 ### Logs
 
 `docker logs nginx`
+
+### reload
+
+Чтобы перезагрузить Nginx и применить изменения в конфигурации, используйте одну из следующих команд в зависимости от ситуации:
+
+### 1. **Перезагрузка Nginx без прерывания работы (рекомендуется)**
+
+```bash
+sudo nginx -s reload
+```
+Эта команда отправляет сигнал **reload** текущему процессу Nginx. Сервер перезагрузит конфигурацию, не прерывая активные соединения.
+
+---
+
+### 2. **Перезапуск сервиса Nginx через systemd**
+Если вы используете systemd, выполните:
+
+```bash
+sudo systemctl reload nginx
+```
+Эта команда аналогична `-s reload`, она обновляет конфигурацию без остановки сервера.
+
+---
+
+### 3. **Полный перезапуск Nginx**
+Если вам необходимо полностью перезапустить Nginx (например, после установки новых модулей):
+
+```bash
+sudo systemctl restart nginx
+```
+**Важно:** Этот метод разрывает все активные соединения.
+
+---
+
+### 4. **Проверка конфигурации перед перезагрузкой**
+Перед перезагрузкой всегда полезно проверить конфигурацию на наличие ошибок:
+
+```bash
+sudo nginx -t
+```
+
+Если конфигурация корректна, команда выведет:
+```
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+```
+
+Используйте этот подход, чтобы избежать ошибок, которые могут привести к недоступности сервера.
+
+### 
+
+[Spring Boot Swagger through Nginx does not work correctly](https://stackoverflow.com/questions/75838196/spring-boot-swagger-through-nginx-does-not-work-correctly)
