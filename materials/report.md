@@ -55,3 +55,5 @@
 ## Docker
 
 [How to del docker image](https://stackoverflow.com/questions/65895928/how-to-delete-a-docker-image)
+
+[healthcheck for pgAdmin](https://stackoverflow.com/questions/72272476/how-to-perform-docker-compose-healthcheck-for-pgadmin4)
