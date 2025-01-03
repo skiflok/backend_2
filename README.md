@@ -189,7 +189,7 @@ address
     - [x] Настроить маршрутизацию /api -> на /api/v1.
     - [x] По пути /api/v1 выдавать swagger.
     - [x] Настроить раздачу статики по пути /. В корне раздачи статики поместить 2 файла: index.html и image.png.
-    - [ ] Настроить /admin на pgAdmin — GUI СУБД POSTGRES.
+    - [x] Настроить /admin на pgAdmin — GUI СУБД POSTGRES.
     - [ ] Настроить /status на отдачу страницы статуса сервера Nginx (nginx status).
 
 
