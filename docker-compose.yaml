@@ -30,8 +30,8 @@ services:
       test: ["CMD", "wget", "-O", "-", "http://localhost:80/misc/ping"]
       interval: 10s         # Как часто выполнять проверку
       timeout: 10s          # Сколько ждать ответа
-      retries: 3            # Сколько раз повторить проверку до признания контейнера unhealthy
-      start_period: 5s      # Период ожидания перед началом проверок
+      retries: 5            # Сколько раз повторить проверку до признания контейнера unhealthy
+      start_period: 10s     # Период ожидания перед началом проверок
 
   backend:
     image: backend:latest
