@@ -37,6 +37,7 @@
 * v1.2.0 По пути /api/v1 отдается swagger.
 * v1.3.0 раздача статики на /.
 * v1.4.0 настроен pgAdmin на /admin.
+* v1.5.0 статус nginx на /status.
 
 </details>
 
@@ -191,7 +192,7 @@ address
     - [x] По пути /api/v1 выдавать swagger.
     - [x] Настроить раздачу статики по пути /. В корне раздачи статики поместить 2 файла: index.html и image.png.
     - [x] Настроить /admin на pgAdmin — GUI СУБД POSTGRES.
-    - [ ] Настроить /status на отдачу страницы статуса сервера Nginx (nginx status).
+    - [x] Настроить /status на отдачу страницы статуса сервера Nginx (nginx status).
 
 
 - [ ] Настроить Nginx в части балансировки:
