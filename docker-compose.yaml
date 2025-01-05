@@ -33,14 +33,33 @@ services:
       retries: 5            # Сколько раз повторить проверку до признания контейнера unhealthy
       start_period: 10s     # Период ожидания перед началом проверок
 
-  backend:
+  backend_primary:
     image: backend:latest
-    container_name: backend
+    container_name: backend_primary
     ports:
       - "9999:9999"
     depends_on:
       postgres:
         condition: service_healthy
+    environment:
+      DB_ACCESS: rw
+  backend_db_ro-1:
+    image: backend:latest
+    container_name: backend_db_ro-1
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_ACCESS: ro
+  backend_db_ro-2:
+    image: backend:latest
+    container_name: backend_db_ro-2
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_ACCESS: ro
+
 
   nginx:
     image: nginx:latest
@@ -51,7 +70,7 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./src/main/resources/static/nginx:/static
     depends_on:
-      backend:
+      backend_primary:
         condition: service_started
       adminer:
         condition: service_healthy
