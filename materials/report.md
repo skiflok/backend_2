@@ -52,6 +52,8 @@
 
 [Алфавитный указатель переменных](http://nginx.org/ru/docs/varindex.html)
 
+[Раскрываем возможности map в nginx](https://habr.com/ru/articles/231277/)
+
 ## Docker
 
 [How to del docker image](https://stackoverflow.com/questions/65895928/how-to-delete-a-docker-image)
