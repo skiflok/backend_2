@@ -14,6 +14,12 @@
 
 [Spring Boot With H2 Database]{https://www.baeldung.com/spring-boot-h2-database}
 
+### Spring boot configuration
+
+[Spring Boot DataSource Configuration](https://howtodoinjava.com/spring-boot2/datasource-configuration/)
+
+[Common Application Properties](https://docs.spring.io/spring-boot/appendix/application-properties/index.html#appendix.application-properties.core)
+
 ## REST API
 
 [Аннотированные контроллеры](https://javarush.com/quests/lectures/questspring.level05.lecture02)
