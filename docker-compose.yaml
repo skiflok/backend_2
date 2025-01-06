@@ -17,6 +17,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    restart: unless-stopped
 
   adminer:
     image: dpage/pgadmin4
@@ -32,15 +33,40 @@ services:
       timeout: 10s          # Сколько ждать ответа
       retries: 5            # Сколько раз повторить проверку до признания контейнера unhealthy
       start_period: 10s     # Период ожидания перед началом проверок
+    restart: unless-stopped
 
-  backend:
+  backend_primary:
     image: backend:latest
-    container_name: backend
+    container_name: backend_primary
     ports:
       - "9999:9999"
     depends_on:
       postgres:
         condition: service_healthy
+    environment:
+      DB_READ_ONLY: false
+    restart: unless-stopped
+
+  backend_db_ro-1:
+    image: backend:latest
+    container_name: backend_db_ro-1
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_READ_ONLY: true
+    restart: unless-stopped
+
+  backend_db_ro-2:
+    image: backend:latest
+    container_name: backend_db_ro-2
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_READ_ONLY: true
+    restart: unless-stopped
+
 
   nginx:
     image: nginx:latest
@@ -51,7 +77,8 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./src/main/resources/static/nginx:/static
     depends_on:
-      backend:
+      backend_primary:
         condition: service_started
       adminer:
         condition: service_healthy
+    restart: unless-stopped
