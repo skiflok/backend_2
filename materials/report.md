@@ -65,3 +65,19 @@
 [How to del docker image](https://stackoverflow.com/questions/65895928/how-to-delete-a-docker-image)
 
 [healthcheck for pgAdmin](https://stackoverflow.com/questions/72272476/how-to-perform-docker-compose-healthcheck-for-pgadmin4)
+
+## Linux
+
+### create local DNS
+
+* Отредактируйте файл /etc/hosts с правами администратора:
+* `sudo nano /etc/hosts`
+* add `127.0.0.1   s21backend`
+
+### create certificate
+
+```bash
+sudo openssl req -x509 -nodes -days 7 -newkey rsa:2048 \
+-keyout ./src/main/resources/cert/s21backend.key \
+-out ./src/main/resources/cert/s21backend.crt
+```
