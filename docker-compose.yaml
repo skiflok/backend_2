@@ -1,6 +1,8 @@
 #version: '3.8'
 
 services:
+#  DB
+
   postgres:
     image: postgres:latest
     container_name: pg_backend_2
@@ -19,6 +21,26 @@ services:
       retries: 5
     restart: unless-stopped
 
+  postgres_auth:
+    image: postgres:latest
+    container_name: db_pg_auth
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: auth_db
+    ports:
+      - "5433:5432"
+#    volumes:
+#      - ./auth-service/src/main/resources/psql_map_folder:/psql_map_folder
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U auth_admin -d auth_db" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+#    DB ADMIN SERVICE
+
   adminer:
     image: dpage/pgadmin4
     container_name: pg_admin
@@ -34,6 +56,8 @@ services:
       retries: 5            # Сколько раз повторить проверку до признания контейнера unhealthy
       start_period: 10s     # Период ожидания перед началом проверок
     restart: unless-stopped
+
+#    BACKEND SERVICES
 
   shop_service_primary:
     image: shop-service:latest
@@ -67,6 +91,7 @@ services:
       DB_READ_ONLY: true
     restart: unless-stopped
 
+# REVERS PROXY NGINX
 
   nginx:
     image: nginx:latest
