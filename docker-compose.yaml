@@ -26,13 +26,13 @@ services:
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: pass
-      POSTGRES_DB: auth_db
+      POSTGRES_DB: auth
     ports:
       - "5433:5432"
 #    volumes:
 #      - ./auth-service/src/main/resources/psql_map_folder:/psql_map_folder
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U auth_admin -d auth_db" ]
+      test: [ "CMD-SHELL", "pg_isready -U admin -d auth" ]
       interval: 5s
       timeout: 5s
       retries: 5
