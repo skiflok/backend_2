@@ -81,3 +81,13 @@ sudo openssl req -x509 -nodes -days 7 -newkey rsa:2048 \
 -keyout ./src/main/resources/cert/s21backend.key \
 -out ./src/main/resources/cert/s21backend.crt
 ```
+
+## PLANT UML
+
+[plant uml site](https://plantuml.com/ru/)
+
+## Auth service
+
+[Сервер авторизации для микросервисов на Spring Boot](https://habr.com/ru/companies/otus/articles/681448/)
+
+[Простой сервис аутентификации и авторизации по JWT на основе фильтров SpringSecurity](https://habr.com/ru/articles/781066/)
