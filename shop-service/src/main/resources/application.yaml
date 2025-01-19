@@ -3,7 +3,8 @@ spring:
     name: shop-service
 
   datasource:
-    url: jdbc:postgresql://postgres:5432/backend2
+#    url: jdbc:postgresql://postgres:5432/backend2
+    url: jdbc:postgresql://localhost:5432/backend2
     username: admin
     password: pass
     hikari:

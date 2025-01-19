@@ -12,5 +12,4 @@ public class AuthServiceApplication {
         application.addInitializers(new DatabaseConfigLoggerInitializer());
         application.run(args);
     }
-
 }
