@@ -91,3 +91,20 @@ sudo openssl req -x509 -nodes -days 7 -newkey rsa:2048 \
 [Сервер авторизации для микросервисов на Spring Boot](https://habr.com/ru/companies/otus/articles/681448/)
 
 [Простой сервис аутентификации и авторизации по JWT на основе фильтров SpringSecurity](https://habr.com/ru/articles/781066/)
+
+# GRPC
+
+[gRPC DOCUMENTATION](https://grpc.io/)
+
+[gRPC examples](https://github.com/grpc/grpc-java/tree/master/examples/example-tls)
+
+[gRPC-Java - An RPC library and framework](https://github.com/grpc/grpc-java)
+
+[grpc-spring](https://github.com/grpc-ecosystem/grpc-spring?tab=readme-ov-file#features)
+
+[Введение в gRPC с Spring Boot](https://www.baeldung.com/spring-boot-grpc)
+
+[Introduction to gRPC](https://www.baeldung.com/grpc-introduction)
+
+[Java и gRPC: быстрый старт со Spring Boot | Преимущества, Настройка и Использование
+](https://www.youtube.com/watch?v=Bj7g8voWJNU)
