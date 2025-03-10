@@ -51,6 +51,10 @@ server:
   port: 9998
   forward-headers-strategy: framework
 
+grpc:
+  server:
+    port: 9090
+
 logging:
   level:
     liquibase: info

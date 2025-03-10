@@ -14,6 +14,8 @@ public class HelloServiceImpl extends HelloServiceGrpc.HelloServiceImplBase {
     @Override
     public void hello(HelloRequest request, StreamObserver<HelloResponse> responseObserver) {
 
+
+        log.info("request name = {}, lastname = {}", request.getFirstName(), request.getLastName());
         String greeting = new StringBuilder()
                 .append("Hello, ")
                 .append(request.getFirstName())
