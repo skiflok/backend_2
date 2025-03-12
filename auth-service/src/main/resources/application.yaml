@@ -58,6 +58,7 @@ grpc:
 logging:
   level:
     liquibase: info
-    com.edu.backend: debug
+    com.edu.authservise: debug
     org.springframework.web.filter.CommonsRequestLoggingFilter: debug
+
 

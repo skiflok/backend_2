@@ -10,10 +10,38 @@ message CreateUserRequest {
   string password = 5;
 }
 
-message CreateUserResponse {
+message JwtTokenReturn {
   string jwtToken = 1;
 }
 
+message AccessCheckRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message ChangePasswordRequest {
+  string email = 1;
+  string oldPassword = 2;
+  string newPassword = 3;
+}
+
+message ChangePasswordResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message PasswordRecoveryRequest {
+  string email = 1;
+}
+
+message PasswordRecoveryResponse {
+  bool success = 1;
+  string message = 2;
+}
+
 service AuthService {
-  rpc createUser(CreateUserRequest) returns (CreateUserResponse);
+  rpc createUser(CreateUserRequest) returns (JwtTokenReturn);
+  rpc accessCheck(AccessCheckRequest) returns (JwtTokenReturn);
+  rpc changePassword(ChangePasswordRequest) returns (ChangePasswordResponse);
+  rpc recoverPassword(PasswordRecoveryRequest) returns (PasswordRecoveryResponse);
 }
