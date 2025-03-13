@@ -18,7 +18,7 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     properties:
       hibernate:
         format_sql: true
@@ -33,19 +33,13 @@ spring:
 #    console:
 #      enabled: true
 
-
-#  liquibase:
-#    enabled: true
-#    show-summary-output: console
+  liquibase:
+    enabled: true
+    show-summary-output: console
 
   output:
     ansi:
       enabled: always
-
-  servlet:
-    multipart:
-      max-file-size: 2MB
-
 
 server:
   port: 9998
@@ -57,7 +51,7 @@ grpc:
 
 logging:
   level:
-    liquibase: info
+    liquibase: debug
     com.edu.authservise: debug
     org.springframework.web.filter.CommonsRequestLoggingFilter: debug
 
