@@ -1,16 +1,32 @@
 package com.edu.authservise.service;
 
+import com.edu.authservise.entity.User;
+import com.edu.authservise.repository.UsersRepository;
 import com.edu.grpc.*;
 import io.grpc.stub.StreamObserver;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
 
 @Slf4j
 @GrpcService
+@RequiredArgsConstructor
 public class AuthServiceImpl extends AuthServiceGrpc.AuthServiceImplBase {
+    private final UsersRepository usersRepository;
+
     @Override
     public void createUser(CreateUserRequest request, StreamObserver<JwtTokenReturn> responseObserver) {
         log.info("create user request = {}", request);
+
+        User user = usersRepository.save(User.builder()
+                .email(request.getEmail())
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .phoneNumber(request.getPhoneNumber())
+                .password(request.getPassword())
+                .build());
+
+        log.debug(String.valueOf(user));
 
         JwtTokenReturn response = JwtTokenReturn.newBuilder()
                 .setJwtToken("this is jwt token :)")
