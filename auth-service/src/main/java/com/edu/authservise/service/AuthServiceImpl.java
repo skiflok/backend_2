@@ -2,6 +2,7 @@ package com.edu.authservise.service;
 
 import com.edu.authservise.entity.User;
 import com.edu.authservise.repository.UsersRepository;
+import com.edu.authservise.security.JwtService;
 import com.edu.grpc.*;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import net.devh.boot.grpc.server.service.GrpcService;
 @RequiredArgsConstructor
 public class AuthServiceImpl extends AuthServiceGrpc.AuthServiceImplBase {
     private final UsersRepository usersRepository;
+    private final JwtService jwtService;
 
     @Override
     public void createUser(CreateUserRequest request, StreamObserver<JwtTokenReturn> responseObserver) {
