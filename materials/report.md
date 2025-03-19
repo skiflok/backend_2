@@ -20,6 +20,8 @@
 
 [Common Application Properties](https://docs.spring.io/spring-boot/appendix/application-properties/index.html#appendix.application-properties.core)
 
+[properties-with-spring](https://www.baeldung.com/properties-with-spring)
+
 ## REST API
 
 [Аннотированные контроллеры](https://javarush.com/quests/lectures/questspring.level05.lecture02)
@@ -92,7 +94,7 @@ sudo openssl req -x509 -nodes -days 7 -newkey rsa:2048 \
 
 [Простой сервис аутентификации и авторизации по JWT на основе фильтров SpringSecurity](https://habr.com/ru/articles/781066/)
 
-# GRPC
+## GRPC
 
 [gRPC DOCUMENTATION](https://grpc.io/)
 
@@ -108,3 +110,9 @@ sudo openssl req -x509 -nodes -days 7 -newkey rsa:2048 \
 
 [Java и gRPC: быстрый старт со Spring Boot | Преимущества, Настройка и Использование
 ](https://www.youtube.com/watch?v=Bj7g8voWJNU)
+
+## JWT
+
+[jwtk](https://github.com/jwtk/jjwt#installation)
+
+[Улучшенная аутентификация Java с помощью JSON Web Tokens (JWT)](https://www.baeldung.com/java-json-web-tokens-jjwt)
