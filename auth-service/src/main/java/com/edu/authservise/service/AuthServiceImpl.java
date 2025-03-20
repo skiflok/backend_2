@@ -8,6 +8,7 @@ import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @GrpcService
@@ -17,6 +18,7 @@ public class AuthServiceImpl extends AuthServiceGrpc.AuthServiceImplBase {
     private final JwtService jwtService;
 
     @Override
+    @Transactional
     public void createUser(CreateUserRequest request, StreamObserver<JwtTokenReturn> responseObserver) {
         log.info("create user request = {}", request);
 
@@ -30,8 +32,12 @@ public class AuthServiceImpl extends AuthServiceGrpc.AuthServiceImplBase {
 
         log.debug(String.valueOf(user));
 
+        String jwtToken = jwtService.generateToken(user.getEmail());
+
+        log.debug("jwt token = {}", jwtToken);
+
         JwtTokenReturn response = JwtTokenReturn.newBuilder()
-                .setJwtToken("this is jwt token :)")
+                .setJwtToken(jwtToken)
                 .build();
 
         responseObserver.onNext(response);
