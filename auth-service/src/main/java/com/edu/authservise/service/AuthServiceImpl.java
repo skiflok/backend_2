@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthServiceImpl extends AuthServiceGrpc.AuthServiceImplBase {
     private final UsersRepository usersRepository;
     private final JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
@@ -30,9 +32,7 @@ public class AuthServiceImpl extends AuthServiceGrpc.AuthServiceImplBase {
                     .firstName(request.getFirstName())
                     .lastName(request.getLastName())
                     .phoneNumber(request.getPhoneNumber())
-                    //todo
-//                    .password(passwordEncoder.encode(request.getPassword()))
-                    .password(request.getPassword())
+                    .password(passwordEncoder.encode(request.getPassword()))
                     .build());
 
             log.debug("User created: {}", user.getEmail());

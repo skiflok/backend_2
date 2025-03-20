@@ -55,7 +55,7 @@ jwt:
 
 logging:
   level:
-    liquibase: debug
+    liquibase: info
     com.edu.authservise: debug
     org.springframework.web.filter.CommonsRequestLoggingFilter: debug
 
