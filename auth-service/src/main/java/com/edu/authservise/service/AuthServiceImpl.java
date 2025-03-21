@@ -65,40 +65,39 @@ public class AuthServiceImpl extends AuthServiceGrpc.AuthServiceImplBase {
     public void accessCheck(AccessCheckRequest request, StreamObserver<JwtTokenReturn> responseObserver) {
         try {
             log.info("AccessCheckRequest by account = [{}]", request.getEmail());
-            User user = usersRepository.findByEmail(request.getEmail()).orElseThrow();
-            log.info("Account [{}] find in DB", request.getEmail());
-            boolean success = passwordEncoder.matches(request.getPassword(), user.getPassword());
 
-            if (success) {
-                JwtTokenReturn response = JwtTokenReturn.newBuilder()
-                        .setJwtToken(jwtService.generateToken(user.getEmail()))
-                        .build();
+            User user = usersRepository.findByEmail(request.getEmail())
+                    .orElseThrow(() -> new IllegalArgumentException("User with this email not exists"));
 
-                log.info("Create token by account [{}] success", request.getEmail());
+            log.info("Account [{}] found in DB", request.getEmail());
 
-                responseObserver.onNext(response);
+            if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+                String token = jwtService.generateToken(user.getEmail());
+                log.info("Token generated successfully for account [{}]", request.getEmail());
+
+                responseObserver.onNext(JwtTokenReturn.newBuilder().setJwtToken(token).build());
                 responseObserver.onCompleted();
+                log.info("Send token by account [{}]", request.getEmail());
             } else {
-                log.warn("Password by account [{}] not valid", request.getEmail());
                 responseObserver.onError(
-                        Status.PERMISSION_DENIED.withDescription("Password not valid")
-                                .asRuntimeException());
+                        Status.UNAUTHENTICATED.withDescription("Invalid password").asRuntimeException()
+                );
+                log.warn("Invalid password for account [{}]", request.getEmail());
             }
 
-        } catch (NoSuchElementException e) {
-            log.warn("Account [{}] not exists", request.getEmail());
+        } catch (IllegalArgumentException e) {
             responseObserver.onError(
-                    Status.UNAUTHENTICATED.withDescription("User with this email not exists")
-                            .asRuntimeException()
+                    Status.UNAUTHENTICATED.withDescription(e.getMessage()).asRuntimeException()
             );
+            log.warn("Account [{}] does not exist", request.getEmail());
         } catch (Exception e) {
-            log.error("Unexpected error", e);
             responseObserver.onError(
-                    Status.INTERNAL.withDescription("An unexpected error occurred")
-                            .asRuntimeException()
+                    Status.INTERNAL.withDescription("An unexpected error occurred").asRuntimeException()
             );
+            log.error("Unexpected error", e);
         }
     }
+
 
     //todo
     @Override
