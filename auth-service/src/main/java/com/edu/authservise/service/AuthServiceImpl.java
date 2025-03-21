@@ -13,6 +13,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
+
 @Slf4j
 @GrpcService
 @RequiredArgsConstructor
@@ -37,10 +39,8 @@ public class AuthServiceImpl extends AuthServiceGrpc.AuthServiceImplBase {
 
             log.debug("User created: {}", user.getEmail());
 
-            String jwtToken = jwtService.generateToken(user.getEmail());
-
             JwtTokenReturn response = JwtTokenReturn.newBuilder()
-                    .setJwtToken(jwtToken)
+                    .setJwtToken(jwtService.generateToken(user.getEmail()))
                     .build();
 
             responseObserver.onNext(response);
@@ -61,18 +61,43 @@ public class AuthServiceImpl extends AuthServiceGrpc.AuthServiceImplBase {
         }
     }
 
-
-    //todo
     @Override
     public void accessCheck(AccessCheckRequest request, StreamObserver<JwtTokenReturn> responseObserver) {
-        log.debug("request = \n{}", request);
+        try {
+            log.info("AccessCheckRequest by account = [{}]", request.getEmail());
+            User user = usersRepository.findByEmail(request.getEmail()).orElseThrow();
+            log.info("Account [{}] find in DB", request.getEmail());
+            boolean success = passwordEncoder.matches(request.getPassword(), user.getPassword());
 
-        JwtTokenReturn response = JwtTokenReturn.newBuilder()
-                .setJwtToken("this is jwt token :)")
-                .build();
+            if (success) {
+                JwtTokenReturn response = JwtTokenReturn.newBuilder()
+                        .setJwtToken(jwtService.generateToken(user.getEmail()))
+                        .build();
 
-        responseObserver.onNext(response);
-        responseObserver.onCompleted();
+                log.info("Create token by account [{}] success", request.getEmail());
+
+                responseObserver.onNext(response);
+                responseObserver.onCompleted();
+            } else {
+                log.warn("Password by account [{}] not valid", request.getEmail());
+                responseObserver.onError(
+                        Status.PERMISSION_DENIED.withDescription("Password not valid")
+                                .asRuntimeException());
+            }
+
+        } catch (NoSuchElementException e) {
+            log.warn("Account [{}] not exists", request.getEmail());
+            responseObserver.onError(
+                    Status.UNAUTHENTICATED.withDescription("User with this email not exists")
+                            .asRuntimeException()
+            );
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+            responseObserver.onError(
+                    Status.INTERNAL.withDescription("An unexpected error occurred")
+                            .asRuntimeException()
+            );
+        }
     }
 
     //todo

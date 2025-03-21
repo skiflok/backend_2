@@ -1,10 +1,7 @@
 package com.edu.authservise.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @ToString
 @Builder
@@ -15,6 +12,8 @@ import lombok.ToString;
         name = "users",
         schema = "s21"
 )
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
     @Id
     @Column(name = "id")
