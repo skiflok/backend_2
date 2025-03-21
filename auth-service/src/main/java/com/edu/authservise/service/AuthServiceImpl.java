@@ -13,8 +13,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.NoSuchElementException;
-
 @Slf4j
 @GrpcService
 @RequiredArgsConstructor
@@ -66,8 +64,7 @@ public class AuthServiceImpl extends AuthServiceGrpc.AuthServiceImplBase {
         try {
             log.info("AccessCheckRequest by account = [{}]", request.getEmail());
 
-            User user = usersRepository.findByEmail(request.getEmail())
-                    .orElseThrow(() -> new IllegalArgumentException("User with this email not exists"));
+            User user = getUserByEmail(request.getEmail());
 
             log.info("Account [{}] found in DB", request.getEmail());
 
@@ -98,25 +95,45 @@ public class AuthServiceImpl extends AuthServiceGrpc.AuthServiceImplBase {
         }
     }
 
-
-    //todo
     @Override
+    @Transactional
     public void changePassword(ChangePasswordRequest request, StreamObserver<ChangePasswordResponse> responseObserver) {
-        log.debug("request = \n{}", request);
+        try {
+            log.info("Password change request for account = [{}]", request.getEmail());
 
-        ChangePasswordResponse response = ChangePasswordResponse.newBuilder()
-                .setSuccess(true)
-                .setMessage("password change success")
-                .build();
+            User user = getUserByEmail(request.getEmail());
 
-        responseObserver.onNext(response);
-        responseObserver.onCompleted();
+            if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+                log.warn("Invalid current password for account [{}]", request.getEmail());
+                responseObserver.onError(Status.UNAUTHENTICATED.withDescription("Invalid current password").asRuntimeException());
+                return;
+            }
+
+            String newPasswordHash = passwordEncoder.encode(request.getNewPassword());
+            user.setPassword(newPasswordHash);
+            usersRepository.save(user);
+
+            log.info("Password changed successfully for account [{}]", request.getEmail());
+
+            responseObserver.onNext(ChangePasswordResponse.newBuilder()
+                    .setSuccess(true)
+                    .setMessage("Password changed successfully")
+                    .build());
+            responseObserver.onCompleted();
+
+        } catch (IllegalArgumentException e) {
+            log.warn("Account [{}] does not exist", request.getEmail());
+            responseObserver.onError(Status.UNAUTHENTICATED.withDescription(e.getMessage()).asRuntimeException());
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+            responseObserver.onError(Status.INTERNAL.withDescription("An unexpected error occurred").asRuntimeException());
+        }
     }
 
     //todo
     @Override
     public void recoverPassword(PasswordRecoveryRequest request, StreamObserver<PasswordRecoveryResponse> responseObserver) {
-        log.debug("request = \n{}", request);
+        log.debug("recover password by account = [{}]", request.getEmail());
 
         PasswordRecoveryResponse response = PasswordRecoveryResponse.newBuilder()
                 .setSuccess(true)
@@ -125,5 +142,10 @@ public class AuthServiceImpl extends AuthServiceGrpc.AuthServiceImplBase {
 
         responseObserver.onNext(response);
         responseObserver.onCompleted();
+    }
+
+    private User getUserByEmail(String email) {
+        return usersRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("User with this email does not exist"));
     }
 }
