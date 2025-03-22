@@ -20,6 +20,8 @@
 
 [Common Application Properties](https://docs.spring.io/spring-boot/appendix/application-properties/index.html#appendix.application-properties.core)
 
+[properties-with-spring](https://www.baeldung.com/properties-with-spring)
+
 ## REST API
 
 [Аннотированные контроллеры](https://javarush.com/quests/lectures/questspring.level05.lecture02)
@@ -81,3 +83,40 @@ sudo openssl req -x509 -nodes -days 7 -newkey rsa:2048 \
 -keyout ./src/main/resources/cert/s21backend.key \
 -out ./src/main/resources/cert/s21backend.crt
 ```
+
+## PLANT UML
+
+[plant uml site](https://plantuml.com/ru/)
+
+## Auth service
+
+[Сервер авторизации для микросервисов на Spring Boot](https://habr.com/ru/companies/otus/articles/681448/)
+
+[Простой сервис аутентификации и авторизации по JWT на основе фильтров SpringSecurity](https://habr.com/ru/articles/781066/)
+
+## GRPC
+
+[gRPC DOCUMENTATION](https://grpc.io/)
+
+[gRPC examples](https://github.com/grpc/grpc-java/tree/master/examples/example-tls)
+
+[gRPC-Java - An RPC library and framework](https://github.com/grpc/grpc-java)
+
+[grpc-spring](https://github.com/grpc-ecosystem/grpc-spring?tab=readme-ov-file#features)
+
+[Введение в gRPC с Spring Boot](https://www.baeldung.com/spring-boot-grpc)
+
+[Introduction to gRPC](https://www.baeldung.com/grpc-introduction)
+
+[Java и gRPC: быстрый старт со Spring Boot | Преимущества, Настройка и Использование
+](https://www.youtube.com/watch?v=Bj7g8voWJNU)
+
+## JWT
+
+[jwtk](https://github.com/jwtk/jjwt#installation)
+
+[Улучшенная аутентификация Java с помощью JSON Web Tokens (JWT)](https://www.baeldung.com/java-json-web-tokens-jjwt)
+
+## Security
+
+[secure-random](https://www.baeldung.com/java-secure-random)

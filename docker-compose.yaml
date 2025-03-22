@@ -1,6 +1,7 @@
-#version: '3.8'
-
 services:
+
+#  DB
+
   postgres:
     image: postgres:latest
     container_name: pg_backend_2
@@ -11,13 +12,33 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./src/main/resources/psql_map_folder:/psql_map_folder
+      - ./shop-service/src/main/resources/psql_map_folder:/psql_map_folder
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U admin -d backend2" ]
       interval: 5s
       timeout: 5s
       retries: 5
     restart: unless-stopped
+
+  postgres_auth:
+    image: postgres:latest
+    container_name: db_pg_auth
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: auth
+    ports:
+      - "5433:5432"
+#    volumes:
+#      - ./auth-service/src/main/resources/psql_map_folder:/psql_map_folder
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U admin -d auth" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+#    DB ADMIN SERVICE
 
   adminer:
     image: dpage/pgadmin4
@@ -35,9 +56,21 @@ services:
       start_period: 10s     # Период ожидания перед началом проверок
     restart: unless-stopped
 
-  backend_primary:
-    image: backend:latest
-    container_name: backend_primary
+#    BACKEND SERVICES
+
+  auth_service:
+    image: auth-service:latest
+    container_name: auth_service
+    ports:
+      - "9090:9090"
+    depends_on:
+      postgres_auth:
+        condition: service_healthy
+    restart: unless-stopped
+
+  shop_service_primary:
+    image: shop-service:latest
+    container_name: shop_service_primary
     ports:
       - "9999:9999"
     depends_on:
@@ -47,9 +80,9 @@ services:
       DB_READ_ONLY: false
     restart: unless-stopped
 
-  backend_db_ro-1:
-    image: backend:latest
-    container_name: backend_db_ro-1
+  shop_service_db_ro-1:
+    image: shop-service:latest
+    container_name: shop_service_db_ro-1
     depends_on:
       postgres:
         condition: service_healthy
@@ -57,9 +90,9 @@ services:
       DB_READ_ONLY: true
     restart: unless-stopped
 
-  backend_db_ro-2:
-    image: backend:latest
-    container_name: backend_db_ro-2
+  shop_service_db_ro-2:
+    image: shop-service:latest
+    container_name: shop_service_db_ro-2
     depends_on:
       postgres:
         condition: service_healthy
@@ -67,6 +100,7 @@ services:
       DB_READ_ONLY: true
     restart: unless-stopped
 
+# REVERS PROXY NGINX
 
   nginx:
     image: nginx:latest
@@ -76,10 +110,10 @@ services:
       - "443:443"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./src/main/resources/static/nginx:/static
-      - ./src/main/resources/cert:/certs/
+      - ./shop-service/src/main/resources/static/nginx:/static
+      - ./shop-service/src/main/resources/cert:/certs/
     depends_on:
-      backend_primary:
+      shop_service_primary:
         condition: service_started
       adminer:
         condition: service_healthy
