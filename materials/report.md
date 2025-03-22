@@ -116,3 +116,7 @@ sudo openssl req -x509 -nodes -days 7 -newkey rsa:2048 \
 [jwtk](https://github.com/jwtk/jjwt#installation)
 
 [Улучшенная аутентификация Java с помощью JSON Web Tokens (JWT)](https://www.baeldung.com/java-json-web-tokens-jjwt)
+
+## Security
+
+[secure-random](https://www.baeldung.com/java-secure-random)

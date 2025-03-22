@@ -23,6 +23,7 @@ public class AuthServiceImpl extends AuthServiceGrpc.AuthServiceImplBase {
     private final UsersRepository usersRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
+    private final SecureRandom secureRandom;
 
     @Override
     @Transactional
@@ -175,8 +176,7 @@ public class AuthServiceImpl extends AuthServiceGrpc.AuthServiceImplBase {
     }
 
     private String generateSecureTemporaryPassword() {
-        SecureRandom random = new SecureRandom();
-        return random.ints(8, 33, 122)
+        return secureRandom.ints(8, 33, 122)
                 .mapToObj(i -> String.valueOf((char) i))
                 .collect(Collectors.joining());
     }
