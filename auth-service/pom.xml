@@ -184,35 +184,35 @@
             </plugin>
 
 
-            <!--            <plugin>-->
-            <!--                <groupId>com.google.cloud.tools</groupId>-->
-            <!--                <artifactId>jib-maven-plugin</artifactId>-->
-            <!--                <version>3.3.2</version>-->
-            <!--                <configuration>-->
-            <!--                    <from>-->
-            <!--                        <image>eclipse-temurin:17.0.4.1_1-jre</image>-->
-            <!--                    </from>-->
-            <!--                    <to>-->
-            <!--                        <image>${project.artifactId}:latest</image>-->
-            <!--                    </to>-->
-            <!--                    <extraDirectories>-->
-            <!--                        <paths>-->
-            <!--                            &lt;!&ndash; Путь до локальной папки с файлами &ndash;&gt;-->
-            <!--                            <path>-->
-            <!--                                <from>src/main/resources/psql_map_folder</from>-->
-            <!--                                <into>/psql_map_folder</into>-->
-            <!--                            </path>-->
-            <!--                        </paths>-->
-            <!--                        <permissions>-->
-            <!--                            &lt;!&ndash; Указываем права доступа, если необходимо &ndash;&gt;-->
-            <!--                            <permission>-->
-            <!--                                <file>/psql_map_folder</file>-->
-            <!--                                <mode>777</mode>-->
-            <!--                            </permission>-->
-            <!--                        </permissions>-->
-            <!--                    </extraDirectories>-->
-            <!--                </configuration>-->
-            <!--            </plugin>-->
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>3.3.2</version>
+                <configuration>
+                    <from>
+                        <image>eclipse-temurin:17.0.4.1_1-jre</image>
+                    </from>
+                    <to>
+                        <image>${project.artifactId}:latest</image>
+                    </to>
+                    <extraDirectories>
+                        <paths>
+                            <!-- Путь до локальной папки с файлами -->
+<!--                            <path>-->
+<!--                                <from>src/main/resources/psql_map_folder</from>-->
+<!--                                <into>/psql_map_folder</into>-->
+<!--                            </path>-->
+                        </paths>
+<!--                        <permissions>-->
+                            <!-- Указываем права доступа, если необходимо -->
+<!--                            <permission>-->
+<!--                                <file>/psql_map_folder</file>-->
+<!--                                <mode>777</mode>-->
+<!--                            </permission>-->
+<!--                        </permissions>-->
+                    </extraDirectories>
+                </configuration>
+            </plugin>
 
 
         </plugins>

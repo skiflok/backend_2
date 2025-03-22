@@ -58,6 +58,16 @@ services:
 
 #    BACKEND SERVICES
 
+  auth_service:
+    image: auth-service:latest
+    container_name: auth_service
+    ports:
+      - "9090:9090"
+    depends_on:
+      postgres_auth:
+        condition: service_healthy
+    restart: unless-stopped
+
   shop_service_primary:
     image: shop-service:latest
     container_name: shop_service_primary
