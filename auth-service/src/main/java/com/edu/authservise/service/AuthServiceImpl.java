@@ -13,6 +13,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.SecureRandom;
+import java.util.stream.Collectors;
+
 @Slf4j
 @GrpcService
 @RequiredArgsConstructor
@@ -132,17 +135,43 @@ public class AuthServiceImpl extends AuthServiceGrpc.AuthServiceImplBase {
 
     //todo
     @Override
+    @Transactional
     public void recoverPassword(PasswordRecoveryRequest request, StreamObserver<PasswordRecoveryResponse> responseObserver) {
-        log.debug("recover password by account = [{}]", request.getEmail());
+        try {
+            log.info("Password recovery request for account = [{}]", request.getEmail());
 
-        PasswordRecoveryResponse response = PasswordRecoveryResponse.newBuilder()
-                .setSuccess(true)
-                .setMessage("password success recover")
-                .build();
+            User user = getUserByEmail(request.getEmail());
 
-        responseObserver.onNext(response);
-        responseObserver.onCompleted();
+            String tempPassword = generateSecureTemporaryPassword();
+            String hashedPassword = passwordEncoder.encode(tempPassword);
+
+            user.setPassword(hashedPassword);
+            usersRepository.save(user);
+
+            log.info("Temporary password for account [{}]: [{}]", request.getEmail(), tempPassword);
+
+            responseObserver.onNext(PasswordRecoveryResponse.newBuilder()
+                    .setSuccess(true)
+                    .setMessage("Temporary password has been sent to your email")
+                    .build());
+            responseObserver.onCompleted();
+
+        } catch (IllegalArgumentException e) {
+            log.warn("Account [{}] does not exist", request.getEmail());
+            responseObserver.onError(Status.UNAUTHENTICATED.withDescription(e.getMessage()).asRuntimeException());
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+            responseObserver.onError(Status.INTERNAL.withDescription("An unexpected error occurred").asRuntimeException());
+        }
     }
+
+    private String generateSecureTemporaryPassword() {
+        SecureRandom random = new SecureRandom();
+        return random.ints(8, 33, 122)
+                .mapToObj(i -> String.valueOf((char) i))
+                .collect(Collectors.joining());
+    }
+
 
     private User getUserByEmail(String email) {
         return usersRepository.findByEmail(email)
