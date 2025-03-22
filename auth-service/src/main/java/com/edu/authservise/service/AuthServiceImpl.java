@@ -71,19 +71,19 @@ public class AuthServiceImpl extends AuthServiceGrpc.AuthServiceImplBase {
 
             log.info("Account [{}] found in DB", request.getEmail());
 
-            if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-                String token = jwtService.generateToken(user.getEmail());
-                log.info("Token generated successfully for account [{}]", request.getEmail());
-
-                responseObserver.onNext(JwtTokenReturn.newBuilder().setJwtToken(token).build());
-                responseObserver.onCompleted();
-                log.info("Send token by account [{}]", request.getEmail());
-            } else {
+            if (isPassNotEqual(request.getPassword(), user.getPassword())) {
+                log.warn("Invalid current password for account [{}]", request.getEmail());
                 responseObserver.onError(
-                        Status.UNAUTHENTICATED.withDescription("Invalid password").asRuntimeException()
-                );
-                log.warn("Invalid password for account [{}]", request.getEmail());
+                        Status.UNAUTHENTICATED.withDescription("Invalid current password").asRuntimeException());
+                return;
             }
+
+            String token = jwtService.generateToken(user.getEmail());
+            log.info("Token generated successfully for account [{}]", request.getEmail());
+
+            responseObserver.onNext(JwtTokenReturn.newBuilder().setJwtToken(token).build());
+            responseObserver.onCompleted();
+            log.info("Send token by account [{}]", request.getEmail());
 
         } catch (IllegalArgumentException e) {
             responseObserver.onError(
@@ -106,7 +106,7 @@ public class AuthServiceImpl extends AuthServiceGrpc.AuthServiceImplBase {
 
             User user = getUserByEmail(request.getEmail());
 
-            if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+            if (isPassNotEqual(request.getOldPassword(), user.getPassword())) {
                 log.warn("Invalid current password for account [{}]", request.getEmail());
                 responseObserver.onError(Status.UNAUTHENTICATED.withDescription("Invalid current password").asRuntimeException());
                 return;
@@ -133,7 +133,6 @@ public class AuthServiceImpl extends AuthServiceGrpc.AuthServiceImplBase {
         }
     }
 
-    //todo
     @Override
     @Transactional
     public void recoverPassword(PasswordRecoveryRequest request, StreamObserver<PasswordRecoveryResponse> responseObserver) {
@@ -148,7 +147,7 @@ public class AuthServiceImpl extends AuthServiceGrpc.AuthServiceImplBase {
             user.setPassword(hashedPassword);
             usersRepository.save(user);
 
-            log.info("Temporary password for account [{}]: [{}]", request.getEmail(), tempPassword);
+            sendTempPassToUserEmail(request.getEmail(), tempPassword);
 
             responseObserver.onNext(PasswordRecoveryResponse.newBuilder()
                     .setSuccess(true)
@@ -165,13 +164,22 @@ public class AuthServiceImpl extends AuthServiceGrpc.AuthServiceImplBase {
         }
     }
 
+    //todo need send by email logic
+    private void sendTempPassToUserEmail(String email, String tempPassword) {
+        log.info("Temporary password for account [{}]: [{}]", email, tempPassword);
+
+    }
+
+    private boolean isPassNotEqual(String requestPass, String currentPass) {
+        return passwordEncoder.matches(requestPass, currentPass);
+    }
+
     private String generateSecureTemporaryPassword() {
         SecureRandom random = new SecureRandom();
         return random.ints(8, 33, 122)
                 .mapToObj(i -> String.valueOf((char) i))
                 .collect(Collectors.joining());
     }
-
 
     private User getUserByEmail(String email) {
         return usersRepository.findByEmail(email)
