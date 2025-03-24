@@ -55,7 +55,7 @@ server:
 logging:
   level:
     liquibase: info
-    com.edu.backend: debug
+    com.edu.shopservice: debug
     org.springframework.web.filter.CommonsRequestLoggingFilter: debug
 
 springdoc:

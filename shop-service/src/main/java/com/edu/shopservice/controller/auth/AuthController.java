@@ -2,11 +2,13 @@ package com.edu.shopservice.controller.auth;
 
 
 import com.edu.shopservice.dto.ClientDto;
+import com.edu.shopservice.dto.auth.AuthDto;
 import com.edu.shopservice.dto.auth.RegisterDto;
 import com.edu.shopservice.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -39,15 +41,46 @@ public class AuthController {
     public ResponseEntity<Void> register(@Valid @RequestBody RegisterDto registerDto) {
         String token = authService.register(registerDto);
 
+        //todo заглушка
         return ResponseEntity.status(HttpStatus.CREATED)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .build();
     }
 
-}
+    @PostMapping(
+            value = "/auth",
+            consumes = "application/json"
+    )
+    @Operation(
+            summary = "Авторизация пользователя",
+            description = "Принимаем логин пароль, отдаем токен"
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Void> auth(@Valid @RequestBody AuthDto authDto) {
+        String token = authService.auth(authDto);
 
-/*
-регистрации (/register),
-авторизации(/auth),
-восстановления пароля(/reset)
- */
+        //todo заглушка
+        return ResponseEntity.status(HttpStatus.OK)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .build();
+    }
+
+    @GetMapping(
+            value = "/reset"
+    )
+    @Operation(
+            summary = "Восстановление пароля",
+            description = "Отправляет новый пароль на почту"
+    )
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseEntity<Void> reset(
+//            @Valid @Email
+            @RequestPart String email
+    ) {
+
+        authService.reset(email);
+        //todo заглушка
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .build();
+    }
+}
