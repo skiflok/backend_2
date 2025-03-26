@@ -1,5 +1,6 @@
 package com.edu.shopservice.service;
 
+import com.edu.shopservice.client.AuthGrpcClient;
 import com.edu.shopservice.dto.auth.AuthDto;
 import com.edu.shopservice.dto.auth.RegisterDto;
 import jakarta.validation.Valid;
@@ -13,9 +14,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthService {
 
+    private final AuthGrpcClient authGrpcClient;
 
     public String register(@Valid RegisterDto registerDto) {
-        return "test token";
+        return authGrpcClient.createUser(registerDto);
     }
 
     public String auth(@Valid AuthDto authDto) {

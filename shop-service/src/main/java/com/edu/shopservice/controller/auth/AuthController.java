@@ -40,8 +40,6 @@ public class AuthController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Void> register(@Valid @RequestBody RegisterDto registerDto) {
         String token = authService.register(registerDto);
-
-        //todo заглушка
         return ResponseEntity.status(HttpStatus.CREATED)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .build();
