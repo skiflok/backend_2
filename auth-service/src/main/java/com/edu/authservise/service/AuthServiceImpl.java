@@ -72,7 +72,7 @@ public class AuthServiceImpl extends AuthServiceGrpc.AuthServiceImplBase {
 
             log.info("Account [{}] found in DB", request.getEmail());
 
-            if (isPassNotEqual(request.getPassword(), user.getPassword())) {
+            if (isPassNotEqual(user.getPassword(), request.getPassword())) {
                 log.warn("Invalid current password for account [{}]", request.getEmail());
                 responseObserver.onError(
                         Status.UNAUTHENTICATED.withDescription("Invalid current password").asRuntimeException());
