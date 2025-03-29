@@ -156,6 +156,8 @@ public class AuthServiceImpl extends AuthServiceGrpc.AuthServiceImplBase {
                     .build());
             responseObserver.onCompleted();
 
+            // todo need send to notification service
+            log.info("new password by user {} = [{}]", user.getEmail(), tempPassword);
         } catch (IllegalArgumentException e) {
             log.warn("Account [{}] does not exist", request.getEmail());
             responseObserver.onError(Status.UNAUTHENTICATED.withDescription(e.getMessage()).asRuntimeException());

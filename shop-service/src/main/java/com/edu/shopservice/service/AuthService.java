@@ -1,15 +1,16 @@
 package com.edu.shopservice.service;
 
+import com.edu.grpc.PasswordRecoveryResponse;
 import com.edu.shopservice.client.AuthGrpcClient;
 import com.edu.shopservice.dto.auth.AuthDto;
 import com.edu.shopservice.dto.auth.RegisterDto;
+import com.edu.shopservice.dto.auth.ResetPasswordResponseDto;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.security.sasl.AuthenticationException;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -24,7 +25,11 @@ public class AuthService {
         return authGrpcClient.auth(authDto);
     }
 
-    public void reset(String email) {
-        log.debug("reset pass by email [{}]", email);
+    public ResetPasswordResponseDto reset(String email) throws AuthenticationException {
+        PasswordRecoveryResponse response = authGrpcClient.reset(email);
+        return ResetPasswordResponseDto.builder()
+                .success(response.getSuccess())
+                .message(response.getMessage())
+                .build();
     }
 }

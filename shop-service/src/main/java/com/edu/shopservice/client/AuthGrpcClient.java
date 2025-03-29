@@ -1,9 +1,6 @@
 package com.edu.shopservice.client;
 
-import com.edu.grpc.AccessCheckRequest;
-import com.edu.grpc.AuthServiceGrpc;
-import com.edu.grpc.CreateUserRequest;
-import com.edu.grpc.JwtTokenReturn;
+import com.edu.grpc.*;
 import com.edu.shopservice.dto.auth.AuthDto;
 import com.edu.shopservice.dto.auth.RegisterDto;
 import io.grpc.Status;
@@ -47,6 +44,23 @@ public class AuthGrpcClient {
             log.info("Calling accessCheck gRPC method");
             return authServiceBlockingStub.accessCheck(request);
         });
+    }
+
+    public PasswordRecoveryResponse reset(String email) throws AuthenticationException {
+        try {
+            log.info("gRPC call to reset password");
+            PasswordRecoveryResponse response = authServiceBlockingStub.recoverPassword(PasswordRecoveryRequest.newBuilder()
+                    .setEmail(email)
+                    .build());
+            log.info("reset password success");
+            return response;
+        } catch (StatusRuntimeException e) {
+            handleGrpcException(e);
+            throw new RuntimeException("Unhandled gRPC error", e);
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+            throw new RuntimeException("Unexpected error", e);
+        }
     }
 
     private String handleGrpcCall(Supplier<JwtTokenReturn> grpcCall) throws AuthenticationException {

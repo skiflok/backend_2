@@ -1,18 +1,21 @@
 package com.edu.shopservice.controller.auth;
 
 
+import com.edu.grpc.PasswordRecoveryResponse;
 import com.edu.shopservice.dto.auth.AuthDto;
 import com.edu.shopservice.dto.auth.RegisterDto;
+import com.edu.shopservice.dto.auth.ResetPasswordResponseDto;
 import com.edu.shopservice.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.*;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
 
 import javax.security.sasl.AuthenticationException;
 
@@ -54,20 +57,13 @@ public class AuthController {
                 .build();
     }
 
-    @GetMapping(value = "/reset")
+    @PostMapping(value = "/reset")
     @Operation(
             summary = "Восстановление пароля",
             description = "Отправляет новый пароль на почту"
     )
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<Void> reset(
-//            @Valid @Email
-            @RequestPart String email
-    ) {
-
-        authService.reset(email);
-        //todo заглушка
-        return ResponseEntity.status(HttpStatus.NO_CONTENT)
-                .build();
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public ResetPasswordResponseDto reset(@RequestPart String email) throws AuthenticationException {
+        return authService.reset(email);
     }
 }
