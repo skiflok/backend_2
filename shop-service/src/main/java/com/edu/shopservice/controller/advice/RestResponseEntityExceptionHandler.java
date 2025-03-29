@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.security.sasl.AuthenticationException;
+
 @Slf4j
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler {
@@ -20,6 +22,13 @@ public class RestResponseEntityExceptionHandler {
     protected ProblemDetail entityException(RuntimeException ex, WebRequest request) {
         log.error("Error: ", ex);
         return (ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage()));
+    }
+
+    @ExceptionHandler(value = AuthenticationException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    protected ProblemDetail entityException(AuthenticationException ex, WebRequest request) {
+        log.error("Error: ", ex);
+        return (ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, ex.getMessage()));
     }
 
 
