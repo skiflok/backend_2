@@ -1,5 +1,6 @@
 package com.edu.shopservice.controller.auth;
 
+import com.edu.shopservice.controller.auth.config.TestSecurityConfig;
 import com.edu.shopservice.dto.auth.RegisterDto;
 import com.edu.shopservice.service.AuthService;
 import jakarta.persistence.EntityNotFoundException;
@@ -10,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -21,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 @WebMvcTest(AuthController.class)
+@Import(TestSecurityConfig.class)
 class AuthControllerTest {
     public static final String REGISTER_URL = "/api/v1/authorization/register";
     public static final String VALID_REGISTER_REQUEST = """
