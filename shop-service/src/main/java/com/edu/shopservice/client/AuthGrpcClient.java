@@ -63,6 +63,25 @@ public class AuthGrpcClient {
         }
     }
 
+    public String verifyToken(String token) throws AuthenticationException {
+        try {
+            // todo del token after design
+            log.info("gRPC call to validate token [{}]", token);
+            TokenValidationResponse response = authServiceBlockingStub.validateToken(
+                    TokenValidationRequest.newBuilder()
+                            .setToken(token)
+                            .build());
+            log.info("validate token success");
+            return response.getEmail();
+        } catch (StatusRuntimeException e) {
+            handleGrpcException(e);
+            throw new RuntimeException("Unhandled gRPC error", e);
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+            throw new RuntimeException("Unexpected error", e);
+        }
+    }
+
     private String handleGrpcCall(Supplier<JwtTokenReturn> grpcCall) throws AuthenticationException {
         try {
             JwtTokenReturn response = grpcCall.get();

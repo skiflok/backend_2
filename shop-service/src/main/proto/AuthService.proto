@@ -39,9 +39,18 @@ message PasswordRecoveryResponse {
   string message = 2;
 }
 
+message TokenValidationRequest {
+  string token = 1;
+}
+
+message TokenValidationResponse {
+  string email = 1;
+}
+
 service AuthService {
   rpc createUser(CreateUserRequest) returns (JwtTokenReturn);
   rpc accessCheck(AccessCheckRequest) returns (JwtTokenReturn);
   rpc changePassword(ChangePasswordRequest) returns (ChangePasswordResponse);
   rpc recoverPassword(PasswordRecoveryRequest) returns (PasswordRecoveryResponse);
+  rpc validateToken(TokenValidationRequest) returns (TokenValidationResponse);
 }

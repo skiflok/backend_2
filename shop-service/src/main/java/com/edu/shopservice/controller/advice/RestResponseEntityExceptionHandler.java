@@ -5,6 +5,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -29,6 +30,19 @@ public class RestResponseEntityExceptionHandler {
     protected ProblemDetail entityException(AuthenticationException ex, WebRequest request) {
         log.error("Error: ", ex);
         return (ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, ex.getMessage()));
+    }
+
+//    @ExceptionHandler(AuthenticationException.class)
+//    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+//    protected ProblemDetail handleAuthException(AuthenticationException ex, WebRequest request) {
+//        return ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, "Invalid token");
+//    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    protected ProblemDetail handleAccessException(AccessDeniedException ex, WebRequest request) {
+        log.warn("Error: ", ex);
+        return ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, "Access denied");
     }
 
 
