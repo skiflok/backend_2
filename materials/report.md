@@ -111,6 +111,10 @@ sudo openssl req -x509 -nodes -days 7 -newkey rsa:2048 \
 [Java и gRPC: быстрый старт со Spring Boot | Преимущества, Настройка и Использование
 ](https://www.youtube.com/watch?v=Bj7g8voWJNU)
 
+#### git
+
+[grpc-spring-boot-3](https://github.com/hemicharly/grpc-spring-boot-3/blob/main/grpc-client/src/main/resources/application.yml)
+
 ## JWT
 
 [jwtk](https://github.com/jwtk/jjwt#installation)

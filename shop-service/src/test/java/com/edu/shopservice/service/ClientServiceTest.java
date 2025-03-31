@@ -94,7 +94,7 @@ class ClientServiceTest {
                 EntityNotFoundException.class,
                 () -> clientService.getClient(1L));
 
-        assertEquals(exception.getMessage(), "Клиент с [id=1] не найден");
+        assertEquals("Клиент с [id=1] не найден", exception.getMessage());
     }
 
 }

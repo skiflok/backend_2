@@ -6,6 +6,7 @@ import com.edu.authservise.security.JwtService;
 import com.edu.grpc.*;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
@@ -156,12 +157,35 @@ public class AuthServiceImpl extends AuthServiceGrpc.AuthServiceImplBase {
                     .build());
             responseObserver.onCompleted();
 
+            // todo need send to notification service
+            log.info("new password by user {} = [{}]", user.getEmail(), tempPassword);
         } catch (IllegalArgumentException e) {
             log.warn("Account [{}] does not exist", request.getEmail());
             responseObserver.onError(Status.UNAUTHENTICATED.withDescription(e.getMessage()).asRuntimeException());
         } catch (Exception e) {
             log.error("Unexpected error", e);
             responseObserver.onError(Status.INTERNAL.withDescription("An unexpected error occurred").asRuntimeException());
+        }
+    }
+
+    @Override
+    public void validateToken(TokenValidationRequest request, StreamObserver<TokenValidationResponse> responseObserver) {
+        try {
+            log.info("Validate token start");
+            String email = jwtService.extractUsername(request.getToken());
+            log.info("Validate token success by email [{}]", email);
+
+            responseObserver.onNext(TokenValidationResponse.newBuilder()
+                    .setEmail(email)
+                    .build());
+            responseObserver.onCompleted();
+        } catch (SignatureException e) {
+            log.warn("Error ", e);
+            responseObserver.onError(Status.UNAUTHENTICATED.withDescription(e.getMessage()).asRuntimeException());
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+            responseObserver
+                    .onError(Status.INTERNAL.withDescription("An unexpected error occurred").asRuntimeException());
         }
     }
 
@@ -172,7 +196,7 @@ public class AuthServiceImpl extends AuthServiceGrpc.AuthServiceImplBase {
     }
 
     private boolean isPassNotEqual(String requestPass, String currentPass) {
-        return passwordEncoder.matches(requestPass, currentPass);
+        return !passwordEncoder.matches(requestPass, currentPass);
     }
 
     private String generateSecureTemporaryPassword() {

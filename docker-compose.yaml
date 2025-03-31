@@ -19,6 +19,8 @@ services:
       timeout: 5s
       retries: 5
     restart: unless-stopped
+    networks:
+      - backend_network
 
   postgres_auth:
     image: postgres:latest
@@ -37,6 +39,8 @@ services:
       timeout: 5s
       retries: 5
     restart: unless-stopped
+    networks:
+      - backend_network
 
 #    DB ADMIN SERVICE
 
@@ -55,18 +59,23 @@ services:
       retries: 5            # Сколько раз повторить проверку до признания контейнера unhealthy
       start_period: 10s     # Период ожидания перед началом проверок
     restart: unless-stopped
+    networks:
+      - backend_network
 
 #    BACKEND SERVICES
 
   auth_service:
     image: auth-service:latest
     container_name: auth_service
-    ports:
-      - "9090:9090"
+#    ports:
+#      - "9090:9090"
     depends_on:
       postgres_auth:
         condition: service_healthy
     restart: unless-stopped
+    networks:
+      backend_network:
+        ipv4_address: 192.168.1.100
 
   shop_service_primary:
     image: shop-service:latest
@@ -78,7 +87,10 @@ services:
         condition: service_healthy
     environment:
       DB_READ_ONLY: false
+      GRPC_CLIENT_AUTHGRPCCLIENT_ADDRESS: static://192.168.1.100:9090
     restart: unless-stopped
+    networks:
+      - backend_network
 
   shop_service_db_ro-1:
     image: shop-service:latest
@@ -88,7 +100,10 @@ services:
         condition: service_healthy
     environment:
       DB_READ_ONLY: true
+      GRPC_CLIENT_AUTHGRPCCLIENT_ADDRESS: static://192.168.1.100:9090
     restart: unless-stopped
+    networks:
+      - backend_network
 
   shop_service_db_ro-2:
     image: shop-service:latest
@@ -98,7 +113,10 @@ services:
         condition: service_healthy
     environment:
       DB_READ_ONLY: true
+      GRPC_CLIENT_AUTHGRPCCLIENT_ADDRESS: static://192.168.1.100:9090
     restart: unless-stopped
+    networks:
+      - backend_network
 
 # REVERS PROXY NGINX
 
@@ -118,3 +136,12 @@ services:
       adminer:
         condition: service_healthy
     restart: unless-stopped
+    networks:
+      - backend_network
+
+networks:
+  backend_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24
