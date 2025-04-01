@@ -88,6 +88,12 @@ sudo openssl req -x509 -nodes -days 7 -newkey rsa:2048 \
 
 [plant uml site](https://plantuml.com/ru/)
 
+[Визуализация архитектуры с помощью C4 модели и PlantUML](https://habr.com/ru/companies/usetech/news/676196/)
+
+[C4-PlantUML github](https://github.com/plantuml-stdlib/C4-PlantUML)
+
+[plantuml-examples](https://github.com/joelparkerhenderson/plantuml-examples)
+
 ## Auth service
 
 [Сервер авторизации для микросервисов на Spring Boot](https://habr.com/ru/companies/otus/articles/681448/)
