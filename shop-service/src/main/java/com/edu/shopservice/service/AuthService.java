@@ -6,7 +6,6 @@ import com.edu.shopservice.dto.auth.AuthDto;
 import com.edu.shopservice.dto.auth.RegisterDto;
 import com.edu.shopservice.dto.auth.ResetPasswordResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.security.sasl.AuthenticationException;

@@ -82,6 +82,13 @@
             <version>3.2.0</version>
         </dependency>
 
+        <!--        MESSEGING-->
+
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+
         <!--        SECURITY-->
 
 <!--        <dependency>-->

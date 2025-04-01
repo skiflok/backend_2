@@ -130,3 +130,13 @@ sudo openssl req -x509 -nodes -days 7 -newkey rsa:2048 \
 ## Security
 
 [secure-random](https://www.baeldung.com/java-secure-random)
+
+## Kafka
+
+[Using Spring for Apache Kafka Sending Messages](https://docs.spring.io/spring-kafka/reference/kafka/sending-messages.html)
+
+[Введение в Apache Kafka с Spring](https://www.baeldung.com/spring-kafka)
+
+[Complete Kafka Producer with Java](https://learn.conduktor.io/kafka/complete-kafka-producer-with-java/)
+
+[Apache Kafka. Пишем простой producer и consumer и тестируем их](https://habr.com/ru/articles/742786/)
