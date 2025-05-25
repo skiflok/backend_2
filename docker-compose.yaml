@@ -67,6 +67,8 @@ services:
   auth_service:
     image: auth-service:latest
     container_name: auth_service
+    environment:
+      POSTGRES_AUTH_URL: jdbc:postgresql://postgres_auth:${DB_PORT:5432}/auth
     #    ports:
     #      - "9090:9090"
     depends_on:
@@ -159,8 +161,8 @@ services:
       - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
-    volumes:
-      - kafka-data:/bitnami/kafka
+#    volumes:
+#      - .kafka-data:/bitnami/kafka:z
     networks:
       - kafka-net
 
@@ -189,6 +191,6 @@ networks:
   kafka-net:
     driver: bridge
 
-volumes:
-  kafka-data:
-    driver: local
+#volumes:
+#  kafka-data:
+#    driver: local
