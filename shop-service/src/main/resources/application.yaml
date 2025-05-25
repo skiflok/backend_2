@@ -4,7 +4,10 @@ spring:
 
   kafka:
     bootstrap-servers: localhost:29092
-    producer:
+    consumer:
+      enable-auto-commit: true
+      auto-commit-interval: 1000  # интервал в мс для авто-коммита
+      auto-offset-reset: latest  # при наличии сохранённых оффсетов читать с последнего
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
 
