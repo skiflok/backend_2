@@ -13,6 +13,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -21,14 +22,14 @@ import java.util.concurrent.ThreadLocalRandom;
 @RequiredArgsConstructor
 public class KafkaEventGeneratorService {
 
-    private final KafkaTemplate<String, String> kafkaTemplate;
     private final KafkaTemplate<String, String> kafka;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper defaultObjectMapper;
 
-    @Value("${kafka.topic.out.product.updates-stocks}")
+    @Value("${kafka.out.product.updates-stocks.topic}")
     private String PRODUCT_UPDATE_STOCKS_TOPIC;
 
-    private int i = 0;
+    //todo del
+    private int availableStock = 5;
 
 
     /* todo для изменения количества (отдельный шедуллер)
@@ -38,7 +39,7 @@ public class KafkaEventGeneratorService {
         3 увеличить на 200 если меньше 10
      */
 
-    @Scheduled(fixedRate = 30000) // Запуск каждые 5 секунд
+    @Scheduled(fixedRateString = "${scheduler.product.updates-stocks:10000}") // Запуск каждые 5 секунд
     private void changeAvailableStockByRandomProduct() {
         try {
             List<ProductDto> productDtoList = getAllProduct();
@@ -51,16 +52,18 @@ public class KafkaEventGeneratorService {
             } else {
                 newStock = currentStock + 200;
             }
+            //todo del
+            availableStock = newStock;
 
             ProductUpdateEvent event = new ProductUpdateEvent(
                     selected.getId(),
                     selected.getPrice(), // цена не меняется
-                    newStock
-//                    Instant.now()
+                    newStock,
+                    Instant.now().toString()
             );
             kafka.send(PRODUCT_UPDATE_STOCKS_TOPIC,
                     String.valueOf(selected.getId()),
-                    objectMapper.writeValueAsString(event));
+                    defaultObjectMapper.writeValueAsString(event));
             log.info("product [id={}] update stocks [from {} by {}]",
                     selected.getId(),
                     selected.getAvailableStock(),
@@ -77,26 +80,17 @@ public class KafkaEventGeneratorService {
         4 выбрать уменьшение или увеличение
         5 нужно обработать вариант когда цена падает или возрастает слишком сильно
  */
-//    @PostConstruct
-    @Scheduled(fixedRate = 5000) // Запуск каждые 5 секунд
-    private void generate() {
-        sendMessage("hello " + i++);
-    }
-
-    public void sendMessage(String message) {
-        kafkaTemplate.send("test", message);
-        log.info("Сообщение отправлено: {}", message);
-    }
 
     public List<ProductDto> getAllProduct() {
         //todo rest to shop
         return mockResponse();
     }
 
+    //todo del
     private List<ProductDto> mockResponse() {
         ProductDto productDto = ProductDto.builder()
                 .id(1L)
-                .availableStock(5)
+                .availableStock(availableStock)
                 .price(BigDecimal.valueOf(15.00))
                 .build();
 

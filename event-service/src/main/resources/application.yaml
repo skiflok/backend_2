@@ -7,7 +7,7 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
-#      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+  #      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
   output:
     ansi:
@@ -17,10 +17,10 @@ server:
   port: 9997
 
 kafka:
-  topic:
-    out:
-      product:
-        updates-stocks: product-updates-stocks
+  out:
+    product:
+      updates-stocks:
+        topic: product-updates-stocks
 
 rest:
   client:
@@ -28,6 +28,10 @@ rest:
       product:
         all:
           url: ${product-all-url:/api/v1/product/all}
+
+scheduler:
+  product:
+    updates-stocks: 10000
 
 
 logging:

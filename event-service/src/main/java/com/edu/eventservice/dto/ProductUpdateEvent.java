@@ -15,6 +15,6 @@ public class ProductUpdateEvent {
     private Long productId;
     private BigDecimal newPrice;
     private Integer newStock;
-//    private Instant eventTime;
+    private String eventTime;
 }
 

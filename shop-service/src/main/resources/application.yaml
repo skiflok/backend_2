@@ -81,3 +81,10 @@ grpc:
     authGrpcClient:
       address: ${GRPC_CLIENT_AUTHGRPCCLIENT_ADDRESS:localhost:9090}
       negotiationType: plaintext
+
+kafka:
+  in:
+    product:
+      updates-stocks:
+        topic: product-updates-stocks
+        group-id: product-updates-stocks
