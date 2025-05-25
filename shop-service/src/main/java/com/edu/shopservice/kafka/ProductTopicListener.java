@@ -6,10 +6,10 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class TestTopicListener2 {
+public class ProductTopicListener {
 
-    @KafkaListener(topics = "test", groupId = "test-group1")
+    @KafkaListener(topics = "product-updates-stocks", groupId = "test-group")
     public void listenTestTopic(String message) {
-        log.info("[consumer 2] Получено сообщение из топика 'test': {}", message);
+        log.info("Получено сообщение из топика 'product-updates-stocks': {}", message);
     }
 }
