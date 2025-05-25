@@ -4,9 +4,7 @@ import com.edu.eventservice.dto.ProductDto;
 import com.edu.eventservice.dto.ProductUpdateEvent;
 import com.edu.eventservice.utils.ProductUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -19,17 +17,23 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class KafkaEventGeneratorService {
 
     private final KafkaTemplate<String, String> kafka;
     private final ObjectMapper defaultObjectMapper;
 
-    @Value("${kafka.out.product.updates-stocks.topic}")
-    private String PRODUCT_UPDATE_STOCKS_TOPIC;
+    private final String productUpdateStocksTopic;
 
     //todo del
     private int availableStock = 5;
+
+    public KafkaEventGeneratorService(KafkaTemplate<String, String> kafka,
+                                      ObjectMapper defaultObjectMapper,
+                                      @Value("${kafka.out.product.updates-stocks.topic}") String productUpdateStocksTopic) {
+        this.kafka = kafka;
+        this.defaultObjectMapper = defaultObjectMapper;
+        this.productUpdateStocksTopic = productUpdateStocksTopic;
+    }
 
 
     /* todo для изменения количества (отдельный шедуллер)
@@ -61,7 +65,7 @@ public class KafkaEventGeneratorService {
                     newStock,
                     Instant.now().toString()
             );
-            kafka.send(PRODUCT_UPDATE_STOCKS_TOPIC,
+            kafka.send(productUpdateStocksTopic,
                     String.valueOf(selected.getId()),
                     defaultObjectMapper.writeValueAsString(event));
             log.info("product [id={}] update stocks [from {} by {}]",

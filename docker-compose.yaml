@@ -68,7 +68,7 @@ services:
     image: auth-service:latest
     container_name: auth_service
     environment:
-      POSTGRES_AUTH_URL: jdbc:postgresql://postgres_auth:${DB_PORT:5432}/auth
+      POSTGRES_AUTH_URL: jdbc:postgresql://postgres_auth:5432/auth
     #    ports:
     #      - "9090:9090"
     depends_on:
