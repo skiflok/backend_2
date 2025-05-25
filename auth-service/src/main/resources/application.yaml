@@ -4,7 +4,8 @@ spring:
 
   datasource:
     #    url: jdbc:postgresql://localhost:5433/auth
-    url: jdbc:postgresql://postgres_auth:${DB_PORT:5432}/auth
+#    url: jdbc:postgresql://postgres_auth:${DB_PORT:5432}/auth
+    url: ${POSTGRES_AUTH_URL:jdbc:postgresql://localhost:5433/auth} # default localhost
     username: admin
     password: pass
     hikari:
