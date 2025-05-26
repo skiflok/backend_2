@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -73,5 +74,18 @@ public class ProductService {
             throw new EntityNotFoundException(String.format("Продукт с [id=%s] не найден", id));
         }
         productRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void updateStock(Long productId, int newStock) {
+        if (newStock < 0) {
+            throw new IllegalArgumentException("Cannot update stock. new stock less zero");
+        }
+        Product p = productRepository.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("No product with id=" + productId));
+        p.setAvailableStock(newStock);
+        p.setLastUpdateDate(LocalDate.now());
+        productRepository.save(p);
+        log.info("Stock updated for [product_id {}] → {}", productId, newStock);
     }
 }

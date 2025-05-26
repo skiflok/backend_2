@@ -26,7 +26,7 @@ spring:
   #    driverClassName: org.h2.Driver
 
   jpa:
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: validate
     properties:
@@ -87,4 +87,4 @@ kafka:
     product:
       updates-stocks:
         topic: product-updates-stocks
-        group-id: product-updates-stocks
+        group-id: product-updates-stocks-group
