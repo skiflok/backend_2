@@ -19,6 +19,10 @@ spring:
     hikari:
       read-only: ${DB_READ_ONLY:false}
 
+  redis:
+    host: redis
+    port: 6379
+
   #  datasource:
   #    url: jdbc:h2:mem:backend2
   #    username: sa
