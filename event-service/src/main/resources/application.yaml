@@ -21,6 +21,8 @@ kafka:
     product:
       updates-stocks:
         topic: product-updates-stocks
+      updates-price:
+        topic: product-updates-price
 
 rest:
   client:
@@ -32,6 +34,7 @@ rest:
 scheduler:
   product:
     updates-stocks: 10000
+    updates-price: 20000
 
 
 logging:

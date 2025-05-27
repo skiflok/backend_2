@@ -22,16 +22,34 @@ public class ProductTopicListener {
     @KafkaListener(
             topics = "${kafka.in.product.updates-stocks.topic}",
             groupId = "${kafka.in.product.updates-stocks.group-id}")
-    public void listenTestTopic(
+    public void updateProductStocks(
             @Payload String message,
             @Header(KafkaHeaders.RECEIVED_TOPIC) String topic
     ) {
-        //todo логика изменения количества товара
         log.info("Get message from [topic {}]", topic);
         log.debug("[message {}]", message);
         try {
             ProductUpdateEvent event = defaultObjectMapper.readValue(message, ProductUpdateEvent.class);
             productService.updateStock(event.getProductId(), event.getNewStock());
+        } catch (JsonProcessingException e) {
+            log.error("mapping error", e);
+        } catch (Exception e) {
+            log.error("Error ", e);
+        }
+    }
+
+    @KafkaListener(
+            topics = "${kafka.in.product.updates-price.topic}",
+            groupId = "${kafka.in.product.updates-price.group-id}")
+    public void updateProductPrice(
+            @Payload String message,
+            @Header(KafkaHeaders.RECEIVED_TOPIC) String topic
+    ) {
+        log.info("Get message from [topic {}]", topic);
+        log.debug("[message {}]", message);
+        try {
+            ProductUpdateEvent event = defaultObjectMapper.readValue(message, ProductUpdateEvent.class);
+            productService.updatePrice(event.getProductId(), event.getNewPrice());
         } catch (JsonProcessingException e) {
             log.error("mapping error", e);
         } catch (Exception e) {

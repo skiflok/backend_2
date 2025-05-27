@@ -11,6 +11,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -23,25 +25,21 @@ public class KafkaEventGeneratorService {
     private final ObjectMapper defaultObjectMapper;
 
     private final String productUpdateStocksTopic;
+    private final String productUpdatePriceTopic;
 
     //todo del
     private int availableStock = 5;
 
-    public KafkaEventGeneratorService(KafkaTemplate<String, String> kafka,
-                                      ObjectMapper defaultObjectMapper,
-                                      @Value("${kafka.out.product.updates-stocks.topic}") String productUpdateStocksTopic) {
+    public KafkaEventGeneratorService(
+            KafkaTemplate<String, String> kafka,
+            ObjectMapper defaultObjectMapper,
+            @Value("${kafka.out.product.updates-stocks.topic}") String productUpdateStocksTopic,
+            @Value("${kafka.out.product.updates-price.topic}") String productUpdatePriceTopic) {
         this.kafka = kafka;
         this.defaultObjectMapper = defaultObjectMapper;
         this.productUpdateStocksTopic = productUpdateStocksTopic;
+        this.productUpdatePriceTopic = productUpdatePriceTopic;
     }
-
-
-    /* todo для изменения количества (отдельный шедуллер)
-        1 синхронный рест запрос на список товаров
-        2 выбрать рандомный товар
-        2 уменьшить товар на количество от 1 до 9 (если больше 10)
-        3 увеличить на 200 если меньше 10
-     */
 
     @Scheduled(fixedRateString = "${scheduler.product.updates-stocks:10000}") // Запуск каждые 5 секунд
     private void changeAvailableStockByRandomProduct() {
@@ -77,13 +75,33 @@ public class KafkaEventGeneratorService {
         }
     }
 
-    /* todo для изменения цены (отдельный шедуллер)
-        1 синхронный рест запрос на список товаров
-        2 выбрать рандомный товар
-        3 выбрать процент изменения от 5 до 10 процентов
-        4 выбрать уменьшение или увеличение
-        5 нужно обработать вариант когда цена падает или возрастает слишком сильно
- */
+    @Scheduled(fixedRateString = "${scheduler.product.updates-price:20000}")
+    private void changePriceByRandomProduct() {
+        try {
+            List<ProductDto> productDtoList = getAllProduct();
+            ProductDto selected = ProductUtils.randomProduct(productDtoList);
+
+            //todo переделать на более адекватное формирование цены
+            BigDecimal newPrice = BigDecimal.valueOf(ThreadLocalRandom.current().nextDouble(10.0, 20.0))
+                    .setScale(2, RoundingMode.HALF_UP);
+
+            ProductUpdateEvent event = new ProductUpdateEvent(
+                    selected.getId(),
+                    newPrice,
+                    selected.getAvailableStock(),
+                    Instant.now().toString()
+            );
+            kafka.send(productUpdatePriceTopic,
+                    String.valueOf(selected.getId()),
+                    defaultObjectMapper.writeValueAsString(event));
+            log.info("product [id={}] update price [from {} by {}]",
+                    selected.getId(),
+                    selected.getPrice(),
+                    event.getNewPrice());
+        } catch (Exception e) {
+            log.error("Update stocks error", e);
+        }
+    }
 
     public List<ProductDto> getAllProduct() {
         //todo rest to shop

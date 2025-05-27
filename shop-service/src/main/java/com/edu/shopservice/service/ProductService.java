@@ -14,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -87,5 +88,18 @@ public class ProductService {
         p.setLastUpdateDate(LocalDate.now());
         productRepository.save(p);
         log.info("Stock updated for [product_id {}] → {}", productId, newStock);
+    }
+
+    @Transactional
+    public void updatePrice(Long productId, BigDecimal newPrice) {
+        if (newPrice.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Cannot update price. new price less zero");
+        }
+        Product p = productRepository.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("No product with id=" + productId));
+        p.setPrice(newPrice);
+        p.setLastUpdateDate(LocalDate.now());
+        productRepository.save(p);
+        log.info("Price updated for [product_id {}] → {}", productId, newPrice);
     }
 }
