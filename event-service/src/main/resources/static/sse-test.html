@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <title>SSE Test Client</title>
+    <style>
+        body { font-family: sans-serif; padding: 1rem; }
+        #log { white-space: pre-wrap; background: #f9f9f9; padding: 1rem; border: 1px solid #ddd; height: 300px; overflow-y: scroll; }
+        button { margin-top: 1rem; }
+    </style>
+</head>
+<body>
+<h1>Тест SSE Client</h1>
+<p>Подключаемся к <code>/product-updates-stocks</code> и выводим в консоль и на экран все события.</p>
+
+<div id="log"></div>
+<button id="clear">Очистить логи</button>
+
+<script>
+    const logEl = document.getElementById('log');
+    const clearBtn = document.getElementById('clear');
+
+    function appendLog(msg) {
+      const time = new Date().toLocaleTimeString();
+      logEl.textContent += `[${time}] ${msg}\n`;
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    clearBtn.addEventListener('click', () => {
+      logEl.textContent = '';
+    });
+
+    // URL вашего SSE эндпоинта
+    const sseUrl = 'http://localhost:9997/kafka-sse';
+
+    appendLog(`Подключаемся к SSE: ${sseUrl}`);
+    const es = new EventSource(sseUrl);
+
+    es.onopen = () => appendLog('🔌 Соединение открыто');
+    es.onerror = (e) => {
+      appendLog('⚠️ Ошибка SSE: ' + (e?.message || 'connection error'));
+    };
+
+    // Если вы отправляете разные event names, можно слушать конкретно:
+    // es.addEventListener('stock-update', e => { ... });
+
+    // Универсальный слушатель — получаем всё
+    es.onmessage = (e) => {
+      appendLog('📨 Получено событие: ' + e.data);
+      console.log('SSE message event', e);
+    };
+</script>
+</body>
+</html>

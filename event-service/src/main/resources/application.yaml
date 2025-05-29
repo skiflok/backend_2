@@ -23,6 +23,11 @@ kafka:
         topic: product-updates-stocks
       updates-price:
         topic: product-updates-price
+  in:
+    product:
+      update-event:
+        topic: product-update-event
+        group-id: product-update-event-group
 
 rest:
   client:
