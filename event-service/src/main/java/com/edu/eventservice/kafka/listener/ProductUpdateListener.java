@@ -12,10 +12,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProductUpdateListener {
 
-
-//    @KafkaListener(
-//            topics = "${kafka.in.product.product-update-event.topic}",
-//            groupId = "${kafka.in.product.product-update-event.group-id}")
+    @KafkaListener(
+            topics = "${kafka.in.product.update-event.topic}",
+            groupId = "${kafka.in.product.update-event.group-id}")
     public void updateProductStocks(
             @Payload String message,
             @Header(KafkaHeaders.RECEIVED_TOPIC) String topic
@@ -32,3 +31,4 @@ public class ProductUpdateListener {
         }
     }
 }
+
