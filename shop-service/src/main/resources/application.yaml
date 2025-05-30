@@ -95,3 +95,9 @@ kafka:
       updates-price:
         topic: product-updates-price
         group-id: product-updates-price-group
+
+  out:
+    product:
+      update-event:
+        topic: product-update-event
+

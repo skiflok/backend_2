@@ -1,16 +1,21 @@
 package com.edu.shopservice.service;
 
 import com.edu.shopservice.dto.ProductDto;
+import com.edu.shopservice.dto.event.ProductUpdateEvent;
 import com.edu.shopservice.entity.Image;
 import com.edu.shopservice.entity.Product;
 import com.edu.shopservice.entity.Supplier;
 import com.edu.shopservice.repository.ImageRepository;
 import com.edu.shopservice.repository.ProductRepository;
 import com.edu.shopservice.repository.SupplierRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +33,11 @@ public class ProductService {
     private final SupplierRepository supplierRepository;
     private final ImageRepository imageRepository;
     private final ModelMapper defaultModelMapper;
+    private final ObjectMapper defaultObjectMapper;
+    private final KafkaTemplate<String, String> kafkaTemplate;
+
+    @Value("${kafka.out.product.update-event.topic}")
+    private String updateEventTopic;
 
     public void addProduct(ProductDto productDto) {
         Supplier supplier = supplierRepository.findById(productDto.getSupplierId()).orElseThrow(() ->
@@ -86,8 +96,28 @@ public class ProductService {
                 .orElseThrow(() -> new EntityNotFoundException("No product with id=" + productId));
         p.setAvailableStock(newStock);
         p.setLastUpdateDate(LocalDate.now());
-        productRepository.save(p);
+        p = productRepository.save(p);
         log.info("Stock updated for [product_id {}] → {}", productId, newStock);
+
+        ProductUpdateEvent event = ProductUpdateEvent.builder()
+                .productId(productId)
+                .newStock(p.getAvailableStock())
+                .newPrice(p.getPrice())
+                .eventTime(p.getLastUpdateDate().toString())
+                .build();
+
+        try {
+            kafkaTemplate.send(updateEventTopic,
+                    productId.toString(),
+                    defaultObjectMapper.writeValueAsString(event));
+            //                .addCallback(
+//                        success -> log.info("Sent update-event to Kafka: {}", eventJson),
+//                        failure -> log.error("Failed to send update-event to Kafka: {}", eventJson, failure)
+//                );
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Transactional
