@@ -11,7 +11,7 @@
 </head>
 <body>
 <h1>Тест SSE Client</h1>
-<p>Подключаемся к <code>/product-updates-stocks</code> и выводим в консоль и на экран все события.</p>
+<p>Подключаемся к <code>/product-update-event</code> и выводим в консоль и на экран все события.</p>
 
 <div id="log"></div>
 <button id="clear">Очистить логи</button>
@@ -31,7 +31,7 @@
     });
 
     // URL вашего SSE эндпоинта
-    const sseUrl = 'http://localhost:9997/kafka-sse';
+    const sseUrl = 'http://localhost:9997/product-update-event';
 
     appendLog(`Подключаемся к SSE: ${sseUrl}`);
     const es = new EventSource(sseUrl);
