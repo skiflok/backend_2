@@ -92,36 +92,33 @@ public class ProductService {
         if (newStock < 0) {
             throw new IllegalArgumentException("Cannot update stock. new stock less zero");
         }
-        Product p = productRepository.findById(productId)
-                .orElseThrow(() -> new EntityNotFoundException("No product with id=" + productId));
-        p.setAvailableStock(newStock);
-        p.setLastUpdateDate(LocalDate.now());
-        p = productRepository.save(p);
-        log.info("Stock updated for [product_id {}] → {}", productId, newStock);
-
-        ProductUpdateEvent event = ProductUpdateEvent.builder()
-                .productId(productId)
-                .newStock(p.getAvailableStock())
-                .newPrice(p.getPrice())
-                .eventTime(p.getLastUpdateDate().toString())
-                .build();
 
         try {
+            Product p = productRepository.findById(productId)
+                    .orElseThrow(() -> new EntityNotFoundException("No product with id=" + productId));
+            p.setAvailableStock(newStock);
+            p.setLastUpdateDate(LocalDate.now());
+            p = productRepository.save(p);
+            log.info("Stock updated for [product_id {}] → {}", productId, newStock);
+
+            ProductUpdateEvent event = ProductUpdateEvent.builder()
+                    .productId(productId)
+                    .newStock(p.getAvailableStock())
+                    .newPrice(p.getPrice())
+                    .eventTime(p.getLastUpdateDate().toString())
+                    .build();
+
             kafkaTemplate.send(updateEventTopic,
                     productId.toString(),
                     defaultObjectMapper.writeValueAsString(event));
-            //                .addCallback(
-//                        success -> log.info("Sent update-event to Kafka: {}", eventJson),
-//                        failure -> log.error("Failed to send update-event to Kafka: {}", eventJson, failure)
-//                );
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            log.error("Error ", e);
         }
 
     }
 
     @Transactional
-    public void updatePrice(Long productId, BigDecimal newPrice) {
+    public void updatePrice(Long productId, BigDecimal newPrice) throws JsonProcessingException {
         if (newPrice.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("Cannot update price. new price less zero");
         }
@@ -131,5 +128,16 @@ public class ProductService {
         p.setLastUpdateDate(LocalDate.now());
         productRepository.save(p);
         log.info("Price updated for [product_id {}] → {}", productId, newPrice);
+
+        ProductUpdateEvent event = ProductUpdateEvent.builder()
+                .productId(productId)
+                .newStock(p.getAvailableStock())
+                .newPrice(p.getPrice())
+                .eventTime(p.getLastUpdateDate().toString())
+                .build();
+
+        kafkaTemplate.send(updateEventTopic,
+                productId.toString(),
+                defaultObjectMapper.writeValueAsString(event));
     }
 }
