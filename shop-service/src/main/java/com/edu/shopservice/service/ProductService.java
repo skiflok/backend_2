@@ -1,6 +1,7 @@
 package com.edu.shopservice.service;
 
 import com.edu.shopservice.dto.ProductDto;
+import com.edu.shopservice.dto.event.ProductStockUpdateEvent;
 import com.edu.shopservice.dto.event.ProductUpdateEvent;
 import com.edu.shopservice.entity.Image;
 import com.edu.shopservice.entity.Product;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,15 +31,21 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProductService {
 
+    //todo рефакторинг сервиса в части оптимизации запросов
+
     private final ProductRepository productRepository;
     private final SupplierRepository supplierRepository;
     private final ImageRepository imageRepository;
     private final ModelMapper defaultModelMapper;
     private final ObjectMapper defaultObjectMapper;
+    //todo мб вынести отправку в отдельный кафка сервис?
     private final KafkaTemplate<String, String> kafkaTemplate;
 
     @Value("${kafka.out.product.update-event.topic}")
     private String updateEventTopic;
+    //todo need config and topic in kafka cluster
+    @Value("${kafka.out.product.update-stock-event.topic}")
+    private String updateStockEventTopic;
 
     public void addProduct(ProductDto productDto) {
         Supplier supplier = supplierRepository.findById(productDto.getSupplierId()).orElseThrow(() ->
@@ -63,15 +71,27 @@ public class ProductService {
     }
 
     public void decreaseProduct(Long productId, Integer decreaseStockValue) {
-        Product product = productRepository.findById(productId).orElseThrow(
-                () -> new EntityNotFoundException(String.format("Продукт с [id=%d] не найден", productId))
-        );
-        if (decreaseStockValue > product.getAvailableStock()) {
-            throw new IllegalArgumentException("Количество товара меньше чем decreaseStockValue");
+        try {
+            ProductDto productDto = getProductById(productId);
+            //todo нужно сохранять время изменения
+            int result = productRepository.decreaseStock(productId, decreaseStockValue);
+            if (result == 0) {
+                throw new IllegalArgumentException("Недостаточно товара на складе");
+            }
+            //todo тут может неактуальные данные по количеству из за того что в бд уже могло обновиться количество
+            ProductStockUpdateEvent event = ProductStockUpdateEvent.builder()
+                    .decreaseStock(decreaseStockValue)
+                    .productId(productId)
+                    .newStock(productDto.getAvailableStock() - decreaseStockValue)
+                    .eventTime(LocalDateTime.now().toString())
+                    .build();
+            kafkaTemplate.send(updateStockEventTopic,
+                    productId.toString(),
+                    defaultObjectMapper.writeValueAsString(event));
+        } catch (Exception e) {
+            log.error("Exception ", e);
         }
-        product.setAvailableStock(product.getAvailableStock() - decreaseStockValue);
-        productRepository.save(product);
-        log.info("product update [{}]", product);
+        log.info("product [id = {}] [decreaseStockValue = {}]", productId, decreaseStockValue);
     }
 
     public List<ProductDto> getAllProduct() {
@@ -85,36 +105,6 @@ public class ProductService {
             throw new EntityNotFoundException(String.format("Продукт с [id=%s] не найден", id));
         }
         productRepository.deleteById(id);
-    }
-
-    @Transactional
-    public void updateStock(Long productId, int newStock) {
-        if (newStock < 0) {
-            throw new IllegalArgumentException("Cannot update stock. new stock less zero");
-        }
-
-        try {
-            Product p = productRepository.findById(productId)
-                    .orElseThrow(() -> new EntityNotFoundException("No product with id=" + productId));
-            p.setAvailableStock(newStock);
-            p.setLastUpdateDate(LocalDate.now());
-            p = productRepository.save(p);
-            log.info("Stock updated for [product_id {}] → {}", productId, newStock);
-
-            ProductUpdateEvent event = ProductUpdateEvent.builder()
-                    .productId(productId)
-                    .newStock(p.getAvailableStock())
-                    .newPrice(p.getPrice())
-                    .eventTime(p.getLastUpdateDate().toString())
-                    .build();
-
-            kafkaTemplate.send(updateEventTopic,
-                    productId.toString(),
-                    defaultObjectMapper.writeValueAsString(event));
-        } catch (Exception e) {
-            log.error("Error ", e);
-        }
-
     }
 
     @Transactional

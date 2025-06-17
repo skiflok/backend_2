@@ -30,7 +30,7 @@ public class ProductTopicListener {
         log.debug("[message {}]", message);
         try {
             ProductUpdateEvent event = defaultObjectMapper.readValue(message, ProductUpdateEvent.class);
-            productService.updateStock(event.getProductId(), event.getNewStock());
+            productService.decreaseProduct(event.getProductId(), event.getNewStock());
         } catch (JsonProcessingException e) {
             log.error("mapping error", e);
         } catch (Exception e) {
