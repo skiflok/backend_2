@@ -1,6 +1,7 @@
 package com.edu.shopservice.kafka;
 
-import com.edu.shopservice.dto.event.ProductUpdateEvent;
+import com.edu.shopservice.dto.event.ProductPriceUpdateEvent;
+import com.edu.shopservice.dto.event.ProductStockUpdateEvent;
 import com.edu.shopservice.service.ProductService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,8 +30,8 @@ public class ProductTopicListener {
         log.info("Get message from [topic {}]", topic);
         log.debug("[message {}]", message);
         try {
-            ProductUpdateEvent event = defaultObjectMapper.readValue(message, ProductUpdateEvent.class);
-            productService.decreaseProduct(event.getProductId(), event.getNewStock());
+            ProductStockUpdateEvent event = defaultObjectMapper.readValue(message, ProductStockUpdateEvent.class);
+            productService.decreaseProduct(event.getProductId(), event.getDecreaseStock());
         } catch (JsonProcessingException e) {
             log.error("mapping error", e);
         } catch (Exception e) {
@@ -48,7 +49,7 @@ public class ProductTopicListener {
         log.info("Get message from [topic {}]", topic);
         log.debug("[message {}]", message);
         try {
-            ProductUpdateEvent event = defaultObjectMapper.readValue(message, ProductUpdateEvent.class);
+            ProductPriceUpdateEvent event = defaultObjectMapper.readValue(message, ProductPriceUpdateEvent.class);
             productService.updatePrice(event.getProductId(), event.getNewPrice());
         } catch (JsonProcessingException e) {
             log.error("mapping error", e);

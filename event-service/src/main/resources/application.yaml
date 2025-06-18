@@ -20,14 +20,20 @@ kafka:
   out:
     product:
       updates-stocks:
-        topic: product-updates-stocks
+        topic: product-stock-update-event-request
       updates-price:
-        topic: product-updates-price
+        topic: product-price-update-event-request
   in:
     product:
       update-event:
-        topic: product-update-event
-        group-id: product-update-event-group
+        topic: product-update-event-response
+        group-id: product-update-event-response-event-group
+      update-stock-event:
+        topic: product-stock-update-event-response
+        group-id: product-stock-update-event-response-event-group
+      update-price-event:
+        topic: product-price-update-event-response
+        group-id: product-price-update-event-response-event-group
 
 rest:
   client:

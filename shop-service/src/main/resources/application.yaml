@@ -90,14 +90,17 @@ kafka:
   in:
     product:
       updates-stocks:
-        topic: product-updates-stocks
-        group-id: product-updates-stocks-group
+        topic: product-stock-update-event-request
+        group-id: product-stock-update-event-request-shop-group
       updates-price:
-        topic: product-updates-price
-        group-id: product-updates-price-group
+        topic: product-price-update-event-request
+        group-id: product-price-update-event-request-shop-group
 
   out:
     product:
       update-event:
-        topic: product-update-event
-
+        topic: product-update-event-response
+      update-stock-event:
+        topic: product-stock-update-event-response
+      update-price-event:
+        topic: product-price-update-event-response

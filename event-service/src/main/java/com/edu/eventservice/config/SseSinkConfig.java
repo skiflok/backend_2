@@ -11,4 +11,14 @@ public class SseSinkConfig {
     public Sinks.Many<String> sseSink() {
         return Sinks.many().replay().limit(1);
     }
+
+    @Bean
+    public Sinks.Many<String> updateStockSseSink() {
+        return Sinks.many().replay().limit(1);
+    }
+
+    @Bean
+    public Sinks.Many<String> updatePriceSseSink() {
+        return Sinks.many().replay().limit(1);
+    }
 }

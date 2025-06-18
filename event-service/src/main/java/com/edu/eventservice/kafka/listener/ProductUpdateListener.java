@@ -1,6 +1,5 @@
 package com.edu.eventservice.kafka.listener;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -16,10 +15,13 @@ import reactor.core.publisher.Sinks;
 public class ProductUpdateListener {
 
     private final Sinks.Many<String> sseSink;
+    private final Sinks.Many<String> updateStockSseSink;
+    private final Sinks.Many<String> updatePriceSseSink;
 
+    //todo сделать 2 лиснера для обновления цены и обновления количества товара
     @KafkaListener(
-            topics = "${kafka.in.product.update-event.topic}",
-            groupId = "${kafka.in.product.update-event.group-id}")
+            topics = "${kafka.in.product.update-stock-event.topic}",
+            groupId = "${kafka.in.product.update-stock-event.group-id}")
     public void updateProductStocks(
             @Payload String message,
             @Header(KafkaHeaders.RECEIVED_TOPIC) String topic
@@ -27,9 +29,28 @@ public class ProductUpdateListener {
         log.info("Get message from [topic {}]", topic);
         log.debug("[message {}]", message);
         try {
-            Sinks.EmitResult result = sseSink.tryEmitNext(message);
+            Sinks.EmitResult result = updateStockSseSink.tryEmitNext(message);
             if (result.isFailure()) {
-                log.warn("Failed to emit message to SSE sink: {}", result);
+                log.warn("Failed to emit message to updateStockSseSink: {}", result);
+            }
+        } catch (Exception e) {
+            log.error("Error ", e);
+        }
+    }
+
+    @KafkaListener(
+            topics = "${kafka.in.product.update-price-event.topic}",
+            groupId = "${kafka.in.product.update-price-event.group-id}")
+    public void updateProductPrice(
+            @Payload String message,
+            @Header(KafkaHeaders.RECEIVED_TOPIC) String topic
+    ) {
+        log.info("Get message from [topic {}]", topic);
+        log.debug("[message {}]", message);
+        try {
+            Sinks.EmitResult result = updatePriceSseSink.tryEmitNext(message);
+            if (result.isFailure()) {
+                log.warn("Failed to emit message to updatePriceSseSink: {}", result);
             }
         } catch (Exception e) {
             log.error("Error ", e);

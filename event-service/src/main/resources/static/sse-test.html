@@ -2,16 +2,16 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8"/>
-    <title>SSE Test Client</title>
+    <title>SSE Stock & Price Client</title>
     <style>
         body { font-family: sans-serif; padding: 1rem; }
         #log { white-space: pre-wrap; background: #f9f9f9; padding: 1rem; border: 1px solid #ddd; height: 300px; overflow-y: scroll; }
-        button { margin-top: 1rem; }
+        button { margin-top: 1rem; margin-right: 0.5rem; }
     </style>
 </head>
 <body>
 <h1>Тест SSE Client</h1>
-<p>Подключаемся к <code>/product-update-event</code> и выводим в консоль и на экран все события.</p>
+<p>Подключение к <code>/product-stock-update-event</code> и <code>/product-price-update-event</code>.</p>
 
 <div id="log"></div>
 <button id="clear">Очистить логи</button>
@@ -21,33 +21,36 @@
     const clearBtn = document.getElementById('clear');
 
     function appendLog(msg) {
-      const time = new Date().toLocaleTimeString();
-      logEl.textContent += `[${time}] ${msg}\n`;
-      logEl.scrollTop = logEl.scrollHeight;
+        const time = new Date().toLocaleTimeString();
+        logEl.textContent += `[${time}] ${msg}\n`;
+        logEl.scrollTop = logEl.scrollHeight;
     }
 
     clearBtn.addEventListener('click', () => {
-      logEl.textContent = '';
+        logEl.textContent = '';
     });
 
-    // URL вашего SSE эндпоинта
-    const sseUrl = 'http://localhost:9997/product-update-event';
+    const stockUrl = 'http://localhost:9997/product-stock-update-event';
+    const priceUrl = 'http://localhost:9997/product-price-update-event';
 
-    appendLog(`Подключаемся к SSE: ${sseUrl}`);
-    const es = new EventSource(sseUrl);
+    appendLog(`Подключаемся к Stock SSE: ${stockUrl}`);
+    const stockSource = new EventSource(stockUrl);
 
-    es.onopen = () => appendLog('🔌 Соединение открыто');
-    es.onerror = (e) => {
-      appendLog('⚠️ Ошибка SSE: ' + (e?.message || 'connection error'));
+    stockSource.onopen = () => appendLog('🔌 Stock-соединение открыто');
+    stockSource.onerror = (e) => appendLog('⚠️ Ошибка Stock SSE: ' + (e?.message || 'connection error'));
+    stockSource.onmessage = (e) => {
+        appendLog('📉 Stock обновление: ' + e.data);
+        console.log('Stock SSE message', e);
     };
 
-    // Если вы отправляете разные event names, можно слушать конкретно:
-    // es.addEventListener('stock-update', e => { ... });
+    appendLog(`Подключаемся к Price SSE: ${priceUrl}`);
+    const priceSource = new EventSource(priceUrl);
 
-    // Универсальный слушатель — получаем всё
-    es.onmessage = (e) => {
-      appendLog('📨 Получено событие: ' + e.data);
-      console.log('SSE message event', e);
+    priceSource.onopen = () => appendLog('🔌 Price-соединение открыто');
+    priceSource.onerror = (e) => appendLog('⚠️ Ошибка Price SSE: ' + (e?.message || 'connection error'));
+    priceSource.onmessage = (e) => {
+        appendLog('💰 Price обновление: ' + e.data);
+        console.log('Price SSE message', e);
     };
 </script>
 </body>

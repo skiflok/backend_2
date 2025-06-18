@@ -1,7 +1,8 @@
 package com.edu.eventservice.service;
 
 import com.edu.eventservice.dto.ProductDto;
-import com.edu.eventservice.dto.ProductUpdateEvent;
+import com.edu.eventservice.dto.event.ProductPriceUpdateEvent;
+import com.edu.eventservice.dto.event.ProductStockUpdateEvent;
 import com.edu.eventservice.utils.ProductUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -27,7 +28,7 @@ public class KafkaEventGeneratorService {
     private final String productUpdatePriceTopic;
 
     //todo del
-    private int availableStock = 5;
+//    private int availableStock = 5;
 
     public KafkaEventGeneratorService(
             KafkaTemplate<String, String> kafka,
@@ -46,29 +47,30 @@ public class KafkaEventGeneratorService {
             List<ProductDto> productDtoList = getAllProduct();
             ProductDto selected = ProductUtils.randomProduct(productDtoList);
 
-            int currentStock = selected.getAvailableStock();
-            int newStock;
-            if (currentStock > 10) {
-                newStock = currentStock - ThreadLocalRandom.current().nextInt(1, 10);
-            } else {
-                newStock = currentStock + 200;
-            }
-            //todo del
-            availableStock = newStock;
+//            int currentStock = selected.getAvailableStock();
+//            int newStock;
+//            if (currentStock > 10) {
+//                newStock = currentStock - ThreadLocalRandom.current().nextInt(1, 10);
+//            } else {
+//                newStock = currentStock + 200;
+//            }
+//            //todo del
+//            availableStock = newStock;
 
-            ProductUpdateEvent event = new ProductUpdateEvent(
-                    selected.getId(),
-                    selected.getPrice(), // цена не меняется
-                    newStock,
-                    Instant.now().toString()
-            );
-            kafka.send(productUpdateStocksTopic,
+            ProductStockUpdateEvent event = ProductStockUpdateEvent.builder()
+                    .productId(selected.getId())
+                    .decreaseStock(ThreadLocalRandom.current().nextInt(1, 5))
+                    .eventTime(LocalDateTime.now().toString())
+                    .build();
+
+            kafka.send(
+                    productUpdateStocksTopic,
                     String.valueOf(selected.getId()),
                     defaultObjectMapper.writeValueAsString(event));
-            log.info("product [id={}] update stocks [from {} by {}]",
+
+            log.info("product [id={}] [decrease stocks by {}]",
                     selected.getId(),
-                    selected.getAvailableStock(),
-                    event.getNewStock());
+                    event.getDecreaseStock());
         } catch (Exception e) {
             log.error("Update stocks error", e);
         }
@@ -84,15 +86,16 @@ public class KafkaEventGeneratorService {
             BigDecimal newPrice = BigDecimal.valueOf(ThreadLocalRandom.current().nextDouble(10.0, 20.0))
                     .setScale(2, RoundingMode.HALF_UP);
 
-            ProductUpdateEvent event = new ProductUpdateEvent(
-                    selected.getId(),
-                    newPrice,
-                    selected.getAvailableStock(),
-                    Instant.now().toString()
-            );
+            ProductPriceUpdateEvent event = ProductPriceUpdateEvent.builder()
+                    .productId(selected.getId())
+                    .newPrice(newPrice)
+                    .eventTime(LocalDateTime.now().toString())
+                    .build();
+
             kafka.send(productUpdatePriceTopic,
                     String.valueOf(selected.getId()),
                     defaultObjectMapper.writeValueAsString(event));
+
             log.info("product [id={}] update price [from {} by {}]",
                     selected.getId(),
                     selected.getPrice(),
@@ -111,7 +114,7 @@ public class KafkaEventGeneratorService {
     private List<ProductDto> mockResponse() {
         ProductDto productDto = ProductDto.builder()
                 .id(1L)
-                .availableStock(availableStock)
+//                .availableStock(availableStock)
                 .price(BigDecimal.valueOf(15.00))
                 .build();
 
