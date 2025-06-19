@@ -8,17 +8,15 @@ import reactor.core.publisher.Sinks;
 public class SseSinkConfig {
 
     @Bean
-    public Sinks.Many<String> sseSink() {
-        return Sinks.many().replay().limit(1);
-    }
-
-    @Bean
     public Sinks.Many<String> updateStockSseSink() {
-        return Sinks.many().replay().limit(1);
+        // multicast + directBestEffort: для каждого нового сообщения
+        // пытаемся дёрнуть каждого подписчика сразу, без буфера
+        return Sinks.many().multicast().directBestEffort();
     }
 
     @Bean
     public Sinks.Many<String> updatePriceSseSink() {
-        return Sinks.many().replay().limit(1);
+        return Sinks.many().multicast().directBestEffort();
     }
+
 }

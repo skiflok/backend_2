@@ -14,7 +14,6 @@ import reactor.core.publisher.Sinks;
 @RequiredArgsConstructor
 public class ProductUpdateListener {
 
-    private final Sinks.Many<String> sseSink;
     private final Sinks.Many<String> updateStockSseSink;
     private final Sinks.Many<String> updatePriceSseSink;
 

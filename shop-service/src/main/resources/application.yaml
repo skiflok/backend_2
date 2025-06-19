@@ -98,8 +98,6 @@ kafka:
 
   out:
     product:
-      update-event:
-        topic: product-update-event-response
       update-stock-event:
         topic: product-stock-update-event-response
       update-price-event:

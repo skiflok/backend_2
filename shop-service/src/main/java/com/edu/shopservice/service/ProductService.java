@@ -41,9 +41,6 @@ public class ProductService {
     //todo мб вынести отправку в отдельный кафка сервис?
     private final KafkaTemplate<String, String> kafkaTemplate;
 
-    @Value("${kafka.out.product.update-event.topic}")
-    private String updateEventTopic;
-    //todo need config and topic in kafka cluster
     @Value("${kafka.out.product.update-stock-event.topic}")
     private String updateStockEventTopic;
     @Value("${kafka.out.product.update-price-event.topic}")

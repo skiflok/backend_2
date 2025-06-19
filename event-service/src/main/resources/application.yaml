@@ -25,9 +25,6 @@ kafka:
         topic: product-price-update-event-request
   in:
     product:
-      update-event:
-        topic: product-update-event-response
-        group-id: product-update-event-response-event-group
       update-stock-event:
         topic: product-stock-update-event-response
         group-id: product-stock-update-event-response-event-group
