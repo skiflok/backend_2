@@ -20,6 +20,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class KafkaEventGeneratorService {
+    //todo
+    // можно попробовать кешировать товары, что бы каждый раз не ходить в БД
+    // сверять через определенное время, обновление делать по эвентам
+    // сравнить реактивный стек и синхронный вызов по  импакту и нагрузке
 
     private final KafkaTemplate<String, String> kafka;
     private final ObjectMapper defaultObjectMapper;
