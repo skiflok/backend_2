@@ -17,7 +17,6 @@ public class ProductUpdateListener {
     private final Sinks.Many<String> updateStockSseSink;
     private final Sinks.Many<String> updatePriceSseSink;
 
-    //todo сделать 2 лиснера для обновления цены и обновления количества товара
     @KafkaListener(
             topics = "${kafka.in.product.update-stock-event.topic}",
             groupId = "${kafka.in.product.update-stock-event.group-id}")

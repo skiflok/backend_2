@@ -1,10 +1,7 @@
 package com.edu.eventservice.dto;
 
 import com.edu.eventservice.enums.Category;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -15,6 +12,8 @@ import java.util.UUID;
 @Setter
 @ToString
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductDto {
 
     private Long id;
