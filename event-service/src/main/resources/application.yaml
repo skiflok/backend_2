@@ -3,7 +3,8 @@ spring:
     name: event-service
 
   kafka:
-    bootstrap-servers: localhost:29092
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:29092}
+#    bootstrap-servers: localhost:29092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
@@ -35,15 +36,15 @@ kafka:
 rest:
   client:
     shop-service:
-      base-url: http://localhost:9999
+      base-url: ${SHOP_SERVICE_BASE_URL:http://localhost:9999}
       auth:
         # move to secret and env
-        url: http://localhost:9999/api/v1/authorization/auth
+        url: ${SHOP_SERVICE_AUTH_URL:http://localhost:9999/api/v1/authorization/auth}
         username: event@example.com
         password: s3cret!
       product:
         all:
-          url: ${product-all-url:http://localhost:9999/api/v1/product/all}
+          url: ${PRODUCT_ALL_URL:http://localhost:9999/api/v1/product/all}
 
 scheduler:
   product:
