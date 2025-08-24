@@ -22,7 +22,7 @@ services:
     networks:
       - backend_network
 
-  postgres_auth:
+  postgres-auth:
     image: postgres:latest
     container_name: db_pg_auth
     environment:
@@ -51,7 +51,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: user@domain.com
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
-      - "8080:80"
+      - "8082:80"
     healthcheck:
       test: [ "CMD", "wget", "-O", "-", "http://localhost:80/misc/ping" ]
       interval: 10s         # Как часто выполнять проверку
@@ -64,63 +64,89 @@ services:
 
   #    BACKEND SERVICES
 
-  auth_service:
+  auth-service:
     image: auth-service:latest
-    container_name: auth_service
+    container_name: auth-service
     environment:
-      POSTGRES_AUTH_URL: jdbc:postgresql://postgres_auth:5432/auth
+      POSTGRES_AUTH_URL: jdbc:postgresql://postgres-auth:5432/auth
     #    ports:
     #      - "9090:9090"
     depends_on:
-      postgres_auth:
+      postgres-auth:
         condition: service_healthy
     restart: unless-stopped
     networks:
       backend_network:
         ipv4_address: 192.168.1.100
 
-  shop_service_primary:
+  shop-service-primary:
     image: shop-service:latest
-    container_name: shop_service_primary
+    container_name: shop-service-primary
     ports:
       - "9999:9999"
     depends_on:
       postgres:
         condition: service_healthy
     environment:
+      DB_URL: jdbc:postgresql://postgres:5432/backend2
       DB_READ_ONLY: false
       GRPC_CLIENT_AUTHGRPCCLIENT_ADDRESS: static://192.168.1.100:9090
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     restart: unless-stopped
     networks:
       - backend_network
 
-  shop_service_db_ro-1:
+  shop-service-db-ro-1:
     image: shop-service:latest
-    container_name: shop_service_db_ro-1
+    container_name: shop-service-db-ro-1
     depends_on:
       postgres:
         condition: service_healthy
     environment:
+      DB_URL: jdbc:postgresql://postgres:5432/backend2
       DB_READ_ONLY: true
       GRPC_CLIENT_AUTHGRPCCLIENT_ADDRESS: static://192.168.1.100:9090
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     restart: unless-stopped
     networks:
       - backend_network
 
-  shop_service_db_ro-2:
+  shop-service-db-ro-2:
     image: shop-service:latest
-    container_name: shop_service_db_ro-2
+    container_name: shop-service-db-ro-2
     depends_on:
       postgres:
         condition: service_healthy
     environment:
+      DB_URL: jdbc:postgresql://postgres:5432/backend2
       DB_READ_ONLY: true
       GRPC_CLIENT_AUTHGRPCCLIENT_ADDRESS: static://192.168.1.100:9090
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     restart: unless-stopped
     networks:
       - backend_network
 
-# REDIS
+  event-service:
+    image: event-service:latest
+    container_name: event-service
+    ports:
+      - "9997:9997"
+#    depends_on:
+#      shop-service-primary:
+#        condition: service_healthy
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+#      SHOP_SERVICE_BASE_URL: https://s21backend/api
+#      SHOP_SERVICE_AUTH_URL: https://s21backend/api/authorization/auth
+#      PRODUCT_ALL_URL: https://s21backend/api/product/all
+      SHOP_SERVICE_BASE_URL: http://shop-service-primary:9999/api/v1
+      SHOP_SERVICE_AUTH_URL: http://shop-service-primary:9999/api/v1/authorization/auth
+      PRODUCT_ALL_URL: http://shop-service-primary:9999/api/v1/product/all
+    restart: unless-stopped
+    networks:
+      - backend_network
+
+  # REDIS
 
   redis:
     image: redis:7-alpine
@@ -154,7 +180,7 @@ services:
       - ./shop-service/src/main/resources/static/nginx:/static
       - ./shop-service/src/main/resources/cert:/certs/
     depends_on:
-      shop_service_primary:
+      shop-service-primary:
         condition: service_started
       adminer:
         condition: service_healthy
@@ -167,8 +193,8 @@ services:
   kafka:
     image: bitnami/kafka:latest
     container_name: kafka
-#    depends_on:
-#      - zookeeper
+    #    depends_on:
+    #      - zookeeper
     ports:
       - "29092:29092"
     environment:
@@ -182,10 +208,11 @@ services:
       - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
-#    volumes:
-#      - .kafka-data:/bitnami/kafka:z
+    #    volumes:
+    #      - .kafka-data:/bitnami/kafka:z
     networks:
       - kafka-net
+      - backend_network
 
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
