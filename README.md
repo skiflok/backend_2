@@ -9,7 +9,7 @@
 
 * `sudo nano /etc/hosts`
 * add `127.0.0.1   s21backend` добавляем локальный DNS
-* `sudo openssl req -x509 -nodes -days 7 -newkey rsa:2048 \
+* `sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
   -keyout ./src/main/resources/cert/s21backend.key \
   -out ./src/main/resources/cert/s21backend.crt` создаем самоподписный сертификат
 * Common Name указать `s21backend`
