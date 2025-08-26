@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <title>WebSocket Test Client</title>
+    <style>
+        body { font-family: sans-serif; padding: 1rem; }
+        #stockLog, #priceLog {
+          width: 45%; display: inline-block; vertical-align: top;
+          background: #f0f0f0; padding: 1rem; height: 200px; overflow-y: scroll;
+          border: 1px solid #ccc; margin-right: 5%;
+        }
+        h2 { margin-top: 0; }
+    </style>
+</head>
+<body>
+<h1>WebSocket Client</h1>
+<div>
+    <div id="stockLog">
+        <h2>Stock Updates</h2>
+    </div>
+    <div id="priceLog">
+        <h2>Price Updates</h2>
+    </div>
+</div>
+
+<script>
+    const stockLog = document.getElementById('stockLog');
+    const priceLog = document.getElementById('priceLog');
+
+    function append(el, msg) {
+      const p = document.createElement('div');
+      p.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+      el.appendChild(p);
+      el.scrollTop = el.scrollHeight;
+    }
+
+    // WS для stock
+    const wsStock = new WebSocket('ws://localhost:9997/ws-stock-updates');
+    wsStock.onopen = () => append(stockLog, '🟢 Connected to /ws-stock-updates');
+    wsStock.onmessage = e => append(stockLog, `📉 ${e.data}`);
+    wsStock.onerror   = e => append(stockLog, `❌ Error: ${e.message}`);
+
+    // WS для price
+    const wsPrice = new WebSocket('ws://localhost:9997/ws-price-updates');
+    wsPrice.onopen    = () => append(priceLog, '🟢 Connected to /ws-price-updates');
+    wsPrice.onmessage = e => append(priceLog, `💰 ${e.data}`);
+    wsPrice.onerror   = e => append(priceLog, `❌ Error: ${e.message}`);
+</script>
+</body>
+</html>

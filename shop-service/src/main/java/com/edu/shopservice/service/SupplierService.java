@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,10 +26,11 @@ public class SupplierService {
     private final AddressRepository addressRepository;
     private final ModelMapper defaultModelMapper;
 
+    @Transactional
     public void add(SupplierDto supplierDto) {
-        supplierRepository.findById(supplierDto.getId()).ifPresent(s -> {
-            throw new EntityExistsException(String.format("Поставщик с [id=%d] уже существует", supplierDto.getId()));
-        });
+
+        supplierDto.setId(null);
+
         Address address = addressRepository.findById(supplierDto.getAddressId())
                 .orElseThrow(() -> new EntityNotFoundException(
                         String.format("Адресс с [id=%d] не найден", supplierDto.getAddressId())));
@@ -39,6 +41,7 @@ public class SupplierService {
         log.info("Supplier saved: {}", supplier);
     }
 
+    @Transactional
     public void changeAddress(Long supplierId, AddressDto addressDto) {
         Supplier supplier = supplierRepository.findById(supplierId).orElseThrow(() ->
                 new EntityNotFoundException(String.format("Поставщик с [id=%d] не существует", supplierId))
@@ -57,6 +60,7 @@ public class SupplierService {
         log.info("Supplier update [{}]", supplier);
     }
 
+    @Transactional
     public void deleteById(Long id) {
         if (!supplierRepository.existsById(id)) {
             throw new EntityNotFoundException(String.format("Поставщик с [id=%s] не найден", id));

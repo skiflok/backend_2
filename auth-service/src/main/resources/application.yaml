@@ -3,18 +3,13 @@ spring:
     name: auth-service
 
   datasource:
-    #    url: jdbc:postgresql://localhost:5433/auth
-    url: jdbc:postgresql://postgres_auth:${DB_PORT:5432}/auth
+#    url: jdbc:postgresql://localhost:5433/auth
+#    url: jdbc:postgresql://postgres_auth:${DB_PORT:5432}/auth
+    url: ${POSTGRES_AUTH_URL:jdbc:postgresql://localhost:5433/auth} # default localhost
     username: admin
     password: pass
     hikari:
       read-only: ${DB_READ_ONLY:false}
-
-  #  datasource:
-  #    url: jdbc:h2:mem:backend2
-  #    username: sa
-  #    password: password
-  #    driverClassName: org.h2.Driver
 
   jpa:
     show-sql: true
@@ -25,14 +20,6 @@ spring:
         format_sql: true
         use_sql_comments: true
     #        dialect: org.hibernate.dialect.PostgreSQLDialect
-
-    #    for H2
-  #    database-platform: org.hibernate.dialect.H2Dialect
-  #    defer-datasource-initialization: true
-
-  #  h2:
-  #    console:
-  #      enabled: true
 
   liquibase:
     enabled: true

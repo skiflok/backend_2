@@ -88,6 +88,12 @@ sudo openssl req -x509 -nodes -days 7 -newkey rsa:2048 \
 
 [plant uml site](https://plantuml.com/ru/)
 
+[Визуализация архитектуры с помощью C4 модели и PlantUML](https://habr.com/ru/companies/usetech/news/676196/)
+
+[C4-PlantUML github](https://github.com/plantuml-stdlib/C4-PlantUML)
+
+[plantuml-examples](https://github.com/joelparkerhenderson/plantuml-examples)
+
 ## Auth service
 
 [Сервер авторизации для микросервисов на Spring Boot](https://habr.com/ru/companies/otus/articles/681448/)
@@ -124,3 +130,13 @@ sudo openssl req -x509 -nodes -days 7 -newkey rsa:2048 \
 ## Security
 
 [secure-random](https://www.baeldung.com/java-secure-random)
+
+## Kafka
+
+[Using Spring for Apache Kafka Sending Messages](https://docs.spring.io/spring-kafka/reference/kafka/sending-messages.html)
+
+[Введение в Apache Kafka с Spring](https://www.baeldung.com/spring-kafka)
+
+[Complete Kafka Producer with Java](https://learn.conduktor.io/kafka/complete-kafka-producer-with-java/)
+
+[Apache Kafka. Пишем простой producer и consumer и тестируем их](https://habr.com/ru/articles/742786/)

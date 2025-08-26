@@ -1,0 +1,21 @@
+@startuml
+actor "Генератор событий" as Generator
+participant "Kafka (топик product-updates)" as Kafka
+participant "Shop-сервис" as Shop
+database "База данных" as DB
+
+Generator -> Kafka : Отправка события с изменениями\n(товарId, новая цена, новый остаток)
+activate Kafka
+Kafka --> Shop : Передача события (асинхронно)
+deactivate Kafka
+
+activate Shop
+Shop -> DB : Найти товар по ID\n(SELECT * FROM product WHERE id = ?)
+DB --> Shop : Возврат текущего состояния товара
+Shop -> DB : Обновить запись\n(UPDATE product SET price = ?, available_stock = ? WHERE id = ?)
+DB --> Shop : Подтверждение обновления
+deactivate Shop
+
+== Если необходимо уведомление клиентов ==
+Shop -> "WebSocket/SSE шлюз" : Отправка уведомления об обновлении
+@enduml

@@ -1,0 +1,58 @@
+spring:
+  application:
+    name: event-service
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:29092}
+#    bootstrap-servers: localhost:29092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+  #      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+  output:
+    ansi:
+      enabled: always
+
+server:
+  port: 9997
+
+kafka:
+  out:
+    product:
+      updates-stocks:
+        topic: product-stock-update-event-request
+      updates-price:
+        topic: product-price-update-event-request
+  in:
+    product:
+      update-stock-event:
+        topic: product-stock-update-event-response
+        group-id: product-stock-update-event-response-event-group
+      update-price-event:
+        topic: product-price-update-event-response
+        group-id: product-price-update-event-response-event-group
+
+rest:
+  client:
+    shop-service:
+      base-url: ${SHOP_SERVICE_BASE_URL:http://localhost:9999}
+      auth:
+        # move to secret and env
+        url: ${SHOP_SERVICE_AUTH_URL:http://localhost:9999/api/v1/authorization/auth}
+        username: event@example.com
+        password: s3cret!
+      product:
+        all:
+          url: ${PRODUCT_ALL_URL:http://localhost:9999/api/v1/product/all}
+
+scheduler:
+  product:
+    updates-stocks: 10000
+    updates-price: 20000
+
+
+logging:
+  level:
+    liquibase: info
+    com.edu.eventservice: debug

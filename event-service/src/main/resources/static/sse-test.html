@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8"/>
+    <title>SSE Stock & Price Client</title>
+    <style>
+        body { font-family: sans-serif; padding: 1rem; }
+        #log { white-space: pre-wrap; background: #f9f9f9; padding: 1rem; border: 1px solid #ddd; height: 300px; overflow-y: scroll; }
+        button { margin-top: 1rem; margin-right: 0.5rem; }
+    </style>
+</head>
+<body>
+<h1>Тест SSE Client</h1>
+<p>Подключение к <code>/product-stock-update-event</code> и <code>/product-price-update-event</code>.</p>
+
+<div id="log"></div>
+<button id="clear">Очистить логи</button>
+
+<script>
+    const logEl = document.getElementById('log');
+    const clearBtn = document.getElementById('clear');
+
+    function appendLog(msg) {
+        const time = new Date().toLocaleTimeString();
+        logEl.textContent += `[${time}] ${msg}\n`;
+        logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    clearBtn.addEventListener('click', () => {
+        logEl.textContent = '';
+    });
+
+    const stockUrl = 'http://localhost:9997/product-stock-update-event';
+    const priceUrl = 'http://localhost:9997/product-price-update-event';
+
+    appendLog(`Подключаемся к Stock SSE: ${stockUrl}`);
+    const stockSource = new EventSource(stockUrl);
+
+    stockSource.onopen = () => appendLog('🔌 Stock-соединение открыто');
+    stockSource.onerror = (e) => appendLog('⚠️ Ошибка Stock SSE: ' + (e?.message || 'connection error'));
+    stockSource.onmessage = (e) => {
+        appendLog('📉 Stock обновление: ' + e.data);
+        console.log('Stock SSE message', e);
+    };
+
+    appendLog(`Подключаемся к Price SSE: ${priceUrl}`);
+    const priceSource = new EventSource(priceUrl);
+
+    priceSource.onopen = () => appendLog('🔌 Price-соединение открыто');
+    priceSource.onerror = (e) => appendLog('⚠️ Ошибка Price SSE: ' + (e?.message || 'connection error'));
+    priceSource.onmessage = (e) => {
+        appendLog('💰 Price обновление: ' + e.data);
+        console.log('Price SSE message', e);
+    };
+</script>
+</body>
+</html>

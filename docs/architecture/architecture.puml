@@ -1,0 +1,32 @@
+@startuml
+skinparam componentStyle rectangle
+
+package "Backend Network" {
+
+  [Postgres (Shop DB)] as DB_Shop
+  [Postgres_auth (Auth DB)] as DB_Auth
+
+  [Adminer] as Adminer
+
+  [Auth Service] as AuthService
+
+  ' Объединённый компонент для всех shop-сервисов
+  [Shop Service] as ShopService
+
+  [nginx] as Nginx
+}
+
+' Связи между компонентами:
+DB_Shop --> ShopService : JDBC (Shop DB)
+DB_Auth --> AuthService : JDBC (Auth DB)
+Adminer --> DB_Shop : Администрирование
+Adminer --> DB_Auth : Администрирование
+
+' gRPC вызов от Shop Service к Auth Service: оставляем только протокол
+ShopService --> AuthService : gRPC
+
+' nginx действует как реверс-прокси
+Nginx --> ShopService : Reverse Proxy (HTTP/HTTPS)
+Nginx --> Adminer : Reverse Proxy (HTTP)
+
+@enduml

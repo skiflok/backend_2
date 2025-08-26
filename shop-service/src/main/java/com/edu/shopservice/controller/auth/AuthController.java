@@ -1,7 +1,6 @@
 package com.edu.shopservice.controller.auth;
 
 
-import com.edu.grpc.PasswordRecoveryResponse;
 import com.edu.shopservice.dto.auth.AuthDto;
 import com.edu.shopservice.dto.auth.RegisterDto;
 import com.edu.shopservice.dto.auth.ResetPasswordResponseDto;
