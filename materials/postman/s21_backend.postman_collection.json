@@ -878,6 +878,38 @@
 							"response": []
 						},
 						{
+							"name": "get by id",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:9999/api/v1/image/fcd54859-2795-4a42-a303-705f06d10319",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"api",
+										"v1",
+										"image",
+										"fcd54859-2795-4a42-a303-705f06d10319"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "get by product id",
 							"request": {
 								"method": "GET",
@@ -895,28 +927,6 @@
 										"image",
 										"by-product-id",
 										"1"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "get by id",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "http://localhost:9999/api/v1/image/ee4b20d9-beb5-48a8-9bde-1eb2ba301b10",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "9999",
-									"path": [
-										"api",
-										"v1",
-										"image",
-										"ee4b20d9-beb5-48a8-9bde-1eb2ba301b10"
 									]
 								}
 							},
@@ -962,6 +972,16 @@
 								{
 									"name": "all sup nginx",
 									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -1121,8 +1141,53 @@
 					"name": "product",
 					"item": [
 						{
+							"name": "nginx",
+							"item": [
+								{
+									"name": "all product nginx",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "https://s21backend/api/product/all",
+											"protocol": "https",
+											"host": [
+												"s21backend"
+											],
+											"path": [
+												"api",
+												"product",
+												"all"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
 							"name": "all product",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
@@ -1267,6 +1332,335 @@
 									],
 									"path": [
 										"index.html"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "auth_service",
+			"item": [
+				{
+					"name": "auth",
+					"item": [
+						{
+							"name": "docker",
+							"item": [
+								{
+									"name": "auth docker",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"SecurePass123!\"\n}\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:9999/api/v1/authorization/auth",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "9999",
+											"path": [
+												"api",
+												"v1",
+												"authorization",
+												"auth"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "auth",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Save the token from the response header to a variable named 'token' and remove 'Bearer ' from the beginning",
+											"pm.test(\"Save the token from the response header to a variable named 'token'\", function () {",
+											"    var token = pm.response.headers.get('Authorization').replace('Bearer ', '');",
+											"    pm.environment.set('token', token);",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"SecurePass123!\"\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:9999/api/v1/authorization/auth",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"api",
+										"v1",
+										"authorization",
+										"auth"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "auth event",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Save the token from the response header to a variable named 'token' and remove 'Bearer ' from the beginning",
+											"pm.test(\"Save the token from the response header to a variable named 'token'\", function () {",
+											"    var token = pm.response.headers.get('Authorization').replace('Bearer ', '');",
+											"    pm.environment.set('token', token);",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"event@example.com\",\n  \"password\": \"s3cret!\"\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:9999/api/v1/authorization/auth",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"api",
+										"v1",
+										"authorization",
+										"auth"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "auth event",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"email\": \"event@example.com\",\n  \"password\": \"s3cret!\"\n}\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:9999/api/v1/authorization/auth",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "9999",
+											"path": [
+												"api",
+												"v1",
+												"authorization",
+												"auth"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "plain",
+									"header": [
+										{
+											"key": "Cache-Control",
+											"value": "no-store, no-cache, must-revalidate, max-age=0"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "Authorization",
+											"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJldmVudEBleGFtcGxlLmNvbSIsImlhdCI6MTc1MDU2NTA4OCwiZXhwIjoxNzUwNTY4Njg4fQ.ojBP6-wWq6VzGUsYLDJxJS16IWAxA0lOyj1QMO7MBSg"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Length",
+											"value": "0"
+										},
+										{
+											"key": "Date",
+											"value": "Sun, 22 Jun 2025 04:04:48 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": null
+								}
+							]
+						},
+						{
+							"name": "register",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"user@example.com\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"phoneNumber\": \"+1234567890\",\n  \"password\": \"SecurePass123!\"\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:9999/api/v1/authorization/register",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"api",
+										"v1",
+										"authorization",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "register event",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"event@example.com\",\n  \"firstName\": \"event\",\n  \"lastName\": \"service\",\n  \"phoneNumber\": \"+1234567890\",\n  \"password\": \"s3cret!\"\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:9999/api/v1/authorization/register",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"api",
+										"v1",
+										"authorization",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "reset",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"SecurePass123!\"\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:9999/api/v1/authorization/auth",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"api",
+										"v1",
+										"authorization",
+										"auth"
 									]
 								}
 							},
