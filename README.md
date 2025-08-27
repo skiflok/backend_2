@@ -97,6 +97,8 @@
 
 </details>
 
+[documentation](shop-service/docs/openapi/index.html)
+
 ## Сущности
 
 <details>
