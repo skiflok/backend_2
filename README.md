@@ -97,6 +97,8 @@
 
 </details>
 
+[swagger](docs/openapi/openapi.json)
+
 ## Сущности
 
 <details>

@@ -23,7 +23,14 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/authorization/**").permitAll() // Открытые эндпоинты
+                        .requestMatchers(
+                                "/api/v1/authorization/**",
+                                "/swagger-ui/**",
+                                "/swagger/**",
+                                "/docs/**",
+                                "/v3/api-docs/**",
+                                "/actuator/health"
+                                ).permitAll() // Открытые эндпоинты
                         .anyRequest().authenticated() // Остальные требуют авторизации
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(authGrpcClient), UsernamePasswordAuthenticationFilter.class);
