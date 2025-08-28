@@ -97,7 +97,7 @@
 
 </details>
 
-[documentation](shop-service/docs/openapi/index.html)
+[swagger](docs/openapi/openapi.json)
 
 ## Сущности
 
