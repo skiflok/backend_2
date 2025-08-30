@@ -1,0 +1,62 @@
+@startuml context_s21
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+' Общий слой: слева → направо
+LAYOUT_LEFT_RIGHT()
+skinparam linetype polyline
+skinparam shadowing false
+skinparam RoundCorner 6
+skinparam ArrowFontSize 11
+skinparam componentStyle rect
+
+' === Actors (слева) ===
+
+Boundary(actors, "actors") {
+    Person(customer, "Customer", "Покупатель / Клиент")
+    Person(admin, "Admin", "Администратор")
+    Lay_D(admin, customer)
+}
+
+' === Reverse proxy (следующий слой) ===
+System_Ext(nginx, "NGINX", "Reverse proxy / TLS termination")
+
+' === S21 Backend (по центру, сервисы вертикально) ===
+System_Boundary(s21, "S21 Backend") {
+  together {
+    LAYOUT_TOP_DOWN()
+    System(shop, "shop-service", "REST API: products/suppliers/clients")
+    System(event, "event-service", "Generates & processes product update events")
+    System(auth, "auth-service (gRPC)", "Authentication & token validation")
+  }
+}
+
+' === Infrastructure (справа, вертикально) ===
+Boundary(infra, "Infrastructure", "External systems") {
+  together {
+    System_Ext(kafka, "Kafka", "Event bus (topics: product-*)")
+    System_Ext(postgres, "Postgres", "Relational DB (schema s21)")
+    System_Ext(redis, "Redis", "Cache / sessions")
+    Lay_D(kafka, postgres)
+    Lay_D(postgres, redis)
+  }
+}
+
+Lay_D(s21, infra)
+
+' === Relationships ===
+'Rel_R(customer, nginx, "Uses / interacts", "HTTP/HTTPS")
+'Rel_R(admin, nginx, "Admin UI / API", "HTTP/HTTPS")
+Rel_R(actors, nginx, "Admin UI / API", "HTTP/HTTPS")
+
+Rel_R(nginx, shop, "Routes requests", "HTTP/REST")
+
+Rel(shop, auth, "Validates tokens", "gRPC")
+Rel(shop, postgres, "Reads/Writes data", "JDBC")
+Rel(shop, redis, "Cache access", "Redis protocol")
+Rel(shop, kafka, "Publishes/Subscribes", "Kafka topics")
+
+Rel(event, kafka, "Publishes/Subscribes", "Kafka topics")
+Rel(event, shop, "Calls API for enrichment", "HTTP/REST")
+
+SHOW_LEGEND()
+@enduml
