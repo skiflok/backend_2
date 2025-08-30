@@ -1,8 +1,64 @@
-# ShopAPI
+# Backend 2 — S21 Backend
 
-* Тематика магазина: магазин бытовой техники.
+[![Build](https://img.shields.io/badge/build-maven-blue)]() <!-- optional: ссылка на CI -->
+[![Docker Image](https://img.shields.io/badge/docker-ready-brightgreen)]()
+[![License](https://img.shields.io/badge/license-MIT-lightgrey)]()
 
-## Запуск
+Краткое описание: **Backend для S21 (shop, event, auth)** — микросервисы на Spring Boot (shop-service, event-service, auth-service) + Postgres, Kafka, Redis. Реализует управление товарами, авторизацию, обработку событий по Kafka.
+
+---
+
+## Содержание
+- [Архитектура](#архитектура)
+- [Технологии](#технологии)
+- [Быстрый старт](#быстрый-старт)
+  - [Запуск локально (Docker Compose)](#запуск)
+    ###### todo  - [Конфигурация / переменные окружения](#конфигурация--переменные-окружения)
+- [История версий](#versions-history)
+- [Документация API (Swagger / OpenAPI)](#документация-api-swagger--openapi)
+
+## TODO
+- [Генерация документации](#генерация-документации)
+- [Сборка / Тесты](#сборка--тесты)
+- [Troubleshooting (частые ошибки)](#troubleshooting-частые-ошибки)
+- [Contributing](#contributing)
+- [License](#license)
+
+---
+
+## Архитектура
+Сервисы:
+- `shop-service` — REST API магазина (порт `9999`)
+- `event-service` — отправляет/принимает события (порт `9997`)
+- `auth-service` — авторизация (gRPC, адрес `9090`)
+- БД: `postgres` (`backend2`), `postgres_auth` (`auth`)
+- `kafka`, `redis`, `nginx` (реверс-прокси)
+
+*(TODO: добавить простую схему архитектуры в `docs/` — png или mermaid диаграмму.)*
+
+![Context diagram](docs/diagrams/src/context_s21.svg)
+
+---
+
+## Технологии
+- Java 17, Spring Boot 3.x
+- Spring Data JPA, Liquibase
+- Spring Kafka
+- Redis
+- PostgreSQL
+- SpringDoc OpenAPI (Swagger UI)
+- Docker / Docker Compose, Jib для контейнеров
+
+---
+
+## Быстрый старт
+
+### Предварительно
+- Docker & Docker Compose
+- Maven 3.8+
+- Java 17 (для локальной сборки, если нужно)
+
+### Запуск
 
 <details>
   <summary>Описание команд запуска</summary>
@@ -86,7 +142,9 @@
 
 </details>
 
-## Swagger
+## документация-api-swagger--openapi
+
+> http://localhost:9999/swagger/index.html
 
 <details>
   <summary>вызовы сваггера через реверс прокси</summary>
@@ -97,7 +155,7 @@
 
 </details>
 
-[swagger](docs/openapi/openapi.json)
+[docs](docs/openapi/openapi.json)
 
 ## Сущности
 
@@ -224,10 +282,6 @@ address
     5) Получение изображения по id изображения
 
 </details>
-
-## Swagger спецификация
-
-> http://localhost:9999/swagger/index.html
 
 ## NGINX реверс прокси, балансировка запросов, сжатие, кэширование, https
 
