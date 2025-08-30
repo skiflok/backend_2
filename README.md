@@ -34,9 +34,13 @@
 - БД: `postgres` (`backend2`), `postgres_auth` (`auth`)
 - `kafka`, `redis`, `nginx` (реверс-прокси)
 
-*(TODO: добавить простую схему архитектуры в `docs/` — png или mermaid диаграмму.)*
+<details>
+    <summary>Context diagram</summary>
 
 ![Context diagram](docs/diagrams/src/context_s21.svg)
+
+</details>
+
 
 ---
 
@@ -87,6 +91,8 @@
 * `mvn jib:dockerBuild`
 
 </details>
+
+---
 
 ## versions history
 
@@ -142,6 +148,8 @@
 
 </details>
 
+---
+
 ## документация-api-swagger--openapi
 
 > http://localhost:9999/swagger/index.html
@@ -156,6 +164,8 @@
 </details>
 
 [docs](docs/openapi/openapi.json)
+
+---
 
 ## Сущности
 
@@ -225,6 +235,8 @@ address
 
 </details>
 
+---
+
 ## Реализованы виды HTTP запросов (GET, POST, PUT, DELETE, PATCH).
 
 <details>
@@ -283,6 +295,8 @@ address
 
 </details>
 
+---
+
 ## NGINX реверс прокси, балансировка запросов, сжатие, кэширование, https
 
 <details>
@@ -322,6 +336,8 @@ address
     - [x] Настроить reverse proxy на запущенное приложение.
 
 </details>
+
+---
 
 ## Авторизация с помощью сервиса авторизации по gRPC
 
@@ -372,6 +388,8 @@ address
 
 </details>
 
+---
+
 ## Брокеры сообщений (обработка эвентов в kafka), Redis, эхо-клиенты (WebSockets и SSE)
 
 <details>
@@ -392,5 +410,7 @@ address
 - [x]  Фотографии товара для ответов должны кешироваться в Redis.
 
 </details>
+
+---
 
 ## TODO
