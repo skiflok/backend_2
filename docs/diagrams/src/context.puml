@@ -3,19 +3,27 @@
 
 ' Общий слой: слева → направо
 LAYOUT_LEFT_RIGHT()
-skinparam linetype polyline
+'HIDE_PERSON_SPRITE()
+'SHOW_PERSON_OUTLINE()
+
+skinparam linetype ortho
 skinparam shadowing false
 skinparam RoundCorner 10
 skinparam ArrowFontSize 11
 skinparam componentStyle rect
 
-' === Actors (слева) ===
+skinparam ranksep 50
+skinparam nodesep 100
 
+' === Actors (слева) ===
 Boundary(actors, "actors") {
-    Person(customer, "Customer", "Покупатель / Клиент")
-    Person(admin, "Admin", "Администратор")
-    Lay_D(admin, customer)
+    together{
+        Person(customer, "Customer", "Покупатель / Клиент")
+        Person(admin, "Admin", "Администратор")
+        Lay_D(admin, customer)
+    }
 }
+
 
 ' === Reverse proxy (следующий слой) ===
 System_Ext(nginx, "NGINX", "Reverse proxy / TLS termination")
@@ -44,16 +52,14 @@ Boundary(infra, "Infrastructure", "External systems") {
 Lay_D(s21, infra)
 
 ' === Relationships ===
-
-Rel_R(actors, nginx, "Admin UI / API", "HTTP/HTTPS")
+Rel_R(admin, nginx, "Admin UI / API", "HTTPS")
+Rel_R(customer, nginx, "Customer UI / API", "HTTPS")
 
 Rel_R(nginx, shop, "Routes requests", "HTTP/REST")
-
 Rel(shop, auth, "Validates tokens", "gRPC")
-
 Rel(event, shop, "Calls API", "HTTP/REST")
-
 Rel(s21, infra, "", "")
+
 
 SHOW_LEGEND()
 @enduml
