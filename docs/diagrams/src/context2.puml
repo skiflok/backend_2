@@ -5,7 +5,7 @@
 LAYOUT_LEFT_RIGHT()
 skinparam linetype polyline
 skinparam shadowing false
-skinparam RoundCorner 6
+skinparam RoundCorner 10
 skinparam ArrowFontSize 11
 skinparam componentStyle rect
 
@@ -33,9 +33,9 @@ System_Boundary(s21, "S21 Backend") {
 ' === Infrastructure (справа, вертикально) ===
 Boundary(infra, "Infrastructure", "External systems") {
   together {
-    System_Ext(kafka, "Kafka", "Event bus (topics: product-*)")
-    System_Ext(postgres, "Postgres", "Relational DB (schema s21)")
-    System_Ext(redis, "Redis", "Cache / sessions")
+    SystemQueue(kafka, "Kafka", "Event bus (topics: product-*)")
+    SystemDb(postgres, "Postgres", "Relational DB (schema s21)")
+    SystemDb(redis, "Redis", "Cache / sessions")
     Lay_D(kafka, postgres)
     Lay_D(postgres, redis)
   }
@@ -44,19 +44,16 @@ Boundary(infra, "Infrastructure", "External systems") {
 Lay_D(s21, infra)
 
 ' === Relationships ===
-'Rel_R(customer, nginx, "Uses / interacts", "HTTP/HTTPS")
-'Rel_R(admin, nginx, "Admin UI / API", "HTTP/HTTPS")
+
 Rel_R(actors, nginx, "Admin UI / API", "HTTP/HTTPS")
 
 Rel_R(nginx, shop, "Routes requests", "HTTP/REST")
 
 Rel(shop, auth, "Validates tokens", "gRPC")
-Rel(shop, postgres, "Reads/Writes data", "JDBC")
-Rel(shop, redis, "Cache access", "Redis protocol")
-Rel(shop, kafka, "Publishes/Subscribes", "Kafka topics")
 
-Rel(event, kafka, "Publishes/Subscribes", "Kafka topics")
-Rel(event, shop, "Calls API for enrichment", "HTTP/REST")
+Rel(event, shop, "Calls API", "HTTP/REST")
+
+Rel(s21, infra, "", "")
 
 SHOW_LEGEND()
 @enduml
