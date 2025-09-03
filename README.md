@@ -37,7 +37,7 @@
 <details>
     <summary>Context diagram</summary>
 
-![Context diagram](docs/diagrams/src/context_s21.svg)
+![Context diagram](docs/diagrams/src/s21-context_diagram.svg)
 
 </details>
 

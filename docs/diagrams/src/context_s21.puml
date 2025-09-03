@@ -1,0 +1,48 @@
+@startuml
+
+!include <logos/kafka>
+
+
+title context diagram
+left to right direction
+skinparam shadowing false
+skinparam linetype ortho
+skinparam roundcorner 10
+skinparam ArrowFontSize 11
+skinparam defaultFontName Arial
+
+' === Actors ===
+actor Customer as customer
+actor Admin as admin
+
+rectangle "NGINX\nReverse Proxy" as nginx
+
+' === System Boundary: S21 Backend ===
+rectangle "S21 Backend" as s21 {
+  rectangle "Shop Service\n(Spring Boot, REST)" as shop
+  rectangle "Auth Service\n(Spring Boot, gRPC)" as auth
+  rectangle "Event Service\n(Spring Boot, Kafka)" as event
+}
+
+
+' === Infrastructure ===
+database "Postgres\n(schema s21)" as postgres
+database "Postgres\n(schema s21)" as authDB
+database "Redis\nCache / Sessions" as redis
+queue "<$kafka>" as kafka
+
+' === Relationships ===
+customer ---> nginx : HTTP/HTTPS
+admin ---> nginx : HTTP/HTTPS
+
+nginx ---> shop : REST/JSON
+
+shop -> auth : gRPC
+event -> shop : REST
+
+auth ----> authDB : users
+shop ----> postgres : JDBC
+shop ----> redis : cache
+event ----> kafka : publish/consumer
+
+@enduml
