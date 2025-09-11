@@ -1,17 +1,23 @@
 package com.edu.shopservice.service.curator;
 
+import com.edu.shopservice.config.kafka.LeaderKafkaController;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.leader.LeaderSelector;
 import org.apache.curator.framework.recipes.leader.LeaderSelectorListenerAdapter;
 import org.apache.zookeeper.CreateMode;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
+
 import javax.annotation.PreDestroy;
 import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+@Slf4j
+//@DependsOn("kafkaListenerEndpointRegistry")
 @Component
 public class LeaderService extends LeaderSelectorListenerAdapter {
     private final CuratorFramework client;
@@ -20,9 +26,16 @@ public class LeaderService extends LeaderSelectorListenerAdapter {
     private final AtomicBoolean isLeader = new AtomicBoolean(false);
     private final String basePath;
 
-    public LeaderService(CuratorFramework client, @Value("${zookeeper.base-path}") String basePath) {
+    private final LeaderKafkaController leaderKafkaController;
+
+    public LeaderService(
+            CuratorFramework client,
+            @Value("${zookeeper.base-path}") String basePath,
+            LeaderKafkaController leaderKafkaController
+    ) {
         this.client = client;
         this.basePath = basePath;
+        this.leaderKafkaController = leaderKafkaController;
         this.selector = new LeaderSelector(client, basePath + "/leader", this);
         this.selector.autoRequeue();
         this.selector.start();
@@ -35,12 +48,13 @@ public class LeaderService extends LeaderSelectorListenerAdapter {
         try {
             String nodePath = basePath + "/instances/" + instanceId;
             String payload = String.format("{\"id\":\"%s\",\"host\":\"%s\",\"port\":%s}", instanceId,
-                    InetAddress.getLocalHost().getHostAddress(), System.getProperty("server.port","9999"));
+                    InetAddress.getLocalHost().getHostAddress(), System.getProperty("server.port", "9999"));
             client.create().creatingParentsIfNeeded()
                     .withMode(CreateMode.EPHEMERAL)
                     .forPath(nodePath, payload.getBytes(StandardCharsets.UTF_8));
         } catch (Exception e) {
             // логировать
+            log.error("Error ", e);
         }
     }
 
@@ -64,6 +78,7 @@ public class LeaderService extends LeaderSelectorListenerAdapter {
             Thread.sleep(Long.MAX_VALUE);
         } catch (InterruptedException ie) {
             // we lost leadership or shutdown requested
+            log.error("Error ", ie);
         } finally {
             // cleanup when losing leadership
             isLeader.set(false);
@@ -73,9 +88,14 @@ public class LeaderService extends LeaderSelectorListenerAdapter {
 
     private void onBecomingLeader() {
         // hook: notify other beans (via ApplicationEvent or call they expose)
+        leaderKafkaController.startListeners();
+        log.info("onBecomingLeader");
     }
+
     private void onRelinquishLeadership() {
         // hook: notify other beans
+        leaderKafkaController.stopListeners();
+        log.info("onRelinquishLeadership");
     }
 
     public boolean isLeader() {
