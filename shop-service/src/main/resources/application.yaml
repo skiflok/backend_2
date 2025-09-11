@@ -2,6 +2,10 @@ spring:
   application:
     name: shop-service
 
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.actuate.autoconfigure.metrics.SystemMetricsAutoConfiguration
+
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:29092}
     consumer:
@@ -10,6 +14,8 @@ spring:
       auto-offset-reset: latest  # при наличии сохранённых оффсетов читать с последнего
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    listener:
+      auto-startup: false
 
   datasource:
     #    url: jdbc:postgresql://postgres:5432/backend2
@@ -41,13 +47,17 @@ spring:
     ansi:
       enabled: always
 
+zookeeper:
+  connect-string: ${ZK_CONNECT_STRING:localhost:2181}
+  base-path: /s21/shop
+
   servlet:
     multipart:
       max-file-size: 2MB
 
 
 server:
-  port: 9999
+  port: ${PORT:9999}
   forward-headers-strategy: framework
 
 logging:
@@ -87,3 +97,10 @@ kafka:
         topic: product-stock-update-event-response
       update-price-event:
         topic: product-price-update-event-response
+
+
+management:
+  metrics:
+    binders:
+      processor:
+        enabled: false
