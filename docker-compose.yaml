@@ -79,52 +79,55 @@ services:
       backend_network:
         ipv4_address: 192.168.1.100
 
-  shop-service-primary:
+  shop-service:
     image: shop-service:latest
-    container_name: shop-service-primary
-    ports:
-      - "9999:9999"
-    depends_on:
-      postgres:
-        condition: service_healthy
+#    container_name: shop-service
+#    ports:
+#      - "9999:9999"
     environment:
       DB_URL: jdbc:postgresql://postgres:5432/backend2
       DB_READ_ONLY: false
       GRPC_CLIENT_AUTHGRPCCLIENT_ADDRESS: static://192.168.1.100:9090
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      ZK_CONNECT_STRING: zookeeper-shop:2181
+    depends_on:
+      postgres:
+        condition: service_healthy
+      zookeeper-shop:
+        condition: service_started
     restart: unless-stopped
     networks:
       - backend_network
 
-  shop-service-db-ro-1:
-    image: shop-service:latest
-    container_name: shop-service-db-ro-1
-    depends_on:
-      postgres:
-        condition: service_healthy
-    environment:
-      DB_URL: jdbc:postgresql://postgres:5432/backend2
-      DB_READ_ONLY: true
-      GRPC_CLIENT_AUTHGRPCCLIENT_ADDRESS: static://192.168.1.100:9090
-      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-    restart: unless-stopped
-    networks:
-      - backend_network
+#  shop-service-db-ro-1:
+#    image: shop-service:latest
+#    container_name: shop-service-db-ro-1
+#    depends_on:
+#      postgres:
+#        condition: service_healthy
+#    environment:
+#      DB_URL: jdbc:postgresql://postgres:5432/backend2
+#      DB_READ_ONLY: true
+#      GRPC_CLIENT_AUTHGRPCCLIENT_ADDRESS: static://192.168.1.100:9090
+#      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+#    restart: unless-stopped
+#    networks:
+#      - backend_network
 
-  shop-service-db-ro-2:
-    image: shop-service:latest
-    container_name: shop-service-db-ro-2
-    depends_on:
-      postgres:
-        condition: service_healthy
-    environment:
-      DB_URL: jdbc:postgresql://postgres:5432/backend2
-      DB_READ_ONLY: true
-      GRPC_CLIENT_AUTHGRPCCLIENT_ADDRESS: static://192.168.1.100:9090
-      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-    restart: unless-stopped
-    networks:
-      - backend_network
+#  shop-service-db-ro-2:
+#    image: shop-service:latest
+#    container_name: shop-service-db-ro-2
+#    depends_on:
+#      postgres:
+#        condition: service_healthy
+#    environment:
+#      DB_URL: jdbc:postgresql://postgres:5432/backend2
+#      DB_READ_ONLY: true
+#      GRPC_CLIENT_AUTHGRPCCLIENT_ADDRESS: static://192.168.1.100:9090
+#      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+#    restart: unless-stopped
+#    networks:
+#      - backend_network
 
   event-service:
     image: event-service:latest
@@ -132,19 +135,52 @@ services:
     ports:
       - "9997:9997"
 #    depends_on:
-#      shop-service-primary:
+#      shop-service:
 #        condition: service_healthy
     environment:
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
 #      SHOP_SERVICE_BASE_URL: https://s21backend/api
 #      SHOP_SERVICE_AUTH_URL: https://s21backend/api/authorization/auth
 #      PRODUCT_ALL_URL: https://s21backend/api/product/all
-      SHOP_SERVICE_BASE_URL: http://shop-service-primary:9999/api/v1
-      SHOP_SERVICE_AUTH_URL: http://shop-service-primary:9999/api/v1/authorization/auth
-      PRODUCT_ALL_URL: http://shop-service-primary:9999/api/v1/product/all
+      SHOP_SERVICE_BASE_URL: http://shop-service:9999/api/v1
+      SHOP_SERVICE_AUTH_URL: http://shop-service:9999/api/v1/authorization/auth
+      PRODUCT_ALL_URL: http://shop-service:9999/api/v1/product/all
     restart: unless-stopped
     networks:
       - backend_network
+
+
+  # ZOOKEEPER
+
+  zookeeper-shop:
+    image: bitnami/zookeeper:latest
+    container_name: zookeeper-shop
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    ports:
+      - "2181:2181"   # маппинг на хост (не конфликтовать с другим ZK)
+    networks:
+      - backend_network
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "zkServer.sh", "status" ]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+
+  zoonavigator:
+    image: elkozmon/zoonavigator:latest
+    container_name: zoonavigator
+    environment:
+      HTTP_PORT: 9000
+      CONNECTIONS: "s21-zookeeper:zookeeper-shop:2181"
+    ports:
+      - "8100:9000"        # будет доступен на хосте: http://localhost:8100
+    networks:
+      - backend_network
+    depends_on:
+      - zookeeper-shop
+    restart: unless-stopped
 
   # REDIS
 
@@ -180,7 +216,7 @@ services:
       - ./shop-service/src/main/resources/static/nginx:/static
       - ./shop-service/src/main/resources/cert:/certs/
     depends_on:
-      shop-service-primary:
+      shop-service:
         condition: service_started
       adminer:
         condition: service_healthy
@@ -198,7 +234,7 @@ services:
     ports:
       - "29092:29092"
     environment:
-      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+#      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
       - ALLOW_PLAINTEXT_LISTENER=yes
       - KAFKA_CFG_PROCESS_ROLES=broker,controller
       - KAFKA_CFG_NODE_ID=1
@@ -208,8 +244,6 @@ services:
       - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
-    #    volumes:
-    #      - .kafka-data:/bitnami/kafka:z
     networks:
       - kafka-net
       - backend_network
@@ -225,7 +259,7 @@ services:
       - KAFKA_CLUSTERS_0_NAME=LocalCluster
       # Список брокеров для доступа изнутри Docker-сети
       - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
-      - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
+#      - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
     networks:
       - kafka-net
 

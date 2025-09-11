@@ -104,6 +104,19 @@
 
         <!--        OTHER-->
 
+        <!-- Apache Curator -->
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-framework</artifactId>
+            <version>5.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-recipes</artifactId>
+            <version>5.4.0</version>
+        </dependency>
+
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
@@ -211,7 +224,7 @@
                 <version>3.3.2</version>
                 <configuration>
                     <from>
-                        <image>eclipse-temurin:17.0.4.1_1-jre</image>
+                        <image>eclipse-temurin:21-jre</image>
                     </from>
                     <to>
                         <image>${project.artifactId}:latest</image>
@@ -235,40 +248,6 @@
                 </configuration>
             </plugin>
 
-
-            <!-- OpenAPI Generator: генерация из локального файла -->
-            <plugin>
-                <groupId>org.openapitools</groupId>
-                <artifactId>openapi-generator-maven-plugin</artifactId>
-                <version>6.6.0</version>
-                <executions>
-                    <execution>
-                        <id>generate-openapi-docs</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <!-- Локальный файл с вашей спецификацией -->
-                            <inputSpec>${project.basedir}/docs/openapi/openapi.json</inputSpec>
-
-                            <!-- Генератор: markdown (удобно для README), можно заменить на html2 -->
-                            <generatorName>${openapi.generator}</generatorName>
-
-                            <!-- куда положить сгенерированное -->
-                            <output>${project.build.directory}/generated-openapi</output>
-
-                            <!-- опции генератора (для markdown/html2 можно добавить свои опции) -->
-                            <configOptions>
-                                <enableSearch>false</enableSearch>
-                            </configOptions>
-
-                            <!-- пропускать генерацию при необходимости -->
-                            <skip>${skipOpenapiGeneration}</skip>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
 
         </plugins>
     </build>
