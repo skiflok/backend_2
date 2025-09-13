@@ -7,8 +7,9 @@ import org.apache.curator.framework.recipes.leader.LeaderSelector;
 import org.apache.curator.framework.recipes.leader.LeaderSelectorListenerAdapter;
 import org.apache.zookeeper.CreateMode;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 
 import javax.annotation.PreDestroy;
 import java.net.InetAddress;
@@ -17,15 +18,13 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
-//@DependsOn("kafkaListenerEndpointRegistry")
 @Component
 public class LeaderService extends LeaderSelectorListenerAdapter {
     private final CuratorFramework client;
-    private final LeaderSelector selector;
+    private LeaderSelector selector; // lazy init
     private final String instanceId = UUID.randomUUID().toString();
     private final AtomicBoolean isLeader = new AtomicBoolean(false);
     private final String basePath;
-
     private final LeaderKafkaController leaderKafkaController;
 
     public LeaderService(
@@ -36,12 +35,24 @@ public class LeaderService extends LeaderSelectorListenerAdapter {
         this.client = client;
         this.basePath = basePath;
         this.leaderKafkaController = leaderKafkaController;
-        this.selector = new LeaderSelector(client, basePath + "/leader", this);
-        this.selector.autoRequeue();
-        this.selector.start();
+        // don't start selector here — wait until ApplicationReadyEvent
+    }
 
-        // register ephemeral info znode
-        registerInstance();
+    @EventListener(ApplicationReadyEvent.class)
+    public void startLeaderSelector() {
+        try {
+            // init and start selector after app is ready (all beans registered)
+            this.selector = new LeaderSelector(client, basePath + "/leader", this);
+            this.selector.autoRequeue();
+            this.selector.start();
+
+            // register ephemeral info znode
+            registerInstance();
+
+            log.info("LeaderSelector started for instanceId={}", instanceId);
+        } catch (Exception e) {
+            log.error("Failed to start LeaderSelector", e);
+        }
     }
 
     private void registerInstance() {
@@ -52,9 +63,9 @@ public class LeaderService extends LeaderSelectorListenerAdapter {
             client.create().creatingParentsIfNeeded()
                     .withMode(CreateMode.EPHEMERAL)
                     .forPath(nodePath, payload.getBytes(StandardCharsets.UTF_8));
+            log.info("Registered instance node: {}", nodePath);
         } catch (Exception e) {
-            // логировать
-            log.error("Error ", e);
+            log.error("Error registering instance in ZooKeeper", e);
         }
     }
 
@@ -63,39 +74,45 @@ public class LeaderService extends LeaderSelectorListenerAdapter {
         // called when this instance becomes leader
         try {
             isLeader.set(true);
-            // optional: create/update /basePath/currentLeader znode
+
+            // create/update /basePath/currentLeader znode
             String leaderPath = basePath + "/currentLeader";
             String payload = instanceId; // или host:port
             if (client.checkExists().forPath(leaderPath) != null) {
                 client.setData().forPath(leaderPath, payload.getBytes(StandardCharsets.UTF_8));
             } else {
-                client.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(leaderPath, payload.getBytes(StandardCharsets.UTF_8));
+                client.create().creatingParentsIfNeeded()
+                        .withMode(CreateMode.EPHEMERAL)
+                        .forPath(leaderPath, payload.getBytes(StandardCharsets.UTF_8));
             }
 
-            // do leader work: enable writers, start kafka listeners etc.
+            log.info("I am leader now: {}", instanceId);
+            // enable writers, start kafka listeners etc.
             onBecomingLeader();
-            // stay leader while JVM up and until interrupted
-            Thread.sleep(Long.MAX_VALUE);
-        } catch (InterruptedException ie) {
-            // we lost leadership or shutdown requested
-            log.error("Error ", ie);
+
+            // hold leadership until interrupted
+            try {
+                Thread.sleep(Long.MAX_VALUE);
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt(); // restore interrupted flag
+                log.info("Leadership interrupted for instance {}", instanceId);
+            }
         } finally {
             // cleanup when losing leadership
             isLeader.set(false);
             onRelinquishLeadership();
+            log.info("Relinquished leadership: {}", instanceId);
         }
     }
 
     private void onBecomingLeader() {
-        // hook: notify other beans (via ApplicationEvent or call they expose)
         leaderKafkaController.startListeners();
-        log.info("onBecomingLeader");
+        log.info("onBecomingLeader - started kafka listeners");
     }
 
     private void onRelinquishLeadership() {
-        // hook: notify other beans
         leaderKafkaController.stopListeners();
-        log.info("onRelinquishLeadership");
+        log.info("onRelinquishLeadership - stopped kafka listeners");
     }
 
     public boolean isLeader() {
@@ -104,7 +121,14 @@ public class LeaderService extends LeaderSelectorListenerAdapter {
 
     @PreDestroy
     public void stop() {
-        selector.close();
-        client.close();
+        if (selector != null) {
+            try {
+                selector.close();
+            } catch (Exception e) {
+                log.warn("Error closing LeaderSelector", e);
+            }
+        }
+        // don't close client here — CuratorFramework bean has its own lifecycle management
+        log.info("LeaderService stopped for instance {}", instanceId);
     }
 }

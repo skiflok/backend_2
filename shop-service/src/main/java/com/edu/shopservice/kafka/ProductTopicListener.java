@@ -16,17 +16,13 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-@ConditionalOnProperty(
-        name = "spring.datasource.hikari.read-only",
-        havingValue = "false",
-        matchIfMissing = true
-)
 @RequiredArgsConstructor
 public class ProductTopicListener {
     private final ProductService productService;
     private final ObjectMapper defaultObjectMapper;
 
     @KafkaListener(
+            id = "product-stock-listener",
             topics = "${kafka.in.product.updates-stocks.topic}",
             groupId = "${kafka.in.product.updates-stocks.group-id}")
     public void updateProductStocks(
@@ -46,6 +42,7 @@ public class ProductTopicListener {
     }
 
     @KafkaListener(
+            id = "product-price-listener",
             topics = "${kafka.in.product.updates-price.topic}",
             groupId = "${kafka.in.product.updates-price.group-id}")
     public void updateProductPrice(

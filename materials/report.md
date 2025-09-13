@@ -140,3 +140,28 @@ sudo openssl req -x509 -nodes -days 7 -newkey rsa:2048 \
 [Complete Kafka Producer with Java](https://learn.conduktor.io/kafka/complete-kafka-producer-with-java/)
 
 [Apache Kafka. Пишем простой producer и consumer и тестируем их](https://habr.com/ru/articles/742786/)
+
+## Zookeeper
+
+**Проблема:** при старте в контейнере Spring Boot падал контекст из-за `NullPointerException` в `ProcessorMetrics` (micrometer) — JDK внутри контейнера возвращал `null` для cgroup-информации, что приводило к остановке приложения и завершению Curator/LeaderSelector.
+
+**Причина:** несовместимость/отсутствие ожидаемых cgroup-метрик в контейнере — `ProcessorMetrics` не обрабатывает `null` и бросает NPE.
+
+**Решение (быстрое и проверенное):** отключить автоконфигурацию системных метрик, чтобы `ProcessorMetrics` не создавался.
+
+Добавить в `application.yml`:
+
+```yaml
+spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.actuate.autoconfigure.metrics.SystemMetricsAutoConfiguration
+```
+
+**Проверка:** пересобрать образ и перезапустить контейнер; в логах больше нет NPE по `ProcessorMetrics`, приложение успешно запускается и Curator/leader работает.
+
+**Альтернатива:** можно отключить конкретный бин через `management.metrics.binders.processor.enabled=false` (иногда не срабатывает в контейнерном окружении) или исключить конфигурацию аннотацией:
+
+```java
+@SpringBootApplication(exclude = SystemMetricsAutoConfiguration.class)
+```
